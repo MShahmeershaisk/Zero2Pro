@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= mode === "attempt" ? test.title : "Quizzes" %> - Developer School</title>
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <% if (mode === "list") { %>
+  <style>
+    .test-list { display: flex; flex-direction: column; gap: 14px; margin-top: 20px; }
+    .test-card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .test-card-info h3 { margin: 0 0 4px; }
+    .test-card-info p { margin: 0; color: #666; font-size: 0.9rem; }
+    .test-card-actions { display: flex; gap: 10px; align-items: center; }
+    .lang-select { padding: 8px 10px; font-size: 14px; }
+    .start-btn {
+      padding: 8px 18px;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      font-size: 14px;
+    }
+    .start-btn:disabled { background: #93c5fd; cursor: not-allowed; }
+    .empty-state { color: #666; margin-top: 20px; }
+    .flash-error {
+      background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5;
+      padding: 10px 14px; border-radius: 6px; margin-top: 16px;
+    }
+  </style>
+  <% } %>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="brand">Developer school</div>
+    <div class="nav-links">
+      <a href="/home">Tutorials</a>
+      <a href="/compiler">Compiler</a>
+      <a href="/test">Quiz</a>
+      <a href="/logout">Logout</a>
+    </div>
+  </nav>
+
+  <% if (mode === "list") { %>
+
+    <h2>Available Tests</h2>
+    <!-- <p>Har attempt mein <%= QUESTIONS_PER_ATTEMPT %> tak random sawal aayenge, sirf usi language ke jo aap select karenge. Pass hone ke liye <%= PASS_PERCENTAGE %>% chahiye.</p> -->
+
+    <% if (typeof error !== "undefined" && error) { %>
+      <div class="flash-error">
+        <% if (error === "missing_category") { %>
+          Pehle language select karein, tab hi test start hoga.
+        <% } else if (error === "no_questions") { %>
+          Iss language ke koi sawal available nahi hain.
+        <% } else { %>
+          Kuch masla ho gaya, dobara try karein.
+        <% } %>
+      </div>
+    <% } %>
+
+    <% if (!tests || tests.length === 0) { %>
+      <p class="empty-state">Abhi koi test available nahi hai.</p>
+    <% } else { %>
+      <div class="test-list">
+        <% tests.forEach(function (t) { %>
+          <div class="test-card">
+            <div class="test-card-info">
+              <h3><%= t.title %></h3>
+            </div>
+            <div class="test-card-actions">
+              <select class="lang-select">
+                <option value="" disabled selected>-- Select Language --</option>
+                <% categories.forEach(function (cat) { %>
+                  <option value="<%= cat %>"><%= cat %></option>
+                <% }) %>
+              </select>
+              <button class="start-btn" disabled onclick="startSelectedTest('<%= t._id %>', this)">Start Test</button>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <script>
+      // Language select karna zaroori hai — tabhi Start Test button enable hoga
+      document.querySelectorAll('.test-card').forEach(function (card) {
+        const select = card.querySelector('.lang-select');
+        const startBtn = card.querySelector('.start-btn');
+        select.addEventListener('change', function () {
+          startBtn.disabled = !select.value;
+        });
+      });
+
+      function startSelectedTest(testId, btn) {
+        const card = btn.closest('.test-card');
+        const category = card.querySelector('.lang-select').value;
+        if (!category) {
+          alert('Pehle language select karein.');
+          return;
+        }
+        window.location.href = '/test/' + testId + '?category=' + encodeURIComponent(category);
+      }
+    </script>
+
+  <% } else if (mode === "attempt") { %>
+
+    <div id="quizApp"></div>
+
+    <!--
+      Server se sirf safeQuestions bheji ja rahi hain (bina correctAnswerIndex ke),
+      taake browser console se answer cheat na kiya ja sake. Actual scoring
+      testController.submitTest mein backend par hoti hai.
+    -->
+    <script type="application/json" id="quiz-data">
+      <%- JSON.stringify({
+        testId: test._id,
+        title: test.title,
+        category: category,
+        questions: safeQuestions,
+        passPercentage: PASS_PERCENTAGE
+      }).replace(/</g, "\\u003c") %>
+    </script>
+
+    <script src="/js/csstest.js"></script>
+
+  <% } %>
+</body>
+</html>

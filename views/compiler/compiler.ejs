@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Compiler</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="brand">Developer school</div>
+    <div class="nav-links">
+      <a href="/home">Tutorials</a>
+      <a href="/compiler">Compiler</a>
+      <a href="/test">Quiz</a>
+      <a href="/logout">Logout</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2>Compiler</h2>
+
+    <div class="compiler-controls">
+      <label for="langSelect">Language:</label>
+      <select id="langSelect">
+        <option value="python">Python</option>
+        <option value="java">Java</option>
+        <option value="javascript">JavaScript</option>
+        <option value="html">HTML</option>
+      </select>
+    </div>
+
+    <textarea id="codeInput" rows="12" placeholder="print('Hello World')"></textarea>
+
+    <!-- Custom Input Box (Initially Hidden) -->
+    <div id="stdinWrapper" style="margin-top: 10px; display: none;">
+      <label for="stdinInput"><strong>Input (Write each input on a separate line):</strong></label>
+      <textarea id="stdinInput" rows="3" style="width: 100%; margin-top: 5px;" placeholder="Enter your input"></textarea>
+    </div>
+
+    <button id="runBtn" style="margin-top: 10px;">Run Code</button>
+
+    <h3>Output:</h3>
+    <pre id="output" class="output-box"></pre>
+    <iframe id="previewFrame" style="display:none; width:100%; height:400px; border:1px solid #ccc; background:#fff;"></iframe>
+  </div>
+
+  <script src="/js/compiler.js?v=6"></script>
+  <script src="/js/Aiwidget.js?v=1"></script>
+</body>
+</html>

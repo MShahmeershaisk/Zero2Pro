@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tutorials</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="brand">Developer school</div>
+    <div class="nav-links">
+      <a href="/home">Tutorials</a>
+      <a href="/compiler">Compiler</a>
+      <a href="/test">Quiz</a>
+      <a href="/logout">Logout</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2>Study Material</h2>
+
+    <!-- Add new tutorial -->
+    <form class="form-box" method="POST" action="/home/add">
+      <input type="text" name="title" placeholder="Title" required />
+      <input type="text" name="description" placeholder="Short description" required />
+      <textarea name="content" rows="4" placeholder="Content" required></textarea>
+      <input type="text" name="category" placeholder="Category (optional)" />
+      <button type="submit">Add Tutorial</button>
+    </form>
+
+    <div class="card-list">
+      <% tutorials.forEach(t => { %>
+        <div class="card">
+          <span class="tag"><%= t.category || "General" %></span>
+          <h3><%= t.title %></h3>
+          <p><%= t.description %></p>
+          <p><%= t.content %></p>
+
+          <!-- Edit -->
+          <form class="inline-form" method="POST" action="/home/edit/<%= t._id %>">
+            <input type="text" name="title" value="<%= t.title %>" required />
+            <input type="text" name="description" value="<%= t.description %>" required />
+            <textarea name="content" rows="3" required><%= t.content %></textarea>
+            <input type="text" name="category" value="<%= t.category %>" />
+            <button type="submit">Save</button>
+          </form>
+
+          <!-- Delete -->
+          <form method="POST" action="/home/delete/<%= t._id %>">
+            <button type="submit" class="btn-danger">Delete</button>
+          </form>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</body>
+</html>

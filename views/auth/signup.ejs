@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Signup</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="auth-box">
+    <h2>Signup</h2>
+    <% if (error) { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+    <form method="POST" action="/signup">
+      <input type="text" name="name" placeholder="Full Name" required />
+      <input type="email" name="email" placeholder="Email (must be @gmail.com)" required />
+      <input type="password" name="password" id="password" placeholder="Password" required minlength="6" />
+      <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" required minlength="6" />
+      <button type="submit">Signup</button>
+    </form>
+    <p>Already have an account? <a href="/login">Login</a></p>
+  </div>
+
+  <script>
+    document.querySelector("form").addEventListener("submit", (e) => {
+      const email = document.querySelector('input[name="email"]').value.trim();
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+
+      if (!/^[^\s@]+@gmail\.com$/i.test(email)) {
+        e.preventDefault();
+        alert("Email must be a valid @gmail.com address.");
+        return;
+      }
+      if (password !== confirmPassword) {
+        e.preventDefault();
+        alert("Password and Confirm Password must match.");
+      }
+    });
+  </script>
+</body>
+</html>
