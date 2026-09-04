@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head', { title: 'Profile - DevHub' }) %>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans min-h-screen flex flex-col">
+
+  <%- include('../partials/navbar') %>
+
+  <div class="flex flex-1 items-center justify-center px-6 py-12">
+    <div class="w-full max-w-lg bg-gray-800 border border-gray-700 rounded-2xl shadow-lg p-8">
+      <div class="flex items-center gap-4 mb-6">
+        <div class="w-16 h-16 rounded-full bg-indigo-600 flex items-center justify-center text-2xl font-bold">
+          <%= (profile && profile.name ? profile.name : 'U').charAt(0).toUpperCase() %>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold"><%= profile ? profile.name : 'Unknown' %></h2>
+          <p class="text-gray-400"><%= profile ? profile.email : '' %></p>
+        </div>
+      </div>
+
+      <% if (error) { %>
+        <p class="mb-4 text-sm bg-red-500/10 border border-red-500/50 text-red-400 rounded-lg py-2 px-4"><%= error %></p>
+      <% } %>
+
+      <div class="space-y-4 text-sm">
+        <div class="flex justify-between border-b border-gray-700 pb-3">
+          <span class="text-gray-400">Role</span>
+          <span class="font-medium capitalize"><%= profile ? profile.role : '—' %></span>
+        </div>
+        <div class="flex justify-between border-b border-gray-700 pb-3">
+          <span class="text-gray-400">Member since</span>
+          <span class="font-medium"><%= profile && profile.createdAt ? new Date(profile.createdAt).toLocaleDateString() : '—' %></span>
+        </div>
+        <div class="flex justify-between border-b border-gray-700 pb-3">
+          <span class="text-gray-400">Account ID</span>
+          <span class="font-medium text-gray-500"><%= profile ? profile._id : '—' %></span>
+        </div>
+      </div>
+
+      <div class="mt-8 flex gap-3">
+        <a href="/home" class="flex-1 text-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg transition">Go to Tutorials</a>
+        <a href="/compiler" class="flex-1 text-center bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2.5 rounded-lg transition">Open Compiler</a>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

@@ -1,7 +1,7 @@
-// Har language ke liye starting placeholder code — pehle yeh object hi
-// missing tha, isi wajah se page load hote hi ek error aa rahi thi aur
-// us error ki wajah se neeche wala runBtn click listener kabhi register
-// hi nahi ho pa raha tha (Run button kaam nahi kar raha tha).
+// DevHub Compiler — Monaco Editor integration
+// Loads Monaco via CDN, wires language selector, run/clear, output + HTML preview.
+
+// Default starting code per language
 const PLACEHOLDERS = {
   python: "print('Hello World')",
   java:
@@ -14,12 +14,54 @@ const PLACEHOLDERS = {
   html: "<h1>Hello World</h1>",
 };
 
+// Map our select values to Monaco language ids
+const MONACO_LANG = {
+  python: "python",
+  java: "java",
+  javascript: "javascript",
+  html: "html",
+};
+
+let editor = null;
+
+// Configure Monaco's AMD loader to fetch from the CDN
+require.config({ paths: { vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs" } });
+
+function initMonaco(initialLang, initialValue) {
+  require(["vs/editor/editor.main"], function () {
+    editor = monaco.editor.create(document.getElementById("editor"), {
+      value: initialValue,
+      language: MONACO_LANG[initialLang] || "python",
+      theme: "vs-dark",
+      automaticLayout: true,
+      fontSize: 14,
+      minimap: { enabled: false },
+      scrollBeyondLastLine: false,
+      tabSize: 4,
+      lineNumbers: "on",
+      wordWrap: "on",
+    });
+
+    // After editor loads, wire everything that depends on it
+    wireEvents();
+    updateUIForLanguage(initialLang);
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const langSelect = document.getElementById("langSelect");
-  const codeInput = document.getElementById("codeInput");
+  const initialLang = langSelect ? langSelect.value.toLowerCase().trim() : "python";
+
+  // Start Monaco with the initial language placeholder
+  initMonaco(initialLang, PLACEHOLDERS[initialLang] || "");
+});
+
+function wireEvents() {
+  const langSelect = document.getElementById("langSelect");
   const stdinWrapper = document.getElementById("stdinWrapper");
   const stdinInput = document.getElementById("stdinInput");
   const runBtn = document.getElementById("runBtn");
+  const clearBtn = document.getElementById("clearBtn");
   const output = document.getElementById("output");
   const previewFrame = document.getElementById("previewFrame");
 
@@ -31,28 +73,29 @@ document.addEventListener("DOMContentLoaded", () => {
     doc.close();
   }
 
-  // Run button ka listener sabse pehle register karte hain, taake agar
-  // neeche kisi aur cheez (placeholder/UI setup) mein kabhi error aaye
-  // bhi, tab bhi Run button kaam karta rahe.
   if (runBtn) {
     runBtn.addEventListener("click", async () => {
       const selectedLang = langSelect ? langSelect.value.toLowerCase().trim() : "python";
-      const code = codeInput.value;
+      const code = editor ? editor.getValue() : "";
 
       if (!code.trim()) {
         if (selectedLang === "html") {
-          renderPreview("<p>Pehle kuch code likho.</p>");
+          renderPreview("<p>Please write some code first.</p>");
         } else {
-          output.textContent = "Pehle kuch code likho.";
+          output.textContent = "Please write some code first.";
         }
         return;
       }
 
       if (selectedLang === "html") {
+        output.style.display = "none";
+        previewFrame.style.display = "block";
         renderPreview(code);
         return;
       }
 
+      output.style.display = "block";
+      previewFrame.style.display = "none";
       output.textContent = "Running...";
       runBtn.disabled = true;
 
@@ -77,11 +120,24 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Code ke andar check karo ki input function maujood hai ya nahi
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      if (!editor) return;
+      const lang = langSelect ? langSelect.value.toLowerCase().trim() : "python";
+      editor.setValue(PLACEHOLDERS[lang] || "");
+      if (output) output.textContent = "";
+      if (previewFrame) previewFrame.style.display = "none";
+      if (output) output.style.display = "block";
+      if (stdinInput) stdinInput.value = "";
+      if (stdinWrapper) stdinWrapper.style.display = "none";
+    });
+  }
+
+  // Check whether the code uses an input function, and show the input box if so
   function checkInputRequirement() {
-    if (!langSelect || !stdinWrapper) return;
+    if (!langSelect || !stdinWrapper || !editor) return;
     const lang = langSelect.value.toLowerCase().trim();
-    const code = codeInput.value;
+    const code = editor.getValue();
 
     let needsInput = false;
 
@@ -93,42 +149,44 @@ document.addEventListener("DOMContentLoaded", () => {
       needsInput = /\b(readline|process\.stdin)\b/.test(code);
     }
 
-    // Dynamic visibility toggling
     if (needsInput) {
       stdinWrapper.style.display = "block";
     } else {
       stdinWrapper.style.display = "none";
-      if (stdinInput) stdinInput.value = ""; // Auto reset input value
+      if (stdinInput) stdinInput.value = "";
     }
   }
 
-  function updateUIForLanguage() {
-    if (!langSelect) return;
-    const lang = langSelect.value.toLowerCase().trim();
+  function updateUIForLanguage(lang) {
+    const selectedLang = lang || (langSelect ? langSelect.value.toLowerCase().trim() : "python");
+    if (!editor) return;
 
-    codeInput.value = PLACEHOLDERS[lang] || "";
+    // Keep the editor value if the user has typed something in this language;
+    // otherwise reset to the placeholder
+    if (selectedLang === "html") {
+      if (output) output.style.display = "none";
+      if (previewFrame) previewFrame.style.display = "block";
+    } else {
+      if (output) output.style.display = "block";
+      if (previewFrame) previewFrame.style.display = "none";
+    }
 
     checkInputRequirement();
-
-    if (output && previewFrame) {
-      if (lang === "html") {
-        output.style.display = "none";
-        previewFrame.style.display = "block";
-      } else {
-        output.style.display = "block";
-        previewFrame.style.display = "none";
-      }
-    }
   }
 
   if (langSelect) {
-    langSelect.addEventListener("change", updateUIForLanguage);
+    langSelect.addEventListener("change", () => {
+      const lang = langSelect.value.toLowerCase().trim();
+      // Set the Monaco language mode and swap in the placeholder for that language
+      if (editor) {
+        monaco.editor.setModelLanguage(editor.getModel(), MONACO_LANG[lang] || "python");
+        editor.setValue(PLACEHOLDERS[lang] || "");
+      }
+      updateUIForLanguage(lang);
+    });
   }
 
-  if (codeInput) {
-    // Typing ya paste karne par real-time check karo
-    codeInput.addEventListener("input", checkInputRequirement);
+  if (editor) {
+    editor.onDidChangeModelContent(checkInputRequirement);
   }
-
-  updateUIForLanguage();
-});
+}

@@ -1,7 +1,7 @@
 (function () {
   const dataEl = document.getElementById("quiz-data");
   const appEl = document.getElementById("quizApp");
-  if (!dataEl || !appEl) return; // list mode page, kuch karne ki zaroorat nahi
+  if (!dataEl || !appEl) return; // list mode page, nothing to do
 
   const quiz = JSON.parse(dataEl.textContent);
   const { testId, title, category, questions, passPercentage } = quiz;
@@ -11,17 +11,17 @@
   let currentIndex = 0;
   const answers = {}; // { [questionId]: selectedOptionIndex }
   let finished = false;
-  let advancing = false; // ek waqt mein sirf ek hi click process ho
+  let advancing = false; // only one click processed at a time
 
-  // Self-contained styles, sab !important ke saath taake site ke global
-  // style.css (jaise generic "button" tag styling) inhe kabhi na todein.
+  // Self-contained styles, all with !important so the site's global styles
+  // never override them.
   function injectFallbackStyles() {
     if (document.getElementById("quiz-fallback-styles")) return;
     const style = document.createElement("style");
     style.id = "quiz-fallback-styles";
     style.textContent = `
-      .quiz-progress { font-size: 0.9rem; color: #666; margin-bottom: 12px; }
-      .quiz-category-tag { display: inline-block; background: #eef2ff; color: #3730a3; font-size: 0.8rem; padding: 2px 10px; border-radius: 999px; margin-bottom: 10px; }
+      .quiz-progress { font-size: 0.9rem; color: #9ca3af; margin-bottom: 12px; }
+      .quiz-category-tag { display: inline-block; background: rgba(99,102,241,0.2); color: #a5b4fc; font-size: 0.8rem; padding: 2px 10px; border-radius: 999px; margin-bottom: 10px; }
       .question-block { margin-bottom: 20px; }
 
       .options-list { list-style: none !important; padding: 0 !important; margin: 15px 0 0 !important; }
@@ -35,14 +35,15 @@
         padding: 12px 15px !important;
         font-size: 15px !important;
         line-height: 1.4 !important;
-        border: 1px solid #ddd !important;
+        border: 1px solid #4b5563 !important;
         border-radius: 8px !important;
-        background: #fff !important;
-        color: #222 !important;
+        background: #1f2937 !important;
+        color: #f3f4f6 !important;
         cursor: pointer !important;
+        transition: background 0.15s ease, border-color 0.15s ease;
       }
-      .option-item:hover { background: #f5f5f5 !important; }
-      .option-item.selected { background: #dbeafe !important; border-color: #2563eb !important; }
+      .option-item:hover { background: #374151 !important; }
+      .option-item.selected { background: #4338ca !important; border-color: #6366f1 !important; }
       .option-item.disabled { cursor: not-allowed !important; opacity: 0.85; }
 
       .quiz-actions { display: flex; justify-content: space-between; gap: 12px; margin-top: 20px; }
@@ -50,15 +51,17 @@
         padding: 10px 20px !important; border-radius: 8px !important; border: none !important;
         cursor: pointer !important; font-size: 1rem !important;
       }
-      .skip-btn { background: #f1f1f1 !important; color: #333 !important; }
+      .skip-btn { background: #374151 !important; color: #e5e7eb !important; }
+      .skip-btn:hover { background: #4b5563 !important; }
       .skip-btn:disabled { opacity: 0.5 !important; cursor: not-allowed !important; }
-      .exit-btn { background: transparent !important; color: #991b1b !important; text-decoration: underline; }
+      .exit-btn { background: transparent !important; color: #f87171 !important; text-decoration: underline; }
 
       .result-box { text-align: center; padding: 40px 20px; border-radius: 12px; margin-top: 20px; }
       .result-percentage { font-size: 2.5rem; font-weight: bold; margin: 10px 0; }
-      .result-pass { background: #ecfdf5; color: #065f46; }
-      .result-fail { background: #fef2f2; color: #991b1b; }
-      .result-box .btn { display: inline-block; margin-top: 16px; padding: 10px 20px; background: #2563eb; color: #fff; border-radius: 8px; text-decoration: none; }
+      .result-pass { background: rgba(16,185,129,0.15); color: #34d399; }
+      .result-fail { background: rgba(239,68,68,0.15); color: #f87171; }
+      .result-box .btn { display: inline-block; margin-top: 16px; padding: 10px 20px; background: #4f46e5; color: #fff; border-radius: 8px; text-decoration: none; }
+      .result-box h2 { color: #f3f4f6; }
     `;
     document.head.appendChild(style);
   }
@@ -81,11 +84,11 @@
       .join("");
 
     appEl.innerHTML = `
-      <h2>${escapeHtml(title)}</h2>
+      <h2 class="text-2xl font-bold mb-1">${escapeHtml(title)}</h2>
       ${category ? `<div class="quiz-category-tag">${escapeHtml(category)}</div>` : ""}
       <div class="quiz-progress">Question ${currentIndex + 1} of ${questions.length}</div>
       <div class="question-block">
-        <p><strong>Q${currentIndex + 1}:</strong> ${escapeHtml(q.questionText)}</p>
+        <p class="text-lg mb-2"><strong>Q${currentIndex + 1}:</strong> ${escapeHtml(q.questionText)}</p>
         <ul class="options-list">
           ${optionsHtml}
         </ul>
@@ -96,7 +99,7 @@
       </div>
     `;
 
-    // Option pe click karte hi answer record ho ke agla sawal khud aa jayega
+    // Clicking an option records the answer and advances automatically
     appEl.querySelectorAll(".option-item").forEach((el) => {
       el.addEventListener("click", () => {
         if (advancing) return;
@@ -120,14 +123,14 @@
     advancing = true;
     answers[questionId] = selectedIndex;
 
-    // Selected option highlight karo, aur sab options ko disable kar do
+    // Highlight selected option and disable all options
     appEl.querySelectorAll(".option-item").forEach((el) => el.classList.add("disabled"));
     clickedEl.classList.add("selected");
     document.getElementById("skipBtn").disabled = true;
 
     const isLast = currentIndex === questions.length - 1;
 
-    // Thodi der highlight dikhne ke baad khud next question pe chale jao
+    // Show the highlight briefly, then move to the next question
     setTimeout(() => goToNext(isLast), 450);
   }
 
@@ -168,9 +171,9 @@
   function renderResult(percentage, pass) {
     appEl.innerHTML = `
       <div class="result-box ${pass ? "result-pass" : "result-fail"}">
-        <h2>${pass ? "Passed" : "Failed"}</h2>
+        <h2 class="text-2xl font-bold mb-2">${pass ? "Passed" : "Failed"}</h2>
         <p class="result-percentage">${percentage}%</p>
-        <p>Passing mark: ${passPercentage}%</p>
+        <p class="text-gray-400">Passing mark: ${passPercentage}%</p>
         <a class="btn" href="/test">Back to Quizzes</a>
       </div>
     `;

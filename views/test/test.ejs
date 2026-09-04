@@ -1,140 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= mode === "attempt" ? test.title : "Quizzes" %> - Developer School</title>
-  <link rel="stylesheet" href="/css/style.css" />
-
-  <% if (mode === "list") { %>
-  <style>
-    .test-list { display: flex; flex-direction: column; gap: 14px; margin-top: 20px; }
-    .test-card {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 16px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .test-card-info h3 { margin: 0 0 4px; }
-    .test-card-info p { margin: 0; color: #666; font-size: 0.9rem; }
-    .test-card-actions { display: flex; gap: 10px; align-items: center; }
-    .lang-select { padding: 8px 10px; font-size: 14px; }
-    .start-btn {
-      padding: 8px 18px;
-      background: #2563eb;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      white-space: nowrap;
-      font-size: 14px;
-    }
-    .start-btn:disabled { background: #93c5fd; cursor: not-allowed; }
-    .empty-state { color: #666; margin-top: 20px; }
-    .flash-error {
-      background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5;
-      padding: 10px 14px; border-radius: 6px; margin-top: 16px;
-    }
-  </style>
-  <% } %>
+  <%- include('../partials/head', { title: mode === "attempt" ? test.title : 'Quizzes - DevHub' }) %>
 </head>
-<body>
-  <nav class="navbar">
-    <div class="brand">Developer school</div>
-    <div class="nav-links">
-      <a href="/home">Tutorials</a>
-      <a href="/compiler">Compiler</a>
-      <a href="/test">Quiz</a>
-      <a href="/logout">Logout</a>
-    </div>
-  </nav>
+<body class="bg-gray-900 text-gray-100 font-sans min-h-screen flex flex-col">
 
-  <% if (mode === "list") { %>
+  <%- include('../partials/navbar') %>
 
-    <h2>Available Tests</h2>
-    <!-- <p>Har attempt mein <%= QUESTIONS_PER_ATTEMPT %> tak random sawal aayenge, sirf usi language ke jo aap select karenge. Pass hone ke liye <%= PASS_PERCENTAGE %>% chahiye.</p> -->
+  <div class="container mx-auto max-w-4xl px-6 py-10 flex-1">
+    <% if (mode === "list") { %>
 
-    <% if (typeof error !== "undefined" && error) { %>
-      <div class="flash-error">
-        <% if (error === "missing_category") { %>
-          Pehle language select karein, tab hi test start hoga.
-        <% } else if (error === "no_questions") { %>
-          Iss language ke koi sawal available nahi hain.
-        <% } else { %>
-          Kuch masla ho gaya, dobara try karein.
-        <% } %>
-      </div>
-    <% } %>
+      <h2 class="text-3xl font-bold mb-2">Available Tests</h2>
+      <p class="text-gray-400 mb-8">
+        Each attempt has up to <%= QUESTIONS_PER_ATTEMPT %> random questions from the language you select. A score of at least <%= PASS_PERCENTAGE %>% is required to pass.
+      </p>
 
-    <% if (!tests || tests.length === 0) { %>
-      <p class="empty-state">Abhi koi test available nahi hai.</p>
-    <% } else { %>
-      <div class="test-list">
-        <% tests.forEach(function (t) { %>
-          <div class="test-card">
-            <div class="test-card-info">
-              <h3><%= t.title %></h3>
+      <% if (typeof error !== "undefined" && error) { %>
+        <div class="mb-6 text-sm bg-red-500/10 border border-red-500/50 text-red-400 rounded-lg py-2 px-4">
+          <% if (error === "missing_category") { %>
+            Please select a language before starting a test.
+          <% } else if (error === "no_questions") { %>
+            No questions are available for this language yet.
+          <% } else { %>
+            Something went wrong. Please try again.
+          <% } %>
+        </div>
+      <% } %>
+
+      <% if (!tests || tests.length === 0) { %>
+        <p class="text-gray-400 text-center py-10">No tests are available right now.</p>
+      <% } else { %>
+        <div class="space-y-4">
+          <% tests.forEach(function (t) { %>
+            <div class="bg-gray-800 border border-gray-700 rounded-2xl p-6 flex items-center justify-between flex-wrap gap-4">
+              <div class="min-w-[200px]">
+                <h3 class="text-xl font-bold"><%= t.title %></h3>
+              </div>
+              <div class="flex gap-3 items-center">
+                <select class="lang-select bg-gray-700 border border-gray-600 rounded-lg text-white px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  <option value="" disabled selected>Select Language</option>
+                  <% categories.forEach(function (cat) { %>
+                    <option value="<%= cat %>" class="bg-gray-800"><%= cat %></option>
+                  <% }) %>
+                </select>
+                <button class="start-btn bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-indigo-600"
+                  disabled onclick="startSelectedTest('<%= t._id %>', this)">Start Test</button>
+              </div>
             </div>
-            <div class="test-card-actions">
-              <select class="lang-select">
-                <option value="" disabled selected>-- Select Language --</option>
-                <% categories.forEach(function (cat) { %>
-                  <option value="<%= cat %>"><%= cat %></option>
-                <% }) %>
-              </select>
-              <button class="start-btn" disabled onclick="startSelectedTest('<%= t._id %>', this)">Start Test</button>
-            </div>
-          </div>
-        <% }) %>
-      </div>
-    <% } %>
+          <% }) %>
+        </div>
+      <% } %>
 
-    <script>
-      // Language select karna zaroori hai — tabhi Start Test button enable hoga
-      document.querySelectorAll('.test-card').forEach(function (card) {
-        const select = card.querySelector('.lang-select');
-        const startBtn = card.querySelector('.start-btn');
-        select.addEventListener('change', function () {
-          startBtn.disabled = !select.value;
+      <script>
+        document.querySelectorAll('.test-card').forEach(() => {});
+        // Enable start buttons once a language is selected
+        document.querySelectorAll('.lang-select').forEach(function (select) {
+          const card = select.closest('div');
+          const startBtn = card.querySelector('.start-btn');
+          select.addEventListener('change', function () {
+            startBtn.disabled = !select.value;
+          });
         });
-      });
 
-      function startSelectedTest(testId, btn) {
-        const card = btn.closest('.test-card');
-        const category = card.querySelector('.lang-select').value;
-        if (!category) {
-          alert('Pehle language select karein.');
-          return;
+        function startSelectedTest(testId, btn) {
+          const card = btn.closest('div');
+          const category = card.querySelector('.lang-select').value;
+          if (!category) {
+            alert('Please select a language first.');
+            return;
+          }
+          window.location.href = '/test/' + testId + '?category=' + encodeURIComponent(category);
         }
-        window.location.href = '/test/' + testId + '?category=' + encodeURIComponent(category);
-      }
-    </script>
+      </script>
 
-  <% } else if (mode === "attempt") { %>
+    <% } else if (mode === "attempt") { %>
 
-    <div id="quizApp"></div>
+      <div id="quizApp"></div>
 
-    <!--
-      Server se sirf safeQuestions bheji ja rahi hain (bina correctAnswerIndex ke),
-      taake browser console se answer cheat na kiya ja sake. Actual scoring
-      testController.submitTest mein backend par hoti hai.
-    -->
-    <script type="application/json" id="quiz-data">
-      <%- JSON.stringify({
-        testId: test._id,
-        title: test.title,
-        category: category,
-        questions: safeQuestions,
-        passPercentage: PASS_PERCENTAGE
-      }).replace(/</g, "\\u003c") %>
-    </script>
+      <script type="application/json" id="quiz-data">
+        <%- JSON.stringify({
+          testId: test._id,
+          title: test.title,
+          category: category,
+          questions: safeQuestions,
+          passPercentage: PASS_PERCENTAGE
+        }).replace(/</g, "\\u003c") %>
+      </script>
 
-    <script src="/js/csstest.js"></script>
+      <script src="/js/csstest.js"></script>
 
-  <% } %>
+    <% } %>
+  </div>
+
+  <%- include('../partials/footer') %>
 </body>
 </html>

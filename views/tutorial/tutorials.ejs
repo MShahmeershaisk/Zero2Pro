@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<%
+  // Inline helper for category icons (plain EJS, no external deps)
+  const ICONS = { 'HTML': '🖥️', 'CSS': '🎨', 'JavaScript': '⚡', 'General': '📘' };
+  function catIcon(c) { return ICONS[c] || '📘'; }
+%>
+<head>
+  <%- include('../partials/head', { title: 'Tutorials - DevHub' }) %>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans min-h-screen flex flex-col">
+
+  <%- include('../partials/navbar') %>
+
+  <main class="flex-1">
+    <!-- Hero -->
+    <section class="text-center px-6 py-14 max-w-3xl mx-auto">
+      <span class="inline-block text-xs font-semibold uppercase tracking-widest text-indigo-400 mb-3">DevHub Library</span>
+      <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Coding Tutorials</h1>
+      <p class="text-gray-400 text-lg">Learn the fundamentals of HTML, CSS, and JavaScript with these hand-picked study guides.</p>
+    </section>
+
+    <!-- Category filter -->
+    <div class="max-w-6xl mx-auto px-6 flex flex-wrap justify-center gap-2 mb-10" id="filterBar">
+      <button data-cat="All"
+        class="filter-btn px-4 py-1.5 rounded-full text-sm font-semibold transition bg-indigo-600 text-white">All</button>
+      <% categories.forEach(cat => { %>
+        <button data-cat="<%= cat %>"
+          class="filter-btn px-4 py-1.5 rounded-full text-sm font-semibold transition bg-gray-800 text-gray-300 hover:bg-gray-700 border border-gray-700"><%= cat %></button>
+      <% }) %>
+    </div>
+
+    <!-- Tutorial grid -->
+    <div class="max-w-6xl mx-auto px-6 pb-20">
+      <% categories.forEach(cat => { %>
+        <section class="tutorial-section mb-12" data-section="<%= cat %>">
+          <div class="flex items-center gap-3 mb-5">
+            <h2 class="text-2xl font-bold"><%= cat %></h2>
+            <span class="text-sm text-gray-500"><%= grouped[cat].length %> <%= grouped[cat].length === 1 ? 'tutorial' : 'tutorials' %></span>
+          </div>
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <% grouped[cat].forEach(t => { %>
+              <article class="tutorial-card bg-gray-800 border border-gray-700 rounded-2xl p-6 flex flex-col hover:border-indigo-500/60 hover:shadow-xl transition group">
+                <div class="flex items-start justify-between mb-3">
+                  <span class="text-2xl"><%= catIcon(cat) %></span>
+                  <span class="text-xs bg-indigo-500/15 text-indigo-300 px-2.5 py-1 rounded-full"><%= cat %></span>
+                </div>
+                <h3 class="text-lg font-bold mb-1 group-hover:text-indigo-300 transition"><%= t.title %></h3>
+                <p class="text-gray-400 text-sm mb-4 flex-1"><%= t.description %></p>
+                <button data-tid="<%= t._id %>"
+                  class="self-start bg-gray-700 hover:bg-indigo-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">Read Lesson</button>
+              </article>
+            <% }) %>
+          </div>
+        </section>
+      <% }) %>
+      <% if (categories.length === 0) { %>
+        <p class="text-gray-400 text-center py-10">No tutorials available yet. Check back soon!</p>
+      <% } %>
+    </div>
+  </main>
+
+  <!-- Reading modal -->
+  <div id="readerModal" class="fixed inset-0 hidden items-center justify-center z-[100] bg-black/70 p-4">
+    <div class="bg-gray-800 border border-gray-700 rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto shadow-2xl">
+      <div class="p-6">
+        <div class="flex items-center justify-between mb-4">
+          <span id="readerCat" class="text-xs bg-indigo-500/15 text-indigo-300 px-2.5 py-1 rounded-full"></span>
+          <button id="readerClose" class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
+        </div>
+        <h2 id="readerTitle" class="text-2xl font-bold mb-3"></h2>
+        <div id="readerDesc" class="text-gray-400 mb-5"></div>
+        <!-- Sections are rendered here by JS -->
+        <div id="readerSections" class="space-y-6"></div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+
+  <!-- Tutorial data blob (escaped for safe embedding) -->
+  <script type="application/json" id="tutorialsData"><%- JSON.stringify(tutorialsData).replace(/</g, '\\u003c') %></script>
+
+  <script>
+    // ─── Category filter ─────────────────────────────────────────────────────
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cat = btn.dataset.cat;
+        document.querySelectorAll('.filter-btn').forEach(b => {
+          b.className = 'filter-btn px-4 py-1.5 rounded-full text-sm font-semibold transition ' +
+            (b === btn ? 'bg-indigo-600 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gray-700 border border-gray-700');
+        });
+        document.querySelectorAll('.tutorial-section').forEach(sec => {
+          sec.style.display = (cat === 'All' || sec.dataset.section === cat) ? '' : 'none';
+        });
+      });
+    });
+
+    // ─── Reader modal ────────────────────────────────────────────────────────
+    const modal = document.getElementById('readerModal');
+    const readerSections = document.getElementById('readerSections');
+
+    // Parse the embedded JSON blob
+    let tutorialsData = {};
+    try {
+      tutorialsData = JSON.parse(document.getElementById('tutorialsData').textContent);
+    } catch (e) { /* empty data on first load is fine */ }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function openReader(tid) {
+      const tut = tutorialsData[tid];
+      if (!tut) return;
+
+      // Show the modal
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+
+      document.getElementById('readerCat').textContent = tut.category || 'General';
+      document.getElementById('readerTitle').textContent = tut.title;
+      document.getElementById('readerDesc').textContent = tut.description;
+
+      // Build sections
+      readerSections.innerHTML = '';
+
+      if (tut.sections && tut.sections.length > 0) {
+        tut.sections.forEach((sec, i) => {
+          const block = document.createElement('div');
+          block.className = 'border-l-2 border-indigo-500 pl-4';
+
+          let html = '';
+          if (sec.heading) {
+            html += '<h3 class="text-lg font-bold text-indigo-300 mb-2">' + escapeHtml(sec.heading) + '</h3>';
+          }
+          if (sec.explanation) {
+            html += '<p class="text-gray-300 text-sm leading-relaxed mb-3">' + escapeHtml(sec.explanation).replace(/\n/g, '<br>') + '</p>';
+          }
+          if (sec.code) {
+            html += '<pre class="bg-gray-900 border border-gray-700 rounded-lg p-4 text-sm text-green-400 overflow-x-auto"><code>' + escapeHtml(sec.code) + '</code></pre>';
+          }
+          block.innerHTML = html;
+          readerSections.appendChild(block);
+        });
+      } else if (tut.content) {
+        // Legacy fallback: show plain content
+        const fallback = document.createElement('div');
+        fallback.className = 'text-gray-200 text-sm leading-relaxed whitespace-pre-wrap';
+        fallback.textContent = tut.content;
+        readerSections.appendChild(fallback);
+      }
+    }
+
+    function closeReader() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // Attach click handlers to all Read Lesson buttons
+    document.querySelectorAll('[data-tid]').forEach(btn => {
+      btn.addEventListener('click', () => openReader(btn.dataset.tid));
+    });
+    document.getElementById('readerClose').addEventListener('click', closeReader);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeReader(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeReader(); });
+  </script>
+</body>
+</html>

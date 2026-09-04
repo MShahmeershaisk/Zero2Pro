@@ -28,20 +28,32 @@ function pickRandomNumbers(start, end, count) {
 }
 
 async function listTests(req, res) {
-  const tests = await Test.find();
+  try {
+    const tests = await Test.find();
 
-  // Dropdown hamesha isi fixed order mein dikhana hai, list page par
-  // har test ke saath.
-  const categories = Object.keys(CATEGORY_RANGES);
+    // Dropdown hamesha isi fixed order mein dikhana hai, list page par
+    // har test ke saath.
+    const categories = Object.keys(CATEGORY_RANGES);
 
-  res.render("test/test", {
-    tests,
-    categories,
-    mode: "list",
-    QUESTIONS_PER_ATTEMPT,
-    PASS_PERCENTAGE,
-    error: req.query.error || null,
-  });
+    res.render("test/test", {
+      tests,
+      categories,
+      mode: "list",
+      QUESTIONS_PER_ATTEMPT,
+      PASS_PERCENTAGE,
+      error: req.query.error || null,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).render("test/test", {
+      tests: [],
+      categories: [],
+      mode: "list",
+      QUESTIONS_PER_ATTEMPT,
+      PASS_PERCENTAGE,
+      error: "Failed to load tests.",
+    });
+  }
 }
 
 async function startTest(req, res) {

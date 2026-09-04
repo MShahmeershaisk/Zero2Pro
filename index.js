@@ -10,6 +10,8 @@ const compilerRoutes = require("./routes/compilerRoutes");
 const testRoutes = require("./routes/testRoutes");
 const authRoutes = require("./routes/authRoutes");
 const aiRoutes = require("./routes/aiRoutes");
+const adminRoutes = require("./routes/adminRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,7 +29,12 @@ app.use(
     secret: process.env.SESSION_SECRET || "secret",
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 1 day
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+    },
   })
 );
 
@@ -88,6 +95,19 @@ app.use("/", compilerRoutes);
 app.use("/", testRoutes);
 app.use("/", authRoutes);
 app.use("/", aiRoutes);
+app.use("/", adminRoutes);
+app.use("/", userRoutes);
+
+// ---------- 404 Handler ----------
+app.use((req, res) => {
+  res.status(404).render("errors/404");
+});
+
+// ---------- Global Error Handler ----------
+app.use((err, req, res, next) => {
+  console.error("Unhandled error:", err);
+  res.status(500).render("errors/500");
+});
 
 // ---------- Start Server ----------
 app.listen(PORT, () => {

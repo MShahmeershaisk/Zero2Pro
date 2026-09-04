@@ -1,57 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Tutorials</title>
-  <link rel="stylesheet" href="/css/style.css" />
+  <%- include('../partials/head', { title: 'Manage Tutorials - DevHub' }) %>
 </head>
-<body>
-  <nav class="navbar">
-    <div class="brand">Developer school</div>
-    <div class="nav-links">
-      <a href="/home">Tutorials</a>
-      <a href="/compiler">Compiler</a>
-      <a href="/test">Quiz</a>
-      <a href="/logout">Logout</a>
-    </div>
-  </nav>
+<body class="bg-gray-900 text-gray-100 font-sans min-h-screen flex flex-col">
 
-  <div class="container">
-    <h2>Study Material</h2>
+  <%- include('../partials/navbar') %>
 
-    <!-- Add new tutorial -->
-    <form class="form-box" method="POST" action="/home/add">
-      <input type="text" name="title" placeholder="Title" required />
-      <input type="text" name="description" placeholder="Short description" required />
-      <textarea name="content" rows="4" placeholder="Content" required></textarea>
-      <input type="text" name="category" placeholder="Category (optional)" />
-      <button type="submit">Add Tutorial</button>
+  <div class="container mx-auto max-w-4xl px-6 py-10 flex-1">
+    <h2 class="text-3xl font-bold mb-2">Study Material</h2>
+    <p class="text-gray-400 mb-8">Manage your custom tutorials and study notes. Each section has a heading, an explanation, and an optional code snippet.</p>
+
+    <% if (typeof message !== "undefined" && message) { %>
+      <p class="mb-6 text-sm bg-green-500/10 border border-green-500/50 text-green-400 rounded-lg py-2 px-4"><%= message %></p>
+    <% } %>
+    <% if (typeof error !== "undefined" && error) { %>
+      <p class="mb-6 text-sm bg-red-500/10 border border-red-500/50 text-red-400 rounded-lg py-2 px-4"><%= error %></p>
+    <% } %>
+
+    <!-- ─── Add New Tutorial ───────────────────────────────────────────────── -->
+    <form class="bg-gray-800 border border-gray-700 rounded-2xl p-6 mb-8" method="POST" action="/home/add">
+      <h3 class="text-lg font-semibold mb-4">Add New Tutorial</h3>
+      <div class="space-y-4">
+        <input type="text" name="title" placeholder="Title" required
+          class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        <input type="text" name="description" placeholder="Short description" required
+          class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        <input type="text" name="category" placeholder="Category (e.g. HTML, CSS, JavaScript)"
+          class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+      </div>
+
+      <!-- Sections builder -->
+      <div class="mt-6">
+        <div class="flex items-center justify-between mb-3">
+          <h4 class="text-sm font-semibold uppercase tracking-wide text-gray-300">Sections (Step-by-step content)</h4>
+          <button type="button" onclick="addSection('add-sections')"
+            class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-3 py-1 rounded-lg transition">+ Add Section</button>
+        </div>
+        <div id="add-sections" class="space-y-4"></div>
+      </div>
+
+      <div class="mt-6">
+        <button type="submit"
+          class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2.5 rounded-lg transition">Add Tutorial</button>
+      </div>
     </form>
 
-    <div class="card-list">
+    <!-- ─── Existing Tutorials ─────────────────────────────────────────────── -->
+    <div class="space-y-6">
       <% tutorials.forEach(t => { %>
-        <div class="card">
-          <span class="tag"><%= t.category || "General" %></span>
-          <h3><%= t.title %></h3>
-          <p><%= t.description %></p>
-          <p><%= t.content %></p>
+        <div class="bg-gray-800 border border-gray-700 rounded-2xl p-6">
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <div class="flex-1 min-w-[200px]">
+              <span class="inline-block text-xs bg-indigo-500/20 text-indigo-300 px-3 py-1 rounded-full mb-2"><%= t.category || "General" %></span>
+              <h3 class="text-xl font-bold"><%= t.title %></h3>
+              <p class="text-gray-300 mt-1"><%= t.description %></p>
+              <% if (t.sections && t.sections.length > 0) { %>
+                <p class="text-gray-400 mt-2 text-sm"><%= t.sections.length %> section(s)</p>
+              <% } else if (t.content) { %>
+                <p class="text-gray-400 mt-2 text-sm whitespace-pre-wrap line-clamp-2"><%= t.content %></p>
+              <% } %>
+            </div>
+            <div class="flex gap-2">
+              <button type="button" data-toggle-edit="<%= t._id %>"
+                class="bg-gray-700 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded-lg text-sm transition">Edit</button>
+              <form method="POST" action="/home/delete/<%= t._id %>" onsubmit="return confirm('Delete this tutorial?')">
+                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg text-sm transition">Delete</button>
+              </form>
+            </div>
+          </div>
 
-          <!-- Edit -->
-          <form class="inline-form" method="POST" action="/home/edit/<%= t._id %>">
-            <input type="text" name="title" value="<%= t.title %>" required />
-            <input type="text" name="description" value="<%= t.description %>" required />
-            <textarea name="content" rows="3" required><%= t.content %></textarea>
-            <input type="text" name="category" value="<%= t.category %>" />
-            <button type="submit">Save</button>
-          </form>
+          <!-- Edit form (hidden by default, toggled via JS) -->
+          <form class="edit-form mt-5 bg-gray-700/40 border border-gray-600 rounded-xl p-5 space-y-4 hidden" method="POST" action="/home/edit/<%= t._id %>" id="edit-form-<%= t._id %>">
+            <h4 class="font-semibold text-sm uppercase tracking-wide text-gray-300">Edit Tutorial</h4>
+            <input type="text" name="title" value="<%= t.title %>" required
+              class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            <input type="text" name="description" value="<%= t.description %>" required
+              class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            <input type="text" name="category" value="<%= t.category || '' %>"
+              class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
 
-          <!-- Delete -->
-          <form method="POST" action="/home/delete/<%= t._id %>">
-            <button type="submit" class="btn-danger">Delete</button>
+            <!-- Existing sections pre-populated -->
+            <div class="mt-4">
+              <div class="flex items-center justify-between mb-3">
+                <h4 class="text-sm font-semibold uppercase tracking-wide text-gray-300">Sections</h4>
+                <button type="button" onclick="addSection('edit-sections-<%= t._id %>')"
+                  class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-3 py-1 rounded-lg transition">+ Add Section</button>
+              </div>
+              <div id="edit-sections-<%= t._id %>" class="space-y-4" data-existing='<%= JSON.stringify(t.sections || []) %>'></div>
+            </div>
+
+            <div class="flex gap-2 mt-4">
+              <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2 rounded-lg text-sm transition">Save</button>
+              <button type="button" data-cancel-edit="<%= t._id %>"
+                class="bg-gray-600 hover:bg-gray-500 text-white font-semibold px-5 py-2 rounded-lg text-sm transition">Cancel</button>
+            </div>
           </form>
         </div>
       <% }) %>
     </div>
+
+    <% if (tutorials.length === 0) { %>
+      <p class="text-gray-400 text-center py-10">No tutorials yet. Add your first one above!</p>
+    <% } %>
   </div>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+
+  <script>
+    // ─── Section builder helpers ────────────────────────────────────────────────
+    const INPUT_CLS = 'w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm';
+
+    function addSection(containerId, heading, explanation, code) {
+      heading = heading || '';
+      explanation = explanation || '';
+      code = code || '';
+
+      const container = document.getElementById(containerId);
+      const idx = container.children.length;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'bg-gray-800 border border-gray-600 rounded-xl p-4 relative section-row';
+      wrapper.dataset.idx = idx;
+
+      wrapper.innerHTML =
+        '<div class="flex items-center justify-between mb-3">' +
+          '<span class="text-xs font-semibold text-indigo-400">Section ' + (idx + 1) + '</span>' +
+          '<button type="button" onclick="removeSection(this)" class="text-red-400 hover:text-red-300 text-xs font-semibold">Remove</button>' +
+        '</div>' +
+        '<input type="text" name="sections[heading]" placeholder="Section heading (e.g. What is a Variable?)" ' +
+          'value="' + escapeAttr(heading) + '" class="w-full mb-2 ' + INPUT_CLS + '" />' +
+        '<textarea name="sections[explanation]" rows="3" placeholder="Detailed explanation of what the code does and why..." ' +
+          'class="w-full mb-2 ' + INPUT_CLS + '">' + escapeHtml(explanation) + '</textarea>' +
+        '<textarea name="sections[code]" rows="3" placeholder="Code snippet (optional)..." ' +
+          'class="w-full font-mono text-xs ' + INPUT_CLS + '">' + escapeHtml(code) + '</textarea>';
+
+      container.appendChild(wrapper);
+    }
+
+    function removeSection(btn) {
+      const row = btn.closest('.section-row');
+      row.remove();
+      reindexSections(row.parentElement);
+    }
+
+    function reindexSections(container) {
+      const rows = container.querySelectorAll('.section-row');
+      rows.forEach((row, i) => {
+        row.dataset.idx = i;
+        row.querySelector('span').textContent = 'Section ' + (i + 1);
+        // Update input names with current index pattern
+        // The names use sections[heading] etc. — Express parses arrays from repeated names
+      });
+    }
+
+    function escapeAttr(str) {
+      return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // ─── Toggle edit forms ──────────────────────────────────────────────────────
+    document.querySelectorAll('[data-toggle-edit]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.toggleEdit;
+        const form = document.getElementById('edit-form-' + id);
+        if (form) {
+          form.classList.toggle('hidden');
+          // Pre-populate sections from data attribute on first open
+          const sectionsContainer = document.getElementById('edit-sections-' + id);
+          if (sectionsContainer && sectionsContainer.dataset.existing && !sectionsContainer.dataset.loaded) {
+            try {
+              const existing = JSON.parse(sectionsContainer.dataset.existing);
+              existing.forEach(sec => {
+                addSection('edit-sections-' + id, sec.heading, sec.explanation, sec.code);
+              });
+              sectionsContainer.dataset.loaded = 'true';
+            } catch (e) { /* ignore parse errors */ }
+          }
+        }
+      });
+    });
+
+    document.querySelectorAll('[data-cancel-edit]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const form = document.getElementById('edit-form-' + btn.dataset.cancelEdit);
+        if (form) form.classList.add('hidden');
+      });
+    });
+  </script>
 </body>
 </html>
