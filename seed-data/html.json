@@ -1,0 +1,298 @@
+[
+  {
+    "title": "HTML Text Formatting & Semantic Tags",
+    "description": "Learn how to make your text stand out and add meaning to your page. These tags help readers, search engines, and screen readers understand your content.",
+    "category": "HTML",
+    "sections": [
+      {
+        "heading": "Bold, Italic, Underline",
+        "explanation": "Formatting tags change how text looks on the page. The b tag makes text bold, the i tag makes text italic, and the u tag underlines it. These tags only change the appearance of the text. They are quick and easy to remember.",
+        "code": "<b>This text is bold.</b>\n<i>This text is italic.</i>\n<u>This text is underlined.</u>"
+      },
+      {
+        "heading": "Strong and Emphasis",
+        "explanation": "The strong and em tags are similar to b and i, but they add meaning too. Strong tells the browser that the text is important. Em tells the browser that the text should be stressed. Search engines understand the extra meaning in these tags.",
+        "code": "<strong>This text is very important.</strong>\n<em>This text needs emphasis.</em>\n<p>This is <strong>bold</strong> and <em>italic</em> inside a paragraph.</p>"
+      },
+      {
+        "heading": "Semantic Section Tags",
+        "explanation": "Semantic tags describe the purpose of a part of your page. The header tag holds the top section, nav holds navigation links, and main holds the main content. The footer tag holds the bottom of the page. Using these tags makes your code easier to read and improves your SEO.",
+        "code": "<header>\n  <h1>My Website</h1>\n</header>\n<nav>\n  <a href='#'>Home</a>\n</nav>\n<main>\n  <p>Welcome to my site.</p>\n</main>\n<footer>\n  <p>Copyright 2026</p>\n</footer>"
+      },
+      {
+        "heading": "Headings and Paragraphs",
+        "explanation": "Headings are like titles for different sections of your page. The h1 tag is the biggest and most important heading, while h6 is the smallest. Paragraphs use the p tag and hold blocks of normal text. Keep one main h1 on each page for better structure.",
+        "code": "<h1>Main Page Title</h1>\n<h2>Section Title</h2>\n<h3>Smaller Title</h3>\n<p>This is a normal paragraph of text.</p>"
+      },
+      {
+        "heading": "Mark and Small",
+        "explanation": "The mark tag highlights text with a yellow background. It is useful for showing parts of a search result. The small tag displays text in a smaller size and is often used for fine print. Both tags are simple and have clear meanings.",
+        "code": "<p>Search results show <mark>highlighted</mark> words.</p>\n<p><small>This is small print like a disclaimer.</small></p>"
+      },
+      {
+        "heading": "Formatting Tips",
+        "explanation": "Use formatting tags for a reason, not just for looks. Combine tags to make text both bold and italic when you need it. Keep your text readable and do not overload it with tags. Use the semantic versions when the meaning matters.",
+        "code": "<p><strong><em>Important alert!</em></strong></p>\n<p>Normal text with <strong>bold</strong> words.</p>"
+      }
+    ]
+  },
+  {
+    "title": "HTML Lists (Ordered & Unordered)",
+    "description": "Lists help you group related items together on a page. HTML gives you easy tags for bullet lists, numbered lists, and nested lists.",
+    "category": "HTML",
+    "sections": [
+      {
+        "heading": "Unordered Lists",
+        "explanation": "An unordered list uses the ul tag and shows a bullet before each item. Each item inside the list uses the li tag. The bullet order does not matter. Use this list for items like ingredients or features.",
+        "code": "<ul>\n  <li>Bread</li>\n  <li>Milk</li>\n  <li>Eggs</li>\n</ul>"
+      },
+      {
+        "heading": "Ordered Lists",
+        "explanation": "An ordered list uses the ol tag and shows numbers before each item. The numbers show the correct order of things. Use this list for steps, directions, or rankings. The browser adds the numbers for you automatically.",
+        "code": "<ol>\n  <li>Heat the pan.</li>\n  <li>Add the oil.</li>\n  <li>Cook the eggs.</li>\n</ol>"
+      },
+      {
+        "heading": "Changing the Start",
+        "explanation": "The start attribute changes the first number in an ordered list. The type attribute changes the style of the marker. You can use letters or Roman numerals with the type attribute. This is useful for numbered steps that continue from another list.",
+        "code": "<ol start='5'>\n  <li>Fifth item</li>\n  <li>Sixth item</li>\n</ol>\n<ol type='A'>\n  <li>Apple</li>\n  <li>Banana</li>\n</ol>"
+      },
+      {
+        "heading": "Nested Lists",
+        "explanation": "A nested list is a list inside another list. You place a new ul or ol tag inside an li tag. Nested lists help show levels of information. A common example is a main item with sub items under it.",
+        "code": "<ul>\n  <li>Fruits\n    <ul>\n      <li>Apple</li>\n      <li>Mango</li>\n    </ul>\n  </li>\n  <li>Vegetables</li>\n</ul>"
+      },
+      {
+        "heading": "Description Lists",
+        "explanation": "A description list uses the dl tag to show terms and their meanings. The dt tag holds the term, and the dd tag holds the description. The browser indents the descriptions. Use this list for glossaries or question and answer sections.",
+        "code": "<dl>\n  <dt>Coffee</dt>\n  <dd>A hot drink made from beans.</dd>\n  <dt>Tea</dt>\n  <dd>A drink made from leaves.</dd>\n</dl>"
+      },
+      {
+        "heading": "List Practice",
+        "explanation": "Try combining different kinds of lists in one page. Use a ul for a shopping list and an ol for the steps to cook it. Check that every li tag is closed properly. Your lists should be easy to read and understand.",
+        "code": "<h2>Weekend Plan</h2>\n<ol>\n  <li>Buy groceries.</li>\n  <li>Cook dinner.</li>\n  <li>Watch a movie.</li>\n</ol>"
+      }
+    ]
+  },
+  {
+    "title": "HTML Tables",
+    "description": "Tables show data in rows and columns. Learn the core table tags and how to merge cells with colspan and rowspan.",
+    "category": "HTML",
+    "sections": [
+      {
+        "heading": "Basic Table Structure",
+        "explanation": "A table is made with the table tag. The tr tag creates a row, and the td tag creates a cell in that row. Every cell sits inside a row, and every row sits inside the table. This structure creates a simple grid of data.",
+        "code": "<table>\n  <tr>\n    <td>Name</td>\n    <td>Age</td>\n  </tr>\n  <tr>\n    <td>Ali</td>\n    <td>25</td>\n  </tr>\n</table>"
+      },
+      {
+        "heading": "Adding Table Headers",
+        "explanation": "The th tag makes a header cell at the top of a column. Header text appears bold and centered by default. Headers tell readers what each column means. Put header cells in the first row of the table.",
+        "code": "<table>\n  <tr>\n    <th>Product</th>\n    <th>Price</th>\n  </tr>\n  <tr>\n    <td>Shirt</td>\n    <td>$20</td>\n  </tr>\n  <tr>\n    <td>Hat</td>\n    <td>$10</td>\n  </tr>\n</table>"
+      },
+      {
+        "heading": "Merging Columns with Colspan",
+        "explanation": "The colspan attribute makes one cell spread across several columns. This is useful for wide titles that need extra space. The value tells the browser how many columns the cell should cover. Count the columns carefully so your table stays even.",
+        "code": "<table>\n  <tr>\n    <th colspan='2'>Sales Report</th>\n  </tr>\n  <tr>\n    <td>January</td>\n    <td>500</td>\n  </tr>\n  <tr>\n    <td>February</td>\n    <td>600</td>\n  </tr>\n</table>"
+      },
+      {
+        "heading": "Merging Rows with Rowspan",
+        "explanation": "The rowspan attribute makes one cell cover several rows. This works well when one item belongs to many rows. The value tells the browser how many rows the cell should cover. Drop the extra cell in the rows below to keep the table clean.",
+        "code": "<table>\n  <tr>\n    <th rowspan='2'>Team A</th>\n    <td>Player 1</td>\n  </tr>\n  <tr>\n    <td>Player 2</td>\n  </tr>\n</table>"
+      },
+      {
+        "heading": "Adding a Caption",
+        "explanation": "The caption tag adds a title above the table. The caption explains what the table shows. It is an optional tag, but it helps readers quickly understand the data. Put the caption right after the opening table tag.",
+        "code": "<table>\n  <caption>Monthly Sales</caption>\n  <tr>\n    <th>Month</th>\n    <th>Sales</th>\n  </tr>\n  <tr>\n    <td>March</td>\n    <td>700</td>\n  </tr>\n</table>"
+      },
+      {
+        "heading": "Grouping Table Rows",
+        "explanation": "The thead, tbody, and tfoot tags group rows in a table. The thead holds header rows, and tbody holds the main data. The tfoot holds totals or summary rows. Grouping keeps long tables organized and easy to style.",
+        "code": "<table>\n  <thead>\n    <tr>\n      <th>Item</th>\n      <th>Total</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Books</td>\n      <td>3</td>\n    </tr>\n  </tbody>\n  <tfoot>\n    <tr>\n      <td>Total</td>\n      <td>3</td>\n    </tr>\n  </tfoot>\n</table>"
+      }
+    ]
+  },
+  {
+    "title": "HTML Classes, IDs & Data Attributes",
+    "description": "Classes and IDs let you style and target elements on your page. Data attributes store extra information right inside your HTML tags.",
+    "category": "HTML",
+    "sections": [
+      {
+        "heading": "Using Classes",
+        "explanation": "A class is a name you give to one or more elements. Classes are written inside the class attribute. Many elements can share the same class name. You can use a class to style all matching elements at once.",
+        "code": "<p class='highlight'>This paragraph is highlighted.</p>\n<p class='highlight'>This one too.</p>\n<span class='highlight'>Small text also matches.</span>"
+      },
+      {
+        "heading": "Using IDs",
+        "explanation": "An id is a unique name given to one single element. An id must be used only once on a page. IDs are written inside the id attribute. They are useful for linking to a specific spot or targeting one element in JavaScript.",
+        "code": "<div id='header'>\n  <h1>Welcome</h1>\n</div>\n<div id='footer'>\n  <p>Goodbye</p>\n</div>"
+      },
+      {
+        "heading": "Class vs ID Differences",
+        "explanation": "Use classes for groups of elements and IDs for single elements. A page can have many elements with the same class. An ID must appear only once. When in doubt, start with a class and move to an ID only when needed.",
+        "code": "<div class='card'>\n  <p>Card one</p>\n</div>\n<div class='card'>\n  <p>Card two</p>\n</div>\n<div id='mainCard'>\n  <p>The main card</p>\n</div>"
+      },
+      {
+        "heading": "Combining Multiple Classes",
+        "explanation": "An element can carry more than one class at the same time. Separate each class name with a space. Each class can control a different part of the styles. Combining classes keeps your CSS reusable and clean.",
+        "code": "<p class='card big'>Large card</p>\n<p class='card small'>Small card</p>\n<p class='card big special'>Big and special</p>"
+      },
+      {
+        "heading": "Adding Data Attributes",
+        "explanation": "Data attributes store extra information on an element. They always begin with the word data followed by a hyphen. The value can be read later with JavaScript. This is handy for storing item ids, colors, or custom settings.",
+        "code": "<button data-color='red'>Red button</button>\n<button data-color='blue'>Blue button</button>\n<div data-id='42' data-type='book'>Book info</div>"
+      },
+      {
+        "heading": "Using Named Links within a Page",
+        "explanation": "An id can also act as a bookmark inside a page. A link with a hash symbol and the id jumps to that spot. This is great for long pages with sections. Add an id to the target section and link to it from the top.",
+        "code": "<a href='#about'>Go to About</a>\n<h2 id='about'>About This Site</h2>\n<p>You have reached the about section.</p>"
+      }
+    ]
+  },
+  {
+    "title": "HTML Audio & Video Elements",
+    "description": "Add sound and motion to your pages with the audio and video tags. Learn the key attributes that control how media plays.",
+    "category": "HTML",
+    "sections": [
+      {
+        "heading": "Adding an Audio Player",
+        "explanation": "The audio tag adds a sound player to your page. The controls attribute shows play, pause, and volume buttons. Put the file path in the src attribute. Use the mp3 format for the widest browser support.",
+        "code": "<audio src='song.mp3' controls>\n  Your browser does not support audio.\n</audio>"
+      },
+      {
+        "heading": "Audio Loop and Autoplay",
+        "explanation": "The loop attribute makes the audio start again when it ends. The autoplay attribute starts the sound as soon as the page loads. Autoplay can be annoying, so use it rarely. The muted attribute starts the sound with the volume off.",
+        "code": "<audio src='bgm.mp3' autoplay loop muted>\n  Background music player.\n</audio>"
+      },
+      {
+        "heading": "Adding a Video Player",
+        "explanation": "The video tag adds a video player to your page. Use the controls attribute to show the playback buttons. The width and height attributes set the size of the player. The poster attribute shows a picture before the video plays.",
+        "code": "<video src='movie.mp4' controls width='640'>\n  Your browser does not support video.\n</video>"
+      },
+      {
+        "heading": "Video Autoplay and Loop",
+        "explanation": "Videos can also autoplay and loop like audio. Autoplay works best when the video is muted. The loop attribute replays the video from the start. Use playsinline so the video plays inside its own frame on phones.",
+        "code": "<video src='intro.mp4' autoplay loop muted playsinline>\n  Intro video with sound off.\n</video>"
+      },
+      {
+        "heading": "Multiple Sources",
+        "explanation": "The source tag lets you provide several video formats. The browser picks the first format it can play. This helps support old and new browsers at the same time. Put a normal text message inside the video tag as a fallback.",
+        "code": "<video controls>\n  <source src='movie.mp4' type='video/mp4'>\n  <source src='movie.webm' type='video/webm'>\n  Your browser cannot play this video.\n</video>"
+      },
+      {
+        "heading": "Media Attributes Summary",
+        "explanation": "Most media attributes work on both audio and video tags. The controls attribute is the most important one to remember. The height attribute only works on the video tag. Test your media tags to make sure they look and play well.",
+        "code": "<audio src='sound.mp3' controls preload='metadata'>\n  Sound preview.\n</audio>\n<video src='clip.mp4' controls height='360'>\n  Video clip.\n</video>"
+      }
+    ]
+  },
+  {
+    "title": "HTML Form Validation",
+    "description": "Forms collect information from your users. HTML has built-in checks that stop bad data before it reaches your server.",
+    "category": "HTML",
+    "sections": [
+      {
+        "heading": "Making Fields Required",
+        "explanation": "The required attribute forces the user to fill in a field. A form cannot be sent while an empty required field exists. The browser shows a message telling the user what to fix. This simple check works without any JavaScript.",
+        "code": "<form>\n  <label>Name:</label>\n  <input type='text' name='name' required>\n  <button type='submit'>Submit</button>\n</form>"
+      },
+      {
+        "heading": "Setting Value Range",
+        "explanation": "The min and max attributes set the allowed range for a number. The maxlength attribute limits how many characters a text field accepts. The step attribute controls the size of the jumps between numbers. The browser checks these limits before submitting.",
+        "code": "<input type='number' min='1' max='100' step='5'>\n<input type='text' maxlength='10'>\n<p>Pick a number from 1 to 100.</p>"
+      },
+      {
+        "heading": "Enforcing a Pattern",
+        "explanation": "The pattern attribute checks that a value matches a pattern. You write the pattern using regular expressions. The title attribute gives the user a helpful hint about the required format. For example, a pattern can require letters only or a set number of digits.",
+        "code": "<input type='text' pattern='[A-Za-z]{3}' title='Enter three letters'>\n<p>The field must have exactly 3 letters.</p>"
+      },
+      {
+        "heading": "Using Email and Number Types",
+        "explanation": "The type attribute gives the browser extra clues about your input. The email type checks that the value looks like an email address. The number type only accepts numeric values. The url type checks that the value is a valid web address.",
+        "code": "<input type='email' placeholder='you@example.com' required>\n<input type='number' placeholder='Age' min='0' max='120'>\n<input type='url' placeholder='https://example.com'>"
+      },
+      {
+        "heading": "Validating Date and Time",
+        "explanation": "HTML also provides date and time input types. The date type shows a picker for choosing a day. The time type shows a picker for choosing a time. You can add min and max values to these fields as well.",
+        "code": "<input type='date' min='2026-01-01' max='2026-12-31'>\n<input type='time' min='09:00' max='17:00'>\n<p>Pick a date and a time.</p>"
+      },
+      {
+        "heading": "Limiting Text Length",
+        "explanation": "The maxlength attribute limits text to a set number of characters. This is useful for usernames or short messages. The browser refuses to type more than the limit. Show the limit in the label so users know what to expect.",
+        "code": "<label>Username (max 8 chars):</label>\n<input type='text' maxlength='8'>\n<p>Your username cannot exceed 8 letters.</p>"
+      }
+    ]
+  },
+  {
+    "title": "HTML Meta Tags & SEO Basics",
+    "description": "Meta tags live in the head of your page and give search engines important information. Good meta tags help your page show up in search results.",
+    "category": "HTML",
+    "sections": [
+      {
+        "heading": "Title and Description",
+        "explanation": "The title tag names your page in the browser tab and search results. The meta description tag gives a short summary of the page. Search engines may show this summary in the results. Write clear titles and descriptions that describe your content.",
+        "code": "<head>\n  <title>Learn HTML - Tutorials</title>\n  <meta name='description' content='Free HTML tutorials for beginners.'>\n</head>"
+      },
+      {
+        "heading": "Setting the Character Set",
+        "explanation": "The charset meta tag tells the browser which characters to expect. The utf-8 setting supports almost every language and symbol. Put this tag early in the head section. This stops strange symbols from showing on your page.",
+        "code": "<head>\n  <meta charset='utf-8'>\n  <title>My Page</title>\n</head>"
+      },
+      {
+        "heading": "Viewport for Mobile",
+        "explanation": "The viewport meta tag controls how a page looks on phones. It sets the width of the page to match the device. Most modern sites include this tag. Without it, mobile pages can look zoomed out and hard to read.",
+        "code": "<head>\n  <meta name='viewport' content='width=device-width, initial-scale=1'>\n  <title>Mobile Friendly Page</title>\n</head>"
+      },
+      {
+        "heading": "Controlling Search Bots",
+        "explanation": "The robots meta tag tells search engines what to do. The value noindex stops a page from appearing in results. The value nofollow stops the search engine from following links on the page. Use these carefully so you do not hide pages by mistake.",
+        "code": "<head>\n  <meta name='robots' content='noindex, nofollow'>\n  <title>Private Page</title>\n</head>"
+      },
+      {
+        "heading": "About the Keywords Tag",
+        "explanation": "The keywords meta tag is mostly ignored by modern search engines. Do not waste time stuffing many keywords into this tag. Instead, use real words in your headings and content. Search engines read your page text more than old meta tags.",
+        "code": "<head>\n  <meta name='keywords' content='html, css, tutorials'>\n  <title>Web Tutorials</title>\n</head>"
+      },
+      {
+        "heading": "Author and Theme",
+        "explanation": "The author meta tag shows who wrote the page. The theme-color meta tag sets the color of the browser bar in mobile Chrome. These tags are small extras that polish your page. Place all meta tags inside the head section.",
+        "code": "<head>\n  <meta name='author' content='Your Name'>\n  <meta name='theme-color' content='#333333'>\n  <title>My Blog</title>\n</head>"
+      }
+    ]
+  },
+  {
+    "title": "HTML Entities & Special Characters",
+    "description": "Some characters have a special meaning in HTML. Entities let you show these characters safely on your page.",
+    "category": "HTML",
+    "sections": [
+      {
+        "heading": "Showing Less-Than Signs",
+        "explanation": "The less-than sign and greater-than sign are used inside HTML tags. If you type them alone, the browser may treat them as markup. Use the entities &lt; and &gt; to show the actual symbols. Your text will then display correctly.",
+        "code": "<p>5 &lt; 10 is true.</p>\n<p>Use &lt;strong&gt; to make text bold.</p>"
+      },
+      {
+        "heading": "Quotes and Apostrophes",
+        "explanation": "The ampersand entity &amp; is used to show the ampersand symbol. The quote entity &quot; shows a double quote, and &apos; shows an apostrophe. Using these entities keeps your HTML safe and valid. They matter most when you write these symbols inside attributes.",
+        "code": "<p>Tom &amp; Jerry are cartoon friends.</p>\n<p>He said &quot;hello&quot; to me.</p>\n<p>It&apos;s a great day.</p>"
+      },
+      {
+        "heading": "Non-Breaking Space",
+        "explanation": "The nbsp entity stands for a non-breaking space. It keeps two words together on the same line. It also adds clean spacing between items. Use it when you do not want the browser to break a line.",
+        "code": "<p>Total price: $50&nbsp;USD</p>\n<p>Line 1&nbsp;&nbsp;Line 2</p>"
+      },
+      {
+        "heading": "Common Symbols",
+        "explanation": "Entities can show symbols that are not on your keyboard. The copy entity shows a copyright sign, and the reg entity shows a registered mark. The euro and pound entities show currency symbols. These entities make it easy to add special symbols to your text.",
+        "code": "<p>&copy; 2026 Your Company</p>\n<p>&reg; Registered Trademark</p>\n<p>&euro;50 saved today</p>"
+      },
+      {
+        "heading": "Math Entities",
+        "explanation": "HTML entities also cover math symbols. The times entity shows a multiplication sign, and the divide entity shows a division sign. The plus-minus entity shows a plus or minus sign. These are handy when you write simple formulas on a page.",
+        "code": "<p>6 &times; 7 = 42</p>\n<p>10 &divide; 2 = 5</p>\n<p>Temperature &plusmn; 2 degrees</p>"
+      },
+      {
+        "heading": "Ampersand in Links",
+        "explanation": "Web addresses often contain ampersand characters. You should write them as &amp; inside the href attribute. This keeps your link valid and easy to read. Browsers will still follow the link correctly.",
+        "code": "<a href='https://example.com/search?q=html&amp;lang=en'>\n  Search HTML results\n</a>"
+      }
+    ]
+  }
+]

@@ -248,4 +248,19 @@
       sendMessage();
     }
   });
+
+  // ---- 5. Global API (compiler page ise call karta hai: AI khud open ho kar send kare) ----
+  function askAI(text) {
+    if (typeof text !== "string" || !text.trim()) return;
+    openPanel();
+    inputEl.value = text;
+    sendMessage();
+  }
+
+  // Har page se UI khole bina code dekhe (sidebar read karke) ise use kiya ja sakta hai.
+  window.ZTPAI = {
+    ask: askAI,   // panel kholega + message auto-send karega
+    open: openPanel,
+    close: closePanel,
+  };
 })();

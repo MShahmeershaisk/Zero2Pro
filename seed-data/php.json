@@ -1,0 +1,216 @@
+[
+  {
+    "title": "PHP Conditionals & Loops",
+    "description": "Learn how PHP makes decisions with if, switch and loops. Control the flow of your programs step by step.",
+    "category": "PHP",
+    "sections": [
+      {
+        "heading": "if else statements",
+        "explanation": "The if statement runs a block of code only when a condition is true. You can add an else block to run code when the condition is false. You can chain more conditions with elseif. This is the most common way to make decisions in PHP.",
+        "code": "$age = 18;\n\nif ($age >= 18) {\n    echo 'You can vote.';\n} elseif ($age >= 16) {\n    echo 'Almost there.';\n} else {\n    echo 'Too young to vote.';\n}"
+      },
+      {
+        "heading": "switch statement",
+        "explanation": "The switch statement checks one value against many cases. It is a cleaner way to write many if and elseif blocks. Each case must end with break to stop the check. The default case runs when nothing else matches.",
+        "code": "$day = 'Monday';\n\nswitch ($day) {\n    case 'Saturday':\n    case 'Sunday':\n        echo 'Weekend!';\n        break;\n    default:\n        echo 'Work day.';\n}"
+      },
+      {
+        "heading": "for loop",
+        "explanation": "A for loop repeats code a set number of times. It has three parts: the start value, the condition, and the step. The loop keeps running while the condition is true. Use it when you know how many times to repeat.",
+        "code": "for ($i = 1; $i <= 5; $i++) {\n    echo 'Number: ' . $i . PHP_EOL;\n}"
+      },
+      {
+        "heading": "foreach and while loops",
+        "explanation": "The foreach loop works through every item in an array. It is the easiest way to read an array from start to finish. The while loop runs until a condition becomes false. Both loops are very common in PHP programs.",
+        "code": "$colors = array('red', 'green', 'blue');\n\nforeach ($colors as $color) {\n    echo $color . PHP_EOL;\n}\n\n$count = 1;\nwhile ($count <= 3) {\n    echo 'Count ' . $count . PHP_EOL;\n    $count++;\n}"
+      }
+    ]
+  },
+  {
+    "title": "PHP Working with Strings",
+    "description": "Master common string helpers to measure, edit and combine text in PHP.",
+    "category": "PHP",
+    "sections": [
+      {
+        "heading": "String basics and concatenation",
+        "explanation": "A string is a sequence of characters inside quotes. PHP lets you join strings together with the dot operator. You can also embed a variable directly inside double quotes. Joining strings this way is called concatenation.",
+        "code": "$first = 'Zero';\n$last = 'Pro';\n\n$full = $first . ' ' . $last;\necho $full;\n\n$welcome = \"Welcome, $full!\";\necho $welcome;"
+      },
+      {
+        "heading": "String length and case",
+        "explanation": "The strlen function returns how many characters a string has. You can change text to uppercase with strtoupper. Use strtolower to turn text into lowercase. These helpers make it easy to format user input.",
+        "code": "$name = 'Zero to Pro';\n\necho 'Length: ' . strlen($name) . PHP_EOL;\necho 'Upper: ' . strtoupper($name) . PHP_EOL;\necho 'Lower: ' . strtolower($name) . PHP_EOL;"
+      },
+      {
+        "heading": "Find and replace text",
+        "explanation": "The strpos function finds where a word appears in a string. It returns the position number, or false if it is missing. The str_replace function swaps all matching words for something new. Use these to search and edit text easily.",
+        "code": "$text = 'Hello PHP world';\n\necho strpos($text, 'PHP') . PHP_EOL;\n\n$new = str_replace('world', 'code', $text);\necho $new;"
+      },
+      {
+        "heading": "Trim, explode and implode",
+        "explanation": "The trim function removes extra spaces from the start and end of a string. The explode function splits a string into an array using a separator. The implode function does the opposite and joins array items into a string. These three are used a lot when handling data.",
+        "code": "$msg = '  hello world  ';\necho trim($msg) . PHP_EOL;\n\n$parts = explode(',', 'apple,banana,mango');\necho $parts[1] . PHP_EOL;\n\necho implode('-', $parts);"
+      }
+    ]
+  },
+  {
+    "title": "PHP Working with Arrays",
+    "description": "Combine, sort and inspect arrays with built-in PHP array functions.",
+    "category": "PHP",
+    "sections": [
+      {
+        "heading": "Merge arrays",
+        "explanation": "The array_merge function joins two or more arrays into one. It keeps all the values from both arrays. If keys are numbers, array_merge pushes the new items to the end. Use it to combine lists of data.",
+        "code": "$a = array('apples', 'mangoes');\n$b = array('pears', 'grapes');\n\n$fruits = array_merge($a, $b);\nprint_r($fruits);"
+      },
+      {
+        "heading": "Sort arrays",
+        "explanation": "The sort function orders array values from smallest to largest. Use rsort to sort them in reverse order. For strings, sort works in alphabetical order. Sorting changes the original key names, so use asort when you must keep them.",
+        "code": "$numbers = array(5, 2, 8, 1);\nsort($numbers);\nprint_r($numbers);\n\nrsort($numbers);\nprint_r($numbers);"
+      },
+      {
+        "heading": "Array keys and values",
+        "explanation": "You can name array items using keys instead of numbers. The array_keys function returns all the keys in an array. The array_values function returns every value. This makes it easy to inspect any array you receive.",
+        "code": "$user = array(\n    'name' => 'Ali',\n    'city' => 'Karachi'\n);\n\nprint_r(array_keys($user));\nprint_r(array_values($user));"
+      },
+      {
+        "heading": "Check a key exists",
+        "explanation": "The array_key_exists function checks if a key is present in an array. It returns true when the key is found and false otherwise. The isset function checks the same thing but returns false for null values. Use these before reading values you are unsure about.",
+        "code": "$user = array('name' => 'Ali');\n\nif (array_key_exists('name', $user)) {\n    echo 'Name is set.';\n}\n\necho isset($user['city']) ? 'Has city' : 'No city';"
+      }
+    ]
+  },
+  {
+    "title": "PHP Functions: Parameters, Return & Scope",
+    "description": "Build reusable functions with parameters, return values and a clear idea of scope.",
+    "category": "PHP",
+    "sections": [
+      {
+        "heading": "Define a basic function",
+        "explanation": "A function is a block of code you can call by name. It runs the same logic again and again without rewriting it. Start with the keyword function and a name. Call it later with just the name and parentheses.",
+        "code": "function greet() {\n    echo 'Hello there!';\n}\n\ngreet();"
+      },
+      {
+        "heading": "Function parameters",
+        "explanation": "Parameters let a function accept input when it is called. You list them inside the parentheses when you define the function. Each call can pass different values. Inside the function you use the parameter as a normal variable.",
+        "code": "function greet($name) {\n    echo 'Hello, ' . $name . '!';\n}\n\ngreet('Ali');\ngreet('Sara');"
+      },
+      {
+        "heading": "Default parameter values",
+        "explanation": "You can give a parameter a default value. If the caller omits that argument, the default is used. Default values make functions easier to call. Put the required parameters before the optional ones.",
+        "code": "function greet($name, $greeting = 'Hi') {\n    echo $greeting . ', ' . $name . '!';\n}\n\ngreet('Ali');\ngreet('Sara', 'Hello');"
+      },
+      {
+        "heading": "Return values",
+        "explanation": "The return keyword sends a value back to the caller. A function can calculate a result and hand it over. The calling code stores or uses that returned value. Use return when the function should produce data, not print it.",
+        "code": "function add($a, $b) {\n    return $a + $b;\n}\n\n$sum = add(4, 5);\necho $sum;"
+      },
+      {
+        "heading": "Variable scope",
+        "explanation": "Variables inside a function are local to that function. A local variable cannot be read outside the function. Variables defined outside are not visible inside either. Pass values through parameters to move data in and out.",
+        "code": "$name = 'Global';\n\nfunction show() {\n    $name = 'Local';\n    echo $name . PHP_EOL;\n}\n\nshow();\necho $name;"
+      },
+      {
+        "heading": "Return multiple values",
+        "explanation": "A function can return an array to send back many values. The caller reads each value by key or index. This keeps your function simple while giving back full data. Use it when one answer is not enough.",
+        "code": "function stats($numbers) {\n    return array(\n        'sum' => array_sum($numbers),\n        'count' => count($numbers)\n    );\n}\n\n$result = stats(array(2, 4, 6));\necho $result['sum'] . PHP_EOL;\necho $result['count'];"
+      }
+    ]
+  },
+  {
+    "title": "PHP Sessions & Cookies",
+    "description": "Remember users between pages with session data and browser cookies.",
+    "category": "PHP",
+    "sections": [
+      {
+        "heading": "Start a session",
+        "explanation": "A session lets you keep data across multiple pages for one user. You must call session_start at the top of every page that uses sessions. PHP stores a session id in a cookie on the user's browser. The session data itself lives on the server.",
+        "code": "session_start();\n$_SESSION['user'] = 'Ali';\n\necho 'Session started.';"
+      },
+      {
+        "heading": "Store and read session data",
+        "explanation": "Session values live in the superglobal $_SESSION array. You write a value by giving it a name and a value. On the next page you read it the same way. The data stays available until the session ends.",
+        "code": "session_start();\n$_SESSION['theme'] = 'dark';\n\nif (isset($_SESSION['theme'])) {\n    echo 'Theme: ' . $_SESSION['theme'];\n}"
+      },
+      {
+        "heading": "Remove session data",
+        "explanation": "You can remove one value with the unset keyword. To end the whole session, clear the $_SESSION array first. Then destroy the session with session_destroy. Finally delete the session cookie so nothing remains on the browser.",
+        "code": "session_start();\n\nunset($_SESSION['theme']);\n\n$_SESSION = array();\nsession_destroy();"
+      },
+      {
+        "heading": "Set a cookie",
+        "explanation": "A cookie is a small piece of data stored on the user's browser. The setcookie function sends it with the next response. You set an expiry time in seconds with the current time plus a duration. Read the cookie back from the $_COOKIE array.",
+        "code": "setcookie('user', 'Ali', time() + 3600);\n\nif (isset($_COOKIE['user'])) {\n    echo 'Cookie: ' . $_COOKIE['user'];\n}"
+      },
+      {
+        "heading": "Delete a cookie",
+        "explanation": "To remove a cookie, set it with a past expiry time. Set the value to an empty string as well. After that the browser will drop the cookie. This is the standard way to clear a cookie in PHP.",
+        "code": "setcookie('user', '', time() - 3600);\n\necho 'Cookie removed.';"
+      }
+    ]
+  },
+  {
+    "title": "PHP File Handling (read & write)",
+    "description": "Read, write, append and delete files using simple PHP file functions.",
+    "category": "PHP",
+    "sections": [
+      {
+        "heading": "Read a whole file",
+        "explanation": "The file_get_contents function reads an entire file into a string. It is the simplest way to load a text file. The function returns the file content or false on failure. Use it when you need all the text at once.",
+        "code": "$content = file_get_contents('notes.txt');\n\necho $content === false ? 'Failed to read.' : $content;"
+      },
+      {
+        "heading": "Write to a file",
+        "explanation": "The file_put_contents function writes a string to a file. If the file does not exist, PHP creates it. If it already exists, the old content is replaced. This is the quickest way to save data to disk.",
+        "code": "$message = 'Hello file!';\n\nfile_put_contents('notes.txt', $message);\necho 'File written.';"
+      },
+      {
+        "heading": "Append data to a file",
+        "explanation": "Use the FILE_APPEND flag to add text to the end of a file. Without this flag the file is overwritten from the start. Appending is great for logs and history. The file grows each time you write to it.",
+        "code": "$logLine = 'User logged in.' . PHP_EOL;\n\nfile_put_contents('log.txt', $logLine, FILE_APPEND);\necho 'Log updated.';"
+      },
+      {
+        "heading": "Check a file exists",
+        "explanation": "The file_exists function checks if a file is present. It returns true when the file is there. You can delete a file with unlink after confirming it exists. Always check before deleting to avoid errors.",
+        "code": "if (file_exists('notes.txt')) {\n    unlink('notes.txt');\n    echo 'File deleted.';\n} else {\n    echo 'No file found.';\n}"
+      },
+      {
+        "heading": "Read a file line by line",
+        "explanation": "The fopen function opens a file for reading. The fgets function reads one line at a time. The while loop keeps reading until the file ends. Use this method for big files that you do not want to load all at once.",
+        "code": "$handle = fopen('notes.txt', 'r');\n\nwhile (($line = fgets($handle)) !== false) {\n    echo $line . PHP_EOL;\n}\n\nfclose($handle);"
+      }
+    ]
+  },
+  {
+    "title": "PHP Security Basics (XSS & SQL Injection)",
+    "description": "Protect your PHP apps from cross-site scripting and SQL injection attacks.",
+    "category": "PHP",
+    "sections": [
+      {
+        "heading": "Understand cross-site scripting",
+        "explanation": "Cross-site scripting, or XSS, happens when a user types script code into your page. If you print that input directly, the browser runs it. An attacker can steal cookies or change the page. Always treat user input as untrusted data.",
+        "code": "$name = $_GET['name'];\n\necho 'Hello ' . $name;"
+      },
+      {
+        "heading": "Escape output with htmlspecialchars",
+        "explanation": "The htmlspecialchars function changes special characters to safe HTML. Angle brackets and quotes become harmless entities. This stops inserted script tags from running. Escape any user value before you print it on a page.",
+        "code": "$name = $_GET['name'];\n\necho 'Hello ' . htmlspecialchars($name);"
+      },
+      {
+        "heading": "Understand SQL injection",
+        "explanation": "SQL injection happens when user text is placed straight into a database query. A clever input can change the query and delete data. Never build queries by joining strings with user input. Use prepared statements instead, which treat input as data only.",
+        "code": "// Unsafe example - do not copy\n$name = $_GET['name'];\n$sql = \"SELECT * FROM users WHERE name = '$name'\";"
+      },
+      {
+        "heading": "Use prepared statements",
+        "explanation": "A prepared statement sends the query shape to the database first. Placeholders mark where the user input will go. Then you bind the real values to those placeholders. The database treats them as plain data, so attackers cannot change the query.",
+        "code": "$stmt = $pdo->prepare(\n    'SELECT * FROM users WHERE name = ?'\n);\n\n$stmt->execute(array($_GET['name']));"
+      },
+      {
+        "heading": "Validate and sanitize input",
+        "explanation": "Always check that input matches what you expect. The filter_var function can validate emails and other formats. You can also strip unwanted characters with preg_replace. Good validation stops bad data before it reaches your code.",
+        "code": "$email = $_POST['email'];\n\nif (filter_var($email, FILTER_VALIDATE_EMAIL)) {\n    echo 'Email is valid.';\n} else {\n    echo 'Invalid email.';\n}"
+      }
+    ]
+  }
+]

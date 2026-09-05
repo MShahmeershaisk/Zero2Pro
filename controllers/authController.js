@@ -37,7 +37,7 @@ async function postSignup(req, res) {
     await user.save();
     req.session.regenerate(() => {
       req.session.user = { id: user._id, name: user.name, email: user.email, role: user.role };
-      res.redirect("/home");
+      res.redirect("/"); // Home/Landing page par redirect karega
     });
   } catch (err) {
     console.error(err);
@@ -60,7 +60,7 @@ async function postLogin(req, res) {
 
     req.session.regenerate(() => {
       req.session.user = { id: user._id, name: user.name, email: user.email, role: user.role };
-      res.redirect("/home");
+      res.redirect("/"); // Home/Landing page par redirect karega
     });
   } catch (err) {
     console.error(err);

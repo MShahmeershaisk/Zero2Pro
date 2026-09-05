@@ -1,16 +1,37 @@
 const Test = require("../models/test");
+const User = require("../models/user");
 
 const QUESTIONS_PER_ATTEMPT = 35;
 const PASS_PERCENTAGE = 75;
+
+// Category -> certificate ke code (certId ke liye chhota label)
+const CERT_CODES = {
+  HTML: "HTML",
+  CSS: "CSS",
+  JavaScript: "JS",
+  PHP: "PHP",
+  "C++": "CPP",
+  React: "RCT",
+  Bootstrap: "BST",
+  General: "GEN",
+};
+
+function certCode(cat) {
+  return CERT_CODES[cat] || cat.slice(0, 3).toUpperCase();
+}
 
 // Har category ka fixed qNum range (seed.js isi order mein data daalta hai).
 // Ab category naam (string) match karne ke bajaye seedha range se call karte
 // hain — na case-mismatch ka dar, na extra loop.
 const CATEGORY_RANGES = {
-  Python: { start: 1, end: 100 },
-  Java: { start: 101, end: 200 },
-  HTML: { start: 201, end: 300 },
-  JavaScript: { start: 301, end: 400 },
+  HTML: { start: 1, end: 100 },
+  CSS: { start: 101, end: 200 },
+  JavaScript: { start: 201, end: 300 },
+  PHP: { start: 301, end: 400 },
+  "C++": { start: 401, end: 500 },
+  React: { start: 501, end: 600 },
+  Bootstrap: { start: 601, end: 700 },
+  General: { start: 701, end: 800 },
 };
 
 // Range ke andar se `count` unique random numbers nikalta hai.
@@ -131,11 +152,41 @@ async function submitTest(req, res) {
     }
 
     const percentage = (score / total) * 100;
+    const roundedPercent = Math.round(percentage * 100) / 100;
     const pass = percentage >= PASS_PERCENTAGE;
+
+    // Pass hone par user ke account par us language ka certificate save karo.
+    // Same language dobara pass hone par (retake) score/date update hoga,
+    // duplicate certificate nahi banega.
+    if (pass && req.session && req.session.user) {
+      try {
+        const user = await User.findById(req.session.user.id);
+        if (user) {
+          const categoryName = String(req.body.category || "General").trim();
+          const existing = user.certificates.find((c) => c.category === categoryName);
+          if (existing) {
+            existing.percentage = roundedPercent;
+            existing.testTitle = test.title;
+            existing.earnedAt = new Date();
+          } else {
+            user.certificates.push({
+              category: categoryName,
+              testTitle: test.title,
+              percentage: roundedPercent,
+              certId: `Z2H-${certCode(categoryName)}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`,
+            });
+          }
+          await user.save();
+        }
+      } catch (err) {
+        // Certificate save fail hone par bhi result user ko mil jaaye
+        console.error("Certificate save error:", err);
+      }
+    }
 
     res.json({
       success: true,
-      percentage: Math.round(percentage * 100) / 100,
+      percentage: roundedPercent,
       pass,
     });
   } catch (err) {

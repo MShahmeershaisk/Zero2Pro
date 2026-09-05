@@ -1,0 +1,224 @@
+[
+  {
+    "title": "React Conditional Rendering & Lists",
+    "description": "Learn how to show different content based on conditions and display lists of data. These skills are essential for building real React apps.",
+    "category": "React",
+    "sections": [
+      {
+        "heading": "Rendering with if-else",
+        "explanation": "You can use a normal if-else statement before returning JSX. The if block picks the JSX for one case, and the else block picks the other case. This works because you decide what to return before React draws the screen. It is the easiest way to choose between two blocks of content.",
+        "code": "function Status({ loggedIn }) {\n  if (loggedIn) {\n    return <h2>Welcome back!</h2>;\n  }\n  return <h2>Please sign in.</h2>;\n}"
+      },
+      {
+        "heading": "Ternary Operator in JSX",
+        "explanation": "The ternary operator works inside JSX and uses the question mark and colon symbols. It checks a condition, then returns one value if it is true and another if it is false. Put the whole ternary inside curly braces. This is a compact way to do conditional rendering in one line.",
+        "code": "function Greeting({ name }) {\n  return (\n    <div>\n      {name ? <p>Hello, {name}!</p> : <p>Hello, guest.</p>}\n    </div>\n  );\n}"
+      },
+      {
+        "heading": "Logical AND Shortcut",
+        "explanation": "The double ampersand operator only shows the JSX when the condition is true. React reads the left side first and returns it when it is false. When the condition is true, React shows the JSX on the right side. This is perfect for showing an optional message or badge.",
+        "code": "function Notifications({ count }) {\n  return (\n    <div>\n      <p>You have {count} alerts.</p>\n      {count > 3 && <p>Too many alerts!</p>}\n    </div>\n  );\n}"
+      },
+      {
+        "heading": "Rendering Lists with map",
+        "explanation": "The map method creates a new array from the items you give it. Call map on your array and return JSX for each item. React then renders every item as its own element. Wrap the map inside curly braces in your JSX.",
+        "code": "const fruits = ['apple', 'mango', 'banana'];\n\nfunction FruitList() {\n  return (\n    <ul>\n      {fruits.map(fruit => <li>{fruit}</li>)}\n    </ul>\n  );\n}"
+      },
+      {
+        "heading": "Using Keys in Lists",
+        "explanation": "Every list item needs a key prop with a unique value. Keys help React keep track of each item when the list changes. Use the id of your data when one exists. Do not use the array index unless you have no other choice.",
+        "code": "const students = [\n  { id: 1, name: 'Ayesha' },\n  { id: 2, name: 'Bilal' },\n];\n\nfunction ClassList() {\n  return (\n    <ul>\n      {students.map(student => (\n        <li key={student.id}>{student.name}</li>\n      ))}\n    </ul>\n  );\n}"
+      },
+      {
+        "heading": "Filter Then Render",
+        "explanation": "You can filter an array before mapping it to JSX. The filter method keeps only the items that match your condition. Chain map after filter to render the result. This is a clean way to show only part of your data.",
+        "code": "const tasks = [\n  { id: 1, title: 'Read book', done: true },\n  { id: 2, title: 'Write code', done: false },\n];\n\nfunction PendingTasks() {\n  const pending = tasks.filter(task => !task.done);\n  return (\n    <ul>\n      {pending.map(task => <li key={task.id}>{task.title}</li>)}\n    </ul>\n  );\n}"
+      }
+    ]
+  },
+  {
+    "title": "React Controlled Forms & Inputs",
+    "description": "Controlled inputs keep the form values inside React state. Learn how to build forms that handle typing, selection, and submission properly.",
+    "category": "React",
+    "sections": [
+      {
+        "heading": "Controlled Input Basics",
+        "explanation": "A controlled input takes its value from React state. The value prop is bound to state, and onChange updates that state. Every keystroke changes the state value. React is then the single source of truth for the input.",
+        "code": "import { useState } from 'react';\n\nfunction NameForm() {\n  const [name, setName] = useState('');\n\n  return (\n    <input\n      value={name}\n      onChange={e => setName(e.target.value)}\n    />\n  );\n}"
+      },
+      {
+        "heading": "Handling Text Inputs",
+        "explanation": "Text inputs work with state and the onChange handler. Event.target.value gives you the text the user typed. Store that value in state with the setter function. The input keeps showing the state value so everything stays in sync.",
+        "code": "import { useState } from 'react';\n\nfunction EmailInput() {\n  const [email, setEmail] = useState('');\n\n  return (\n    <div>\n      <label>Email: </label>\n      <input\n        type='email'\n        value={email}\n        onChange={e => setEmail(e.target.value)}\n      />\n      <p>You typed: {email}</p>\n    </div>\n  );\n}"
+      },
+      {
+        "heading": "Select Dropdown",
+        "explanation": "The select element works like a controlled input too. Bind the value prop to state and handle its change event. The browser sends the selected option value through event.target.value. Update state with that value and the dropdown stays in sync.",
+        "code": "import { useState } from 'react';\n\nfunction CityPicker() {\n  const [city, setCity] = useState('Lahore');\n\n  return (\n    <select value={city} onChange={e => setCity(e.target.value)}>\n      <option value='Lahore'>Lahore</option>\n      <option value='Karachi'>Karachi</option>\n      <option value='Islamabad'>Islamabad</option>\n    </select>\n  );\n}"
+      },
+      {
+        "heading": "Checkboxes and Radios",
+        "explanation": "Checkboxes store a true or false value in state. The checked prop shows whether the box is selected. Radio buttons let the user pick one option from a group. Update the checked property through the change event to keep everything in sync.",
+        "code": "import { useState } from 'react';\n\nfunction FormOptions() {\n  const [agree, setAgree] = useState(false);\n  const [plan, setPlan] = useState('basic');\n\n  return (\n    <div>\n      <input type='checkbox' checked={agree} onChange={e => setAgree(e.target.checked)} />\n      <label>I agree</label>\n      <input type='radio' name='plan' checked={plan === 'basic'} onChange={() => setPlan('basic')} />\n      <label>Basic</label>\n      <input type='radio' name='plan' checked={plan === 'pro'} onChange={() => setPlan('pro')} />\n      <label>Pro</label>\n    </div>\n  );\n}"
+      },
+      {
+        "heading": "Submitting the Form",
+        "explanation": "The form uses an onSubmit handler to catch the submit event. Call preventDefault to stop the page from reloading. You can read all the values from state at this point. Then send the data anywhere you need or show a message.",
+        "code": "import { useState } from 'react';\n\nfunction LoginForm() {\n  const [user, setUser] = useState('');\n  const [pass, setPass] = useState('');\n\n  function handleSubmit(e) {\n    e.preventDefault();\n    alert(`Welcome ${user}!`);\n  }\n\n  return (\n    <form onSubmit={handleSubmit}>\n      <input placeholder='Username' value={user} onChange={e => setUser(e.target.value)} />\n      <input type='password' placeholder='Password' value={pass} onChange={e => setPass(e.target.value)} />\n      <button type='submit'>Login</button>\n    </form>\n  );\n}"
+      },
+      {
+        "heading": "Resetting the Form",
+        "explanation": "You can clear a form by setting all state values back to empty. Create one helper function that resets every field at once. Call that function after a successful submit. This keeps your form clean and ready for the next entry.",
+        "code": "import { useState } from 'react';\n\nfunction FeedbackForm() {\n  const [name, setName] = useState('');\n  const [message, setMessage] = useState('');\n\n  function resetForm() {\n    setName('');\n    setMessage('');\n  }\n\n  return (\n    <div>\n      <input placeholder='Name' value={name} onChange={e => setName(e.target.value)} />\n      <textarea value={message} onChange={e => setMessage(e.target.value)} />\n      <button onClick={resetForm}>Clear</button>\n    </div>\n  );\n}"
+      }
+    ]
+  },
+  {
+    "title": "React useEffect (Data Fetching & Lifecycle)",
+    "description": "The useEffect hook runs code after your component renders. Use it for fetching data, timers, and cleaning up background work.",
+    "category": "React",
+    "sections": [
+      {
+        "heading": "Running Code After Render",
+        "explanation": "The useEffect hook runs a function after the component renders. Import useEffect from the react package. Pass the function you want to run as the first argument. This is the right place for side effects that depend on the screen being shown.",
+        "code": "import { useEffect } from 'react';\n\nfunction App() {\n  useEffect(() => {\n    console.log('Component rendered');\n  });\n\n  return <h1>Check the console</h1>;\n}"
+      },
+      {
+        "heading": "Run Once with Empty Array",
+        "explanation": "An empty array as the second argument makes the effect run only once. The effect runs after the first render and never again. This is useful for loading data when a page opens. It also stops the effect from repeating on every update.",
+        "code": "import { useEffect } from 'react';\n\nfunction App() {\n  useEffect(() => {\n    console.log('Only runs once');\n  }, []);\n\n  return <h1>Welcome</h1>;\n}"
+      },
+      {
+        "heading": "Dependency Array Changes",
+        "explanation": "The dependency array controls when the effect runs again. Put the values your effect uses inside the array. React runs the effect again whenever one of those values changes. Leave a value out and the effect may use old data.",
+        "code": "import { useEffect, useState } from 'react';\n\nfunction Counter() {\n  const [count, setCount] = useState(0);\n\n  useEffect(() => {\n    console.log(`Count changed to ${count}`);\n  }, [count]);\n\n  return <button onClick={() => setCount(count + 1)}>Count: {count}</button>;\n}"
+      },
+      {
+        "heading": "Setting Up a Cleanup",
+        "explanation": "Some effects need a cleanup function to stop background work. Return a function from the effect to do that cleanup. React calls it before the next effect and when the component unmounts. Use this to clear timers or close connections.",
+        "code": "import { useEffect } from 'react';\n\nfunction Timer() {\n  useEffect(() => {\n    const id = setInterval(() => {\n      console.log('Tick');\n    }, 1000);\n\n    return () => clearInterval(id);\n  }, []);\n\n  return <h1>Timer is running</h1>;\n}"
+      },
+      {
+        "heading": "Fetching Data with Fetch",
+        "explanation": "useEffect is the right place to fetch data from an API. Call the fetch function inside the effect and turn the response into JSON. Store the result in state so React rerenders with the data. Use an empty dependency array so the request runs only once.",
+        "code": "import { useEffect, useState } from 'react';\n\nfunction Users() {\n  const [users, setUsers] = useState([]);\n\n  useEffect(() => {\n    fetch('https://jsonplaceholder.typicode.com/users')\n      .then(res => res.json())\n      .then(data => setUsers(data));\n  }, []);\n\n  return <p>Loaded {users.length} users.</p>;\n}"
+      },
+      {
+        "heading": "Showing a Loading State",
+        "explanation": "Loading state tells the user that data is still coming. Start with loading set to true in state. Change it to false after the fetch finishes. Show a loading message while it is true and the data when it is false.",
+        "code": "import { useEffect, useState } from 'react';\n\nfunction Posts() {\n  const [loading, setLoading] = useState(true);\n  const [posts, setPosts] = useState([]);\n\n  useEffect(() => {\n    fetch('https://jsonplaceholder.typicode.com/posts')\n      .then(res => res.json())\n      .then(data => {\n        setPosts(data);\n        setLoading(false);\n      });\n  }, []);\n\n  if (loading) {\n    return <p>Loading posts...</p>;\n  }\n  return <p>{posts.length} posts ready.</p>;\n}"
+      }
+    ]
+  },
+  {
+    "title": "React Styling (Inline, CSS & CSS Modules)",
+    "description": "There are several ways to style React components. Learn inline styles, plain CSS files, and CSS Modules for scoped styling.",
+    "category": "React",
+    "sections": [
+      {
+        "heading": "Inline Style Objects",
+        "explanation": "Inline styles in React are written as JavaScript objects. The style prop accepts an object with camelCase property names. For example, backgroundColor instead of background-color. Values are strings, so wrap them in quotes.",
+        "code": "function Profile() {\n  return (\n    <div style={{ padding: '20px', backgroundColor: '#f0f0f0', textAlign: 'center' }}>\n      <h2>Hello, world!</h2>\n    </div>\n  );\n}"
+      },
+      {
+        "heading": "Using External CSS Files",
+        "explanation": "You can write normal CSS in a separate file and import it. This keeps your styling separate from your component code. Import the CSS file at the top of the component. The classes in the file work like regular CSS classes.",
+        "code": "import './profile.css';\n\nfunction Profile() {\n  return <div className='card'>I am styled by CSS.</div>;\n}"
+      },
+      {
+        "heading": "Adding Classes with className",
+        "explanation": "React uses className instead of class on elements. Set className to the name of your CSS class. You can add several classes by separating them with spaces. This is exactly like writing a class attribute in HTML.",
+        "code": "function Button() {\n  return (\n    <button className='btn btn-large'>\n      Big Button\n    </button>\n  );\n}"
+      },
+      {
+        "heading": "Styling with CSS Modules",
+        "explanation": "CSS Modules keep styles scoped to one component only. Name the file with .module.css at the end. Import the module as an object and use its properties as class names. Other components cannot accidentally use your class names.",
+        "code": "import styles from './Button.module.css';\n\nfunction Button() {\n  return (\n    <button className={styles.primary}>\n      Primary Button\n    </button>\n  );\n}"
+      },
+      {
+        "heading": "Applying Conditional Styles",
+        "explanation": "You can change styles based on the current state. Build a string of class names from your conditions. Use a ternary operator to pick between styles. This is great for active tabs, errors, or selected items.",
+        "code": "function Tabs({ active }) {\n  const className = active ? 'tab active' : 'tab';\n  return <button className={className}>Home</button>;\n}"
+      },
+      {
+        "heading": "Using CSS Variables",
+        "explanation": "CSS variables store color and size values you can reuse. Define them in a CSS file with a double dash prefix. Use var() in your rules to read the value. Change the variable once and the whole theme updates.",
+        "code": ":root {\n  --primary-color: #3498db;\n}\n\n.button {\n  background-color: var(--primary-color);\n  padding: 10px 20px;\n}"
+      }
+    ]
+  },
+  {
+    "title": "React Router (Navigation Between Pages)",
+    "description": "React Router adds multiple pages to your single-page app. Learn to define routes, create links, and read URL parameters.",
+    "category": "React",
+    "sections": [
+      {
+        "heading": "Wrapping the App",
+        "explanation": "BrowserRouter wraps your whole app and gives it routing features. Import it from react-router-dom. Put it at the top level around your routes. Every Router link and route lives inside this wrapper.",
+        "code": "import { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nfunction Root() {\n  return (\n    <BrowserRouter>\n      <App />\n    </BrowserRouter>\n  );\n}"
+      },
+      {
+        "heading": "Defining Routes",
+        "explanation": "Routes match a URL path to a component. The path tells the router which URL to listen for. The element prop names the component to render. Wrap all routes inside a Routes element.",
+        "code": "import { Routes, Route } from 'react-router-dom';\nimport Home from './Home';\nimport About from './About';\n\nfunction AppRoutes() {\n  return (\n    <Routes>\n      <Route path='/' element={<Home />} />\n      <Route path='/about' element={<About />} />\n    </Routes>\n  );\n}"
+      },
+      {
+        "heading": "Creating Links",
+        "explanation": "The Link component replaces normal anchor tags for navigation. It takes a to prop with the destination path. Clicking a Link changes the URL without reloading the whole page. Use it for menus and navigation bars.",
+        "code": "import { Link } from 'react-router-dom';\n\nfunction Nav() {\n  return (\n    <nav>\n      <Link to='/'>Home</Link>\n      <Link to='/about'>About</Link>\n    </nav>\n  );\n}"
+      },
+      {
+        "heading": "Navigating with useNavigate",
+        "explanation": "useNavigate gives you a function to move between pages in code. Call it after a form submit or a button click. Pass the path you want to visit as its argument. This is handy when you must navigate after some action finishes.",
+        "code": "import { useNavigate } from 'react-router-dom';\n\nfunction Login() {\n  const navigate = useNavigate();\n\n  function handleSubmit(e) {\n    e.preventDefault();\n    navigate('/dashboard');\n  }\n\n  return (\n    <form onSubmit={handleSubmit}>\n      <button type='submit'>Login</button>\n    </form>\n  );\n}"
+      },
+      {
+        "heading": "Dynamic Route Paths",
+        "explanation": "Dynamic routes use a colon in the path to mark a parameter. The parameter part changes from one URL to the next. A profile route can serve every user id. The router matches the real value and passes it to your component.",
+        "code": "import { Routes, Route } from 'react-router-dom';\nimport UserProfile from './UserProfile';\n\nfunction AppRoutes() {\n  return (\n    <Routes>\n      <Route path='/users/:id' element={<UserProfile />} />\n    </Routes>\n  );\n}"
+      },
+      {
+        "heading": "Reading URL Parameters",
+        "explanation": "useParams returns an object with all the URL parameters. Use the same name you gave in the path with a colon. Read the value like any other object property. This lets one component show different data for different URLs.",
+        "code": "import { useParams } from 'react-router-dom';\n\nfunction UserProfile() {\n  const { id } = useParams();\n  return <h1>Profile of user {id}</h1>;\n}"
+      }
+    ]
+  },
+  {
+    "title": "React Context API (Sharing State Across Components)",
+    "description": "Context lets you share data between many components without prop drilling. Learn to create, provide, and consume context values.",
+    "category": "React",
+    "sections": [
+      {
+        "heading": "Creating a Context",
+        "explanation": "The createContext function makes a new Context object. Call it outside your component so it stays constant. You can pass a default value as an argument. Export the Context so other files can use it.",
+        "code": "import { createContext } from 'react';\n\nconst ThemeContext = createContext('light');\n\nexport default ThemeContext;"
+      },
+      {
+        "heading": "Providing a Value",
+        "explanation": "The Provider component delivers the value to all child components. Import the context and wrap your tree with its Provider. Set the value prop to the data you want to share. Every component inside the Provider can access this value.",
+        "code": "import ThemeContext from './ThemeContext';\n\nfunction App() {\n  return (\n    <ThemeContext.Provider value='dark'>\n      <MainContent />\n    </ThemeContext.Provider>\n  );\n}"
+      },
+      {
+        "heading": "Consuming with useContext",
+        "explanation": "The useContext hook reads the value from a Provider. Pass the context object to the hook. The hook returns the nearest value from the Provider. Use it in any component inside the Provider tree.",
+        "code": "import { useContext } from 'react';\nimport ThemeContext from './ThemeContext';\n\nfunction Header() {\n  const theme = useContext(ThemeContext);\n  return <header>Current theme: {theme}</header>;\n}"
+      },
+      {
+        "heading": "Storing State in Context",
+        "explanation": "You can store state inside a Provider component. Create state with useState and pass it through the value prop. Include the setter function so children can change the value. This keeps one copy of the data for the whole tree.",
+        "code": "import { createContext, useState } from 'react';\n\nexport const UserContext = createContext(null);\n\nexport function UserProvider({ children }) {\n  const [user, setUser] = useState(null);\n\n  return (\n    <UserContext.Provider value={{ user, setUser }}>\n      {children}\n    </UserContext.Provider>\n  );\n}"
+      },
+      {
+        "heading": "Updating Context Value",
+        "explanation": "Child components can update context using the setter function. Read the setter from the context value object. Call it with new data just like normal state. Every component that uses the context rerenders with the new value.",
+        "code": "import { useContext } from 'react';\nimport { UserContext } from './UserContext';\n\nfunction LoginButton() {\n  const { setUser } = useContext(UserContext);\n\n  function login() {\n    setUser({ name: 'Ali' });\n  }\n\n  return <button onClick={login}>Log in</button>;\n}"
+      },
+      {
+        "heading": "Making a Custom Hook",
+        "explanation": "A custom hook wraps useContext with a friendly name. This shortens the code in your components. The hook reads the context and returns the value you need. If the context is missing, you can throw a helpful error.",
+        "code": "import { useContext } from 'react';\nimport { UserContext } from './UserContext';\n\nexport function useUser() {\n  return useContext(UserContext);\n}\n\nfunction Welcome() {\n  const { user } = useUser();\n  return <h1>Hello, {user ? user.name : 'guest'}</h1>;\n}"
+      }
+    ]
+  }
+]

@@ -1,9 +1,277 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title><%= typeof title !== 'undefined' ? title : 'DevHub - Learn & Practice Coding' %></title>
+<title><%= typeof title !== 'undefined' ? title : 'Zero to Pro - Learn & Practice Coding' %></title>
+<!-- Theme init: apply saved theme BEFORE page renders to prevent flash -->
+<script>
+  (function(){var t=localStorage.getItem('ztp-theme');var s=(t==='light'||t==='dark')?t:'light';document.documentElement.setAttribute('data-theme',s);})();
+</script>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="/css/style.css" />
+<script src="/js/theme.js"></script>
 <style>
-  /* Global theme defaults for the DevHub dark theme */
-  body { background-color: #111827; color: #f3f4f6; }
+  /* ============================================================
+     ZERO TO PRO THEME SYSTEM
+     Dark = default (professional slate/indigo), Light = landing-page
+     style with light colors. Both share the same component palette.
+     ============================================================ */
+
+  /* ---------- DARK THEME (default) ---------- */
+  body { background-color: #0f172a; color: #e2e8f0; }
+  /* Sub-pages (not home) — LIGHT MODE ONLY: soft mint/sky gradient (study-section colors) */
+  html[data-theme="light"] body:not(:has(.hero-section)) {
+    background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 40%, #cffafe 100%);
+  }
+
+  /* Landing page fade-in animation */
+  .fade-in-up { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in-up.visible { opacity: 1; transform: translateY(0); }
+  .lang-card:hover .lang-card-inner { border-color: #818cf8; transform: scale(1.05); }
+  .lang-card .lang-card-inner { transition: all 0.3s ease; }
+
+  /* Landing page section gradients (dark) */
+  .hero-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e293b 30%, #172554 60%, #0c1a3d 100%); }
+
+  /* Hero glassmorphism box — semi-transparent card around hero text (landing page style) */
+  .hero-glass {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 1.75rem;
+    padding: 3rem 2rem;
+    box-shadow: 0 24px 60px rgba(2, 6, 23, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+  .collab-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 30%, #172554 60%, #0c1a3d 100%); }
+  .code-editor-header { background: #1a2332; }
+  .code-editor-body { background: #0d1117; font-family: 'Courier New', Courier, monospace; }
+  .carousel-track { display: flex; gap: 1rem; transition: transform 0.3s ease; }
+  .phone-mockup { background: linear-gradient(135deg, #312e81 0%, #1e1b4b 50%, #0f172a 100%); }
+  .app-section { background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #134e4a 100%); }
+  .study-section { background: linear-gradient(135deg, #0f172a 0%, #134e4a 50%, #1e293b 100%); }
+
+  /* ============================================================
+     LIGHT THEME  —  Landing Page Colors EXACT
+     ============================================================ */
+  html[data-theme="light"] body { background-color: #ffffff; color: #1e293b; }
+
+  /* Hero — dark purple-to-blue gradient card (matches landing page hero) */
+  html[data-theme="light"] .hero-gradient {
+    background: linear-gradient(135deg, #4f46e5 0%, #2563eb 40%, #0ea5e9 100%) !important;
+  }
+  html[data-theme="light"] .hero-section h1 { color: #ffffff !important; }
+  html[data-theme="light"] .hero-section .text-gray-300 { color: #e0e7ff !important; }
+  html[data-theme="light"] .hero-section .text-blue-400 { color: #93c5fd !important; }
+  html[data-theme="light"] .hero-section .text-indigo-400 { color: #a5b4fc !important; }
+  html[data-theme="light"] .hero-section .text-gray-400 { color: #c7d2fe !important; }
+  /* Hero CTA buttons — landing page: purple gradient + white outline */
+  html[data-theme="light"] .hero-section .bg-emerald-500 { background: linear-gradient(135deg, #6366f1, #4f46e5) !important; box-shadow: 0 4px 14px rgba(99,102,241,0.4) !important; }
+  html[data-theme="light"] .hero-section .hover\:bg-emerald-600:hover { background: linear-gradient(135deg, #4f46e5, #4338ca) !important; }
+  html[data-theme="light"] .hero-section .border-blue-500 { border-color: rgba(255,255,255,0.6) !important; color: #ffffff !important; }
+  html[data-theme="light"] .hero-section .hover\:bg-blue-500:hover { background-color: rgba(255,255,255,0.15) !important; color: #ffffff !important; }
+  html[data-theme="light"] .hero-section .ring-indigo-500\/30 { box-shadow: 0 0 0 8px rgba(129,140,248,0.15) !important; }
+
+  /* Navbar — clean white with soft border (landing page style) */
+  html[data-theme="light"] nav.bg-gray-900\/80,
+  html[data-theme="light"] nav { background-color: rgba(255,255,255,0.95) !important; border-color: #e5e7eb !important; box-shadow: 0 1px 3px rgba(15,23,42,0.06) !important; }
+  html[data-theme="light"] nav .text-gray-300,
+  html[data-theme="light"] nav a:not(.bg-indigo-600):not(.bg-red-600):not(.bg-gradient-to-r) { color: #334155 !important; }
+  html[data-theme="light"] nav a:not(.bg-indigo-600):not(.bg-red-600):not(.bg-gradient-to-r):hover { color: #4f46e5 !important; background-color: #f1f5f9 !important; }
+  html[data-theme="light"] nav .bg-gray-800 { background-color: #f1f5f9 !important; }
+
+  /* Collaborations background — match hero gradient */
+  html[data-theme="light"] .collab-bg { background: linear-gradient(135deg, #4f46e5 0%, #2563eb 40%, #0ea5e9 100%) !important; }
+  html[data-theme="light"] .collab-bg h2 { color: #ffffff !important; }
+
+  /* Cards & section surfaces — clean white */
+  html[data-theme="light"] .bg-gray-800 { background-color: #ffffff !important; box-shadow: 0 1px 6px rgba(15,23,42,0.08) !important; }
+  html[data-theme="light"] .bg-gray-800\/30 { background-color: #f8fafc !important; }
+  html[data-theme="light"] .bg-gray-900 { background-color: #ffffff !important; }
+
+  /* Text colors — matching landing page */
+  html[data-theme="light"] .text-gray-100 { color: #0f172a !important; }
+  html[data-theme="light"] .text-gray-200 { color: #1e293b !important; }
+  html[data-theme="light"] .text-gray-300 { color: #475569 !important; }
+  html[data-theme="light"] .text-gray-400 { color: #64748b !important; }
+  html[data-theme="light"] .text-gray-500 { color: #64748b !important; }
+
+  /* Borders — subtle landing page style */
+  html[data-theme="light"] .border-gray-700 { border-color: #e2e8f0 !important; }
+  html[data-theme="light"] .border-gray-800 { border-color: #e2e8f0 !important; }
+  html[data-theme="light"] .border-gray-600 { border-color: #cbd5e1 !important; }
+
+  /* Form controls — clean white inputs */
+  html[data-theme="light"] .bg-gray-700 { background-color: #f8fafc !important; }
+  html[data-theme="light"] .bg-gray-700\/90 { background-color: #f8fafc !important; }
+  html[data-theme="light"] input, html[data-theme="light"] select, html[data-theme="light"] textarea {
+    color: #1e293b !important; border-color: #cbd5e1 !important; background-color: #ffffff !important;
+  }
+  html[data-theme="light"] .placeholder-gray-400::placeholder { color: #94a3b8 !important; }
+  html[data-theme="light"] .placeholder-gray-500::placeholder { color: #94a3b8 !important; }
+
+  /* Light mode: language dropdowns (test + compiler) — BLACK text for readability */
+  html[data-theme="light"] select.lang-select,
+  html[data-theme="light"] select#langSelect {
+    color: #000000 !important;
+    background-color: #ffffff !important;
+    border-color: #cbd5e1 !important;
+  }
+  html[data-theme="light"] .lang-select option,
+  html[data-theme="light"] #langSelect option {
+    color: #000000 !important;
+    background-color: #ffffff !important;
+  }
+  /* "Select Language" placeholder — black in light, white in dark */
+  html[data-theme="light"] select.lang-select option:disabled,
+  html[data-theme="light"] select#langSelect option:disabled {
+    color: #000000 !important;
+  }
+  html[data-theme="dark"] select.lang-select option:disabled,
+  html[data-theme="dark"] select#langSelect option:disabled {
+    color: #ffffff !important;
+  }
+
+  /* Code editor stays dark (landing page keeps code editor dark) */
+  html[data-theme="light"] .code-editor-header { background: #1a2332 !important; }
+  html[data-theme="light"] .code-editor-body { background: #0d1117 !important; color: #e5e7eb !important; }
+
+  /* App section — light cyan/blue gradient card (landing page Introducing ZeroToPro section) */
+  html[data-theme="light"] .app-section { background: linear-gradient(135deg, #e0f7fa 0%, #e0f2fe 40%, #f0f9ff 100%) !important; }
+  /* Study anywhere — light cyan/teal gradient card (landing page study section) */
+  html[data-theme="light"] .study-section { background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 40%, #cffafe 100%) !important; }
+
+  html[data-theme="light"] .app-section h2,
+  html[data-theme="light"] .app-section p,
+  html[data-theme="light"] .study-section h2,
+  html[data-theme="light"] .study-section p,
+  html[data-theme="light"] .app-section .text-gray-300,
+  html[data-theme="light"] .app-section .text-gray-400,
+  html[data-theme="light"] .study-section .text-gray-300,
+  html[data-theme="light"] .study-section .text-gray-400 { color: #1e293b !important; }
+  html[data-theme="light"] .app-section .text-emerald-400,
+  html[data-theme="light"] .study-section .text-emerald-400 { color: #059669 !important; }
+
+  /* App/study buttons — white cards with subtle shadows (landing page style) */
+  html[data-theme="light"] .app-section .bg-gray-800,
+  html[data-theme="light"] .study-section .bg-gray-800 { background-color: #ffffff !important; box-shadow: 0 2px 8px rgba(15,23,42,0.1) !important; }
+  html[data-theme="light"] .app-section .bg-gray-800:hover,
+  html[data-theme="light"] .study-section .bg-gray-800:hover { background-color: #f1f5f9 !important; }
+  html[data-theme="light"] .app-section .border-gray-600,
+  html[data-theme="light"] .app-section .border-gray-700,
+  html[data-theme="light"] .study-section .border-gray-600,
+  html[data-theme="light"] .study-section .border-gray-700 { border-color: #e2e8f0 !important; }
+  html[data-theme="light"] .app-section .text-white,
+  html[data-theme="light"] .study-section .text-white { color: #1e293b !important; }
+
+  /* Phone mockup — dark for contrast (landing page keeps phone dark) */
+  html[data-theme="light"] .phone-mockup { background: linear-gradient(135deg, #312e81 0%, #1e1b4b 50%, #0f172a 100%) !important; }
+  html[data-theme="light"] .phone-mockup .bg-gray-900,
+  html[data-theme="light"] .phone-mockup .bg-gray-800 { background-color: #1e293b !important; }
+  html[data-theme="light"] .phone-mockup .text-gray-400 { color: #9ca3af !important; }
+
+  /* Footer stays dark (landing page footer is dark) */
+  html[data-theme="light"] footer { background-color: #1f2937 !important; border-color: #374151 !important; }
+  html[data-theme="light"] footer a { color: #9ca3af !important; }
+  html[data-theme="light"] footer a:hover { color: #818cf8 !important; }
+  html[data-theme="light"] footer h4 { color: #ffffff !important; }
+  html[data-theme="light"] footer p { color: #9ca3af !important; }
+
+  /* Buttons — vibrant landing page colors */
+  html[data-theme="light"] .bg-indigo-600 { background: linear-gradient(135deg, #6366f1, #4f46e5) !important; color: #ffffff !important; box-shadow: 0 2px 8px rgba(99,102,241,0.3) !important; }
+  html[data-theme="light"] .bg-indigo-700 { background: linear-gradient(135deg, #4f46e5, #4338ca) !important; }
+  html[data-theme="light"] .hover\:bg-indigo-700:hover { background: linear-gradient(135deg, #4f46e5, #4338ca) !important; box-shadow: 0 4px 12px rgba(99,102,241,0.4) !important; }
+  html[data-theme="light"] .hover\:bg-indigo-600:hover { background: linear-gradient(135deg, #6366f1, #4f46e5) !important; color: #ffffff !important; }
+  html[data-theme="light"] .bg-red-600 { background-color: #dc2626 !important; color: #ffffff !important; }
+  html[data-theme="light"] .bg-red-700 { background-color: #b91c1c !important; }
+  html[data-theme="light"] .hover\:bg-red-700:hover { background-color: #b91c1c !important; color: #ffffff !important; }
+
+  /* Light-theme hover on light-gray buttons */
+  html[data-theme="light"] .hover\:bg-gray-600:hover,
+  html[data-theme="light"] .hover\:bg-gray-700:hover,
+  html[data-theme="light"] .hover\:bg-gray-800:hover,
+  html[data-theme="light"] .hover\:bg-gray-900:hover { background-color: #e2e8f0 !important; }
+
+  /* Quiz/option panels + error/success banners */
+  html[data-theme="light"] .bg-red-500\/10 { background-color: #fef2f2 !important; }
+  html[data-theme="light"] .border-red-500\/50 { border-color: #fca5a5 !important; }
+  html[data-theme="light"] .text-red-400 { color: #dc2626 !important; }
+  html[data-theme="light"] .bg-green-500\/10 { background-color: #f0fdf4 !important; }
+  html[data-theme="light"] .border-green-500\/50 { border-color: #86efac !important; }
+  html[data-theme="light"] .text-green-400 { color: #16a34a !important; }
+  html[data-theme="light"] .divide-gray-700 > :not([hidden]) ~ :not([hidden]) { border-color: #e2e8f0 !important; }
+  html[data-theme="light"] .divide-gray-800 > :not([hidden]) ~ :not([hidden]) { border-color: #e2e8f0 !important; }
+  html[data-theme="light"] .bg-indigo-500\/10 { background-color: #eef2ff !important; }
+  html[data-theme="light"] .bg-indigo-500\/15 { background-color: #e0e7ff !important; }
+  html[data-theme="light"] .text-indigo-300 { color: #4f46e5 !important; }
+  html[data-theme="light"] .text-indigo-400 { color: #4f46e5 !important; }
+  html[data-theme="light"] .text-emerald-400 { color: #059669 !important; }
+  html[data-theme="light"] .text-blue-400 { color: #2563eb !important; }
+  html[data-theme="light"] .text-yellow-400 { color: #d97706 !important; }
+  html[data-theme="light"] .text-pink-400 { color: #db2777 !important; }
+
+  /* Gradient text — teal accents (landing page labels) */
+  html[data-theme="light"] .bg-gradient-to-r.from-teal-400.to-emerald-400 { -webkit-text-fill-color: transparent; }
+
+  /* ===== LIGHT THEME: never white-on-white ===== */
+  html[data-theme="light"] .text-white { color: #1e293b !important; }
+  html[data-theme="light"] .bg-indigo-600.text-white,
+  html[data-theme="light"] .bg-indigo-700.text-white,
+  html[data-theme="light"] .bg-red-600.text-white,
+  html[data-theme="light"] .bg-red-700.text-white,
+  html[data-theme="light"] .bg-red-600\/90.text-white,
+  html[data-theme="light"] .bg-emerald-500.text-white,
+  html[data-theme="light"] .bg-emerald-600.text-white,
+  html[data-theme="light"] .bg-blue-600.text-white,
+  html[data-theme="light"] .bg-orange-500.text-white,
+  html[data-theme="light"] .bg-gray-600.text-white,
+  html[data-theme="light"] .bg-gray-700.text-white,
+  html[data-theme="light"] footer .text-white,
+  html[data-theme="light"] .phone-mockup .text-white,
+  html[data-theme="light"] .code-editor-header .text-white,
+  html[data-theme="light"] .code-editor-body .text-white { color: #ffffff !important; }
+  html[data-theme="light"] footer.bg-gray-800 { background-color: #1f2937 !important; border-color: #374151 !important; }
+
+  /* ============================================================
+     NAVBAR THEME TOGGLE BUTTON (present on every page)
+     ============================================================ */
+  .nav-theme-toggle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.3);
+    flex-shrink: 0;
+  }
+  .nav-theme-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 14px rgba(99,102,241,0.45);
+    background: linear-gradient(135deg, #4f46e5, #4338ca);
+  }
+  html[data-theme="light"] .nav-theme-toggle {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.3);
+  }
+  html[data-theme="light"] .nav-theme-toggle:hover {
+    box-shadow: 0 4px 14px rgba(99,102,241,0.45);
+    background: linear-gradient(135deg, #4f46e5, #4338ca);
+  }
+
+  /* Mobile: full-width toggle row with label */
+  .nav-theme-toggle-mobile {
+    width: 100%;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    justify-content: flex-start;
+    gap: 0.6rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .nav-theme-toggle-mobile span { display: inline-block; }
 </style>

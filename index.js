@@ -12,6 +12,7 @@ const authRoutes = require("./routes/authRoutes");
 const aiRoutes = require("./routes/aiRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const userRoutes = require("./routes/userRoutes");
+const certificateRoutes = require("./routes/certificateRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,6 +22,7 @@ app.use(cors());
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/logo", express.static(path.join(__dirname, "logo")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -97,6 +99,7 @@ app.use("/", authRoutes);
 app.use("/", aiRoutes);
 app.use("/", adminRoutes);
 app.use("/", userRoutes);
+app.use("/", certificateRoutes);
 
 // ---------- 404 Handler ----------
 app.use((req, res) => {
@@ -105,8 +108,29 @@ app.use((req, res) => {
 
 // ---------- Global Error Handler ----------
 app.use((err, req, res, next) => {
+  // Body parse errors (invalid JSON / too large) ko clean jawab do — server crash na ho
+  if (err && (err.type === "entity.parse.failed" || err.type === "entity.too.large")) {
+    console.error("Request body error:", err);
+    if (req.path.startsWith("/api/")) {
+      return res.status(err.status || 400).json({ success: false, reply: "Bad request: " + (err.message || "Invalid JSON body") });
+    }
+    return res.status(err.status || 400).send("Bad request");
+  }
+
   console.error("Unhandled error:", err);
-  res.status(500).render("errors/500");
+
+  res.status(500);
+  const locals = { user: (req.session && req.session.user) || null };
+  try {
+    res.render("errors/500", locals);
+  } catch (renderErr) {
+    console.error("500 page render failed:", renderErr);
+    if (req.path.startsWith("/api/")) {
+      res.json({ success: false, reply: "Server error: " + (err && err.message) });
+    } else {
+      res.send("Internal Server Error");
+    }
+  }
 });
 
 // ---------- Start Server ----------

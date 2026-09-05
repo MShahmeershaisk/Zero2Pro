@@ -59,10 +59,14 @@ async function listTutorials(req, res) {
       };
     });
 
+    // /tutorials?cat=HTML — footer / any link se category pre-select hoti hai
+    const requestedCat = req.query.cat || null;
+    const activeCategory = requestedCat && grouped[requestedCat] ? requestedCat : null;
+
     res.render("tutorial/tutorials", {
       grouped,
       categories,
-      activeCategory: null,
+      activeCategory,
       tutorialsData: tutorialsMap,
     });
   } catch (err) {

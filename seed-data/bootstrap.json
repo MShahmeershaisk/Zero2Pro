@@ -1,0 +1,194 @@
+[
+  {
+    "title": "Bootstrap Navbar & Navigation",
+    "description": "Learn how to build responsive navigation bars with Bootstrap so visitors can move around your website easily.",
+    "category": "Bootstrap",
+    "sections": [
+      {
+        "heading": "Creating a Navbar",
+        "explanation": "A navbar is a navigation bar that helps users move around your site. In Bootstrap, you add the class navbar to a nav element. The navbar-expand-lg class makes the menu spread out on large screens. You can place a navbar at the top of any page.",
+        "code": "<nav class='navbar navbar-expand-lg bg-light'>\n  <div class='container-fluid'>\n    <p>Navbar content goes here.</p>\n  </div>\n</nav>"
+      },
+      {
+        "heading": "Adding a Brand",
+        "explanation": "The brand is usually the name or logo of your website. You add it with a link that has the class navbar-brand. This link appears on the left side of the navbar. Clicking the brand normally takes the user back to the homepage.",
+        "code": "<a class='navbar-brand' href='index.html'>\n  My Website\n</a>"
+      },
+      {
+        "heading": "Navbar Links",
+        "explanation": "Links inside a navbar use the class nav-link. Group them inside a container with the classes nav and navbar-nav. You can also add the active class to highlight the current page. The disabled class makes a link unclickable.",
+        "code": "<ul class='navbar-nav'>\n  <li class='nav-item'>\n    <a class='nav-link active' href='index.html'>Home</a>\n  </li>\n  <li class='nav-item'>\n    <a class='nav-link' href='about.html'>About</a>\n  </li>\n</ul>"
+      },
+      {
+        "heading": "Responsive Toggle Button",
+        "explanation": "On small phones, the navbar links hide behind a toggle button. The button shows only when the screen is small. You use the navbar-toggler class for the button. The data-bs-toggle attribute switches the menu open and closed.",
+        "code": "<button class='navbar-toggler' type='button'\n  data-bs-toggle='collapse' data-bs-target='#menu'>\n  <span class='navbar-toggler-icon'></span>\n</button>"
+      },
+      {
+        "heading": "Navbar Color Styles",
+        "explanation": "Bootstrap gives you color classes for the navbar. The classes navbar-light and navbar-dark control the text color. You can also add background color classes like bg-dark or bg-primary. This helps your navbar match your website design.",
+        "code": "<nav class='navbar navbar-expand-lg navbar-dark bg-dark'>\n  <a class='navbar-brand' href='index.html'>My Site</a>\n</nav>"
+      }
+    ]
+  },
+  {
+    "title": "Bootstrap Cards, Images & Badges",
+    "description": "Use Bootstrap cards, images, and badges to present content in clean boxes with eye-catching labels.",
+    "category": "Bootstrap",
+    "sections": [
+      {
+        "heading": "Creating a Basic Card",
+        "explanation": "A card is a flexible box that holds content like text and images. Bootstrap cards use the class card. You place content inside it with the class card-body. Cards are useful for showing information in a neat box.",
+        "code": "<div class='card'>\n  <div class='card-body'>\n    <p>This is a simple card.</p>\n  </div>\n</div>"
+      },
+      {
+        "heading": "Adding a Card Title",
+        "explanation": "Cards look better when you add a title and text. The card-title class styles a heading inside the card. The card-text class is used for paragraphs. These classes add the right spacing and size automatically.",
+        "code": "<div class='card'>\n  <div class='card-body'>\n    <h5 class='card-title'>Card Title</h5>\n    <p class='card-text'>Some text inside the card.</p>\n  </div>\n</div>"
+      },
+      {
+        "heading": "Card with Image",
+        "explanation": "You can put an image at the top of a card. Place the image before the card-body. Use the class card-img-top to make the image fit the card width. Text stays below the image this way.",
+        "code": "<div class='card'>\n  <img class='card-img-top' src='photo.jpg' alt='A photo'>\n  <div class='card-body'>\n    <p class='card-text'>Photo description.</p>\n  </div>\n</div>"
+      },
+      {
+        "heading": "Adding Badges",
+        "explanation": "Badges are small labels that show extra information. You create one with the badge class. The classes bg-primary or bg-success set the badge color. Use a span tag to keep the badge on the same line as text.",
+        "code": "<h5>Inbox <span class='badge bg-primary'>5</span></h5>\n<h5>Messages <span class='badge bg-secondary'>3</span></h5>\n<h5>Alerts <span class='badge bg-danger'>2</span></h5>"
+      },
+      {
+        "heading": "Cards in a Row",
+        "explanation": "You can place cards side by side using the grid. Wrap the cards in a row and give each card a column class. Bootstrap divides the row into twelve equal parts. Each card takes up part of the width.",
+        "code": "<div class='row'>\n  <div class='col-md-4'>\n    <div class='card'>\n      <div class='card-body'>Card One</div>\n    </div>\n  </div>\n  <div class='col-md-4'>\n    <div class='card'>\n      <div class='card-body'>Card Two</div>\n    </div>\n  </div>\n</div>"
+      }
+    ]
+  },
+  {
+    "title": "Bootstrap Modal & Alerts (JavaScript Components)",
+    "description": "Create popup modals and alert messages with Bootstrap JavaScript components to interact with users.",
+    "category": "Bootstrap",
+    "sections": [
+      {
+        "heading": "Building a Modal",
+        "explanation": "A modal is a popup window that appears on top of the page. It needs a container with the class modal. The dialog inside uses the class modal-dialog. Content goes inside a section with the class modal-content.",
+        "code": "<div class='modal fade' id='myModal'>\n  <div class='modal-dialog'>\n    <div class='modal-content'>\n      <p>Modal body text here.</p>\n    </div>\n  </div>\n</div>"
+      },
+      {
+        "heading": "Modal Header and Footer",
+        "explanation": "A modal usually has a header, a body, and a footer. The header holds the title with the class modal-title. The body uses the class modal-body. The footer holds buttons like Close and Save.",
+        "code": "<div class='modal-header'>\n  <h5 class='modal-title'>New Message</h5>\n</div>\n<div class='modal-body'>\n  <p>Modal body content.</p>\n</div>\n<div class='modal-footer'>\n  <button type='button' class='btn btn-secondary'>Close</button>\n</div>"
+      },
+      {
+        "heading": "Opening the Modal",
+        "explanation": "You open a modal by clicking a button. The button needs the data-bs-toggle attribute set to modal. The data-bs-target attribute points to the modal id. Use a hash symbol before the id in the target.",
+        "code": "<button type='button' class='btn btn-primary'\n  data-bs-toggle='modal' data-bs-target='#myModal'>\n  Open Modal\n</button>"
+      },
+      {
+        "heading": "Dismissible Alerts",
+        "explanation": "Alerts show a short message to the user. You make one with the classes alert and alert-warning. To let users close an alert, add alert-dismissible. Add a button with the class btn-close at the end.",
+        "code": "<div class='alert alert-warning alert-dismissible'>\n  Please check your details.\n  <button type='button' class='btn-close'\n    data-bs-dismiss='alert'></button>\n</div>"
+      },
+      {
+        "heading": "Alert Colors",
+        "explanation": "Bootstrap offers alert styles in many colors. Use alert-success for success messages. Use alert-danger for errors and alert-info for useful tips. The colored background makes messages easy to see.",
+        "code": "<div class='alert alert-success'>Saved successfully!</div>\n<div class='alert alert-danger'>Something went wrong.</div>\n<div class='alert alert-info'>Check the helpful tip below.</div>"
+      }
+    ]
+  },
+  {
+    "title": "Bootstrap Carousel",
+    "description": "Build an image slideshow carousel with controls, indicators, captions, and autoplay.",
+    "category": "Bootstrap",
+    "sections": [
+      {
+        "heading": "Setting Up a Carousel",
+        "explanation": "A carousel is a slideshow that cycles through images. It needs a container with the classes carousel and slide. Add the id carouselExample to connect its parts. Every image belongs inside a carousel-item div.",
+        "code": "<div id='carouselExample' class='carousel slide'>\n  <div class='carousel-inner'>\n    <div class='carousel-item active'>\n      <img src='slide1.jpg' alt='First slide'>\n    </div>\n    <div class='carousel-item'>\n      <img src='slide2.jpg' alt='Second slide'>\n    </div>\n  </div>\n</div>"
+      },
+      {
+        "heading": "Adding Controls",
+        "explanation": "Controls are buttons that let the user move between slides. Add a button with the class carousel-control-prev for going back. The data-bs-slide attribute tells Bootstrap which direction to go. Each control needs both prev and next buttons.",
+        "code": "<button class='carousel-control-prev' type='button'\n  data-bs-target='#carouselExample' data-bs-slide='prev'>\n  <span class='carousel-control-prev-icon'></span>\n</button>"
+      },
+      {
+        "heading": "Carousel Indicators",
+        "explanation": "Indicators are small dots that show the current slide. They sit at the bottom of the carousel. Each dot is a button with the class carousel-indicators. The active class shows which slide is on screen.",
+        "code": "<div class='carousel-indicators'>\n  <button type='button' data-bs-target='#carouselExample'\n    data-bs-slide-to='0' class='active'></button>\n  <button type='button' data-bs-target='#carouselExample'\n    data-bs-slide-to='1'></button>\n</div>"
+      },
+      {
+        "heading": "Adding Captions",
+        "explanation": "Captions place text on top of a slide image. Wrap the text in a div with the class carousel-caption. The text appears in the middle or bottom of the image. This is useful for adding titles to slides.",
+        "code": "<div class='carousel-item active'>\n  <img src='slide1.jpg' alt='First slide'>\n  <div class='carousel-caption'>\n    <h5>Welcome</h5>\n    <p>Our featured offer for today.</p>\n  </div>\n</div>"
+      },
+      {
+        "heading": "Autoplay and Pause",
+        "explanation": "A carousel moves automatically every few seconds. You can use pause hover to stop it when the mouse is over it. Set ride to carousel to start moving on page load. These are useful data attributes for the carousel.",
+        "code": "<div id='carouselExample' class='carousel slide'\n  data-bs-ride='carousel' data-bs-pause='hover'>\n  <div class='carousel-inner'>\n    <div class='carousel-item active'></div>\n  </div>\n</div>"
+      }
+    ]
+  },
+  {
+    "title": "Bootstrap Icons & Typography",
+    "description": "Add Bootstrap icons and improve your text with typography and alignment utility classes.",
+    "category": "Bootstrap",
+    "sections": [
+      {
+        "heading": "Using Bootstrap Icons",
+        "explanation": "Bootstrap Icons is a free set of small images for your pages. You load it with a link in the head of your page. Each icon is drawn with a span tag. The icon name goes in the bi class.",
+        "code": "<link rel='stylesheet'\n  href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css'>\n<span class='bi bi-house'></span>"
+      },
+      {
+        "heading": "Icon Sizes",
+        "explanation": "Icons come in different sizes for different places. Use the fs classes from Bootstrap to make them bigger or smaller. Lower fs numbers like fs-1 make the icon the largest. You can also change the color with text classes.",
+        "code": "<span class='bi bi-star'></span>\n<span class='bi bi-star fs-3'></span>\n<span class='bi bi-star fs-1 text-warning'></span>"
+      },
+      {
+        "heading": "Display Headings",
+        "explanation": "Display headings are extra-large titles for hero sections. Use the classes display-1 to display-6. Lower numbers make bigger text. They stand out more than normal headings.",
+        "code": "<h1 class='display-1'>Display One</h1>\n<h2 class='display-3'>Display Three</h2>\n<h3 class='display-6'>Display Six</h3>"
+      },
+      {
+        "heading": "Text Utilities",
+        "explanation": "Bootstrap text classes style words quickly. The classes text-center, text-white, and text-uppercase do common jobs. Use text-muted for light gray helper text. These classes work on any text element.",
+        "code": "<p class='text-center'>This text is centered.</p>\n<p class='text-uppercase text-success'>All capital letters.</p>\n<p class='text-muted'>Small help text.</p>"
+      },
+      {
+        "heading": "Lead Text and Emphasis",
+        "explanation": "The lead class makes a paragraph a little larger. It is perfect for the opening sentence of a page. Bootstrap also gives you classes for bold and italic text. Use fw-bold for bold and fst-italic for italic.",
+        "code": "<p class='lead'>This paragraph leads the page.</p>\n<p class='fw-bold'>This text is bold.</p>\n<p class='fst-italic'>This text is italic.</p>"
+      }
+    ]
+  },
+  {
+    "title": "Bootstrap Building a Complete Page Layout",
+    "description": "Combine Bootstrap parts into one complete page layout with a header, hero, grid sections, and footer.",
+    "category": "Bootstrap",
+    "sections": [
+      {
+        "heading": "Page Container",
+        "explanation": "A container centers your content on the page. The class container makes a fixed-width box. The class container-fluid uses the full width. Many pages start with one container to hold everything.",
+        "code": "<div class='container'>\n  <h1>My Bootstrap Page</h1>\n</div>"
+      },
+      {
+        "heading": "Navigation and Grid",
+        "explanation": "Combine a navbar and a grid to build page structure. The grid uses rows and columns to divide space. Columns add up to twelve across a row. Here the page has a navbar and two columns.",
+        "code": "<nav class='navbar navbar-expand-lg bg-primary'>\n  <a class='navbar-brand' href='index.html'>Landing</a>\n</nav>\n<div class='container'>\n  <div class='row'>\n    <div class='col-md-8'>Main content</div>\n    <div class='col-md-4'>Sidebar</div>\n  </div>\n</div>"
+      },
+      {
+        "heading": "Hero Section",
+        "explanation": "A hero is the big welcome area at the top of a page. It often has a large heading and a button. You can style it with background and padding classes. The button uses the btn btn-primary classes.",
+        "code": "<section class='p-5 bg-light text-center'>\n  <h1 class='display-4'>Hello World</h1>\n  <p class='lead'>A simple Bootstrap page.</p>\n  <a href='about.html' class='btn btn-primary'>Learn More</a>\n</section>"
+      },
+      {
+        "heading": "Content Sections",
+        "explanation": "Long pages use several sections with headings. Each section can use the row and col grid again. Add a my-4 class for breathing space around sections. This keeps the layout tidy and easy to read.",
+        "code": "<section class='container my-4'>\n  <h2>About Us</h2>\n  <div class='row'>\n    <div class='col-sm-6'>First paragraph.</div>\n    <div class='col-sm-6'>Second paragraph.</div>\n  </div>\n</section>"
+      },
+      {
+        "heading": "Footer Section",
+        "explanation": "A footer sits at the bottom of the page. It often contains copyright text and small links. Bootstrap text utilities make it easy to style. A dark background class works well for footers.",
+        "code": "<footer class='bg-dark text-white text-center p-3'>\n  <p>&copy; 2026 My Website</p>\n  <a href='terms.html' class='text-white'>Terms</a>\n</footer>"
+      }
+    ]
+  }
+]

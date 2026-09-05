@@ -1,0 +1,283 @@
+[
+  {
+    "title": "CSS Box Model (Margin, Border, Padding)",
+    "description": "Learn how content, padding, borders, and margins shape the size and spacing of every element.",
+    "category": "CSS",
+    "sections": [
+      {
+        "heading": "What is the Box Model",
+        "explanation": "Every element on a page is a rectangular box. The box is made of content, padding, border, and margin. Content is the actual text or image. Padding sits between content and border, and margin sits outside the border.",
+        "code": "div {\n  width: 200px;\n  padding: 20px;\n  border: 2px solid black;\n  margin: 30px;\n}"
+      },
+      {
+        "heading": "Padding Around Content",
+        "explanation": "Padding adds space inside the element, around the content. You can set padding on one side or all sides at once. Larger padding makes the box look bigger and more comfortable.",
+        "code": "p {\n  padding: 10px;\n}\n\nh1 {\n  padding: 20px 10px;\n}\n\nstrong {\n  padding-left: 5px;\n}"
+      },
+      {
+        "heading": "Border Styles and Width",
+        "explanation": "A border wraps around the padding and content. Borders can have different widths, styles, and colors. You can also show a border on only one side of the box.",
+        "code": ".card {\n  border: 3px solid #333;\n}\n\n.alert {\n  border: 1px dashed red;\n}\n\n.note {\n  border-bottom: 2px dotted blue;\n}"
+      },
+      {
+        "heading": "Margins Separate Boxes",
+        "explanation": "Margin adds space outside the border, between one element and another. Margins help place gaps between elements on the page. Two margins can collapse into one in some cases.",
+        "code": ".box {\n  margin: 20px;\n}\n\n.center {\n  margin: 0 auto;\n  width: 300px;\n}\n\n.title {\n  margin-bottom: 10px;\n}"
+      },
+      {
+        "heading": "Box Sizing Control",
+        "explanation": "By default, width only covers the content box. The box-sizing property makes width include padding and border. This makes the total size much easier to predict.",
+        "code": "* {\n  box-sizing: border-box;\n}\n\n.button {\n  width: 100px;\n  padding: 15px;\n  border: 5px solid gray;\n}"
+      }
+    ]
+  },
+  {
+    "title": "CSS Positioning (Static, Relative, Absolute, Fixed)",
+    "description": "Move elements anywhere on the screen with the position property and top, right, bottom, and left values.",
+    "category": "CSS",
+    "sections": [
+      {
+        "heading": "Static is the Default",
+        "explanation": "Static is the default position for every element. Static elements flow normally down the page in order. You cannot move a static element with top or left. Most content you write is static.",
+        "code": "p {\n  position: static;\n  top: 50px; /* ignored */\n  left: 50px; /* ignored */\n}"
+      },
+      {
+        "heading": "Relative Moves In Place",
+        "explanation": "Relative positioning keeps the element in the normal flow. You can then nudge it with top, right, bottom, or left. The element moves from its original spot without affecting others.",
+        "code": ".box {\n  position: relative;\n  top: 20px;\n  left: 30px;\n}"
+      },
+      {
+        "heading": "Absolute Inside Parent",
+        "explanation": "An absolutely positioned element leaves the normal flow. It is placed relative to its nearest positioned ancestor. If no ancestor has a position, it uses the whole page.",
+        "code": ".parent {\n  position: relative;\n}\n\n.child {\n  position: absolute;\n  top: 0;\n  right: 0;\n}"
+      },
+      {
+        "heading": "Fixed Stays on Screen",
+        "explanation": "A fixed element stays in the same place on the screen, even when you scroll. It is commonly used for navigation bars and floating buttons. Fixed elements ignore the normal flow too.",
+        "code": ".navbar {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n}\n\n.scroll-to-top {\n  position: fixed;\n  bottom: 20px;\n  right: 20px;\n}"
+      },
+      {
+        "heading": "Sticky Combines Behaviors",
+        "explanation": "Sticky elements act like relative until the scroll passes a point. After that point they stick to the viewport. Sticky headers and table heads work well this way.",
+        "code": ".section-title {\n  position: sticky;\n  top: 0;\n  background: white;\n}\n\n.list {\n  overflow-y: scroll;\n  height: 300px;\n}"
+      }
+    ]
+  },
+  {
+    "title": "CSS Colors, Gradients & Backgrounds",
+    "description": "Give elements color with names, hex codes, and color functions, then layer backgrounds and smooth gradients.",
+    "category": "CSS",
+    "sections": [
+      {
+        "heading": "Named and Hex Colors",
+        "explanation": "CSS supports simple color names like red and blue. Hex codes give exact colors using six or three characters. Hex begins with a hash sign and mixes red, green, and blue.",
+        "code": ".one {\n  color: red;\n}\n\n.two {\n  color: #ff0000;\n}\n\n.three {\n  color: #f00;\n}"
+      },
+      {
+        "heading": "RGB and RGBA Colors",
+        "explanation": "The rgb function sets red, green, and blue values from 0 to 255. Adding an alpha value adds transparency. Alpha of 1 is fully visible and 0 is fully invisible.",
+        "code": ".solid {\n  color: rgb(255, 0, 0);\n}\n\n.see-through {\n  color: rgba(255, 0, 0, 0.5);\n}\n\n.faded {\n  background: rgba(0, 0, 0, 0.3);\n}"
+      },
+      {
+        "heading": "HSL Color Model",
+        "explanation": "Hsl stands for hue, saturation, and lightness. Hue is the angle on a color wheel, from 0 to 360. This model is easy to adjust for matching color palettes.",
+        "code": ".warm {\n  color: hsl(0, 100%, 50%);\n}\n\n.soft {\n  color: hsl(210, 50%, 60%);\n}\n\n.dark {\n  background: hsl(0, 0%, 10%);\n}"
+      },
+      {
+        "heading": "Linear Gradients",
+        "explanation": "A linear gradient blends colors along a straight line. The to keyword sets the direction of the blend. You can add multiple color stops for more complex gradients.",
+        "code": ".sunset {\n  background: linear-gradient(to right, #ff7e5f, #feb47b);\n}\n\n.rainbow {\n  background: linear-gradient(45deg, red, orange, yellow);\n}"
+      },
+      {
+        "heading": "Radial Gradients",
+        "explanation": "A radial gradient spreads colors outward from a center point. The default shape is a circle or ellipse. Radial gradients are nice for highlights and glows.",
+        "code": ".glow {\n  background: radial-gradient(circle at center, #fff, #ddd);\n}\n\n.pulse {\n  background: radial-gradient(closest-side, #6a9, #264);\n}"
+      },
+      {
+        "heading": "Background Images and Layers",
+        "explanation": "The background property can hold an image, a repeat pattern, and a color together. You can layer multiple backgrounds by separating them with commas. Background size and position refine the look.",
+        "code": ".hero {\n  background-image: url('bg.png');\n  background-repeat: no-repeat;\n  background-size: cover;\n}\n\n.layered {\n  background:\n    url('top.png') no-repeat center,\n    url('base.jpg') center / cover;\n}"
+      }
+    ]
+  },
+  {
+    "title": "CSS Typography & Fonts",
+    "description": "Control the look of text with font families, sizes, weights, spacing, alignment, and imported web fonts.",
+    "category": "CSS",
+    "sections": [
+      {
+        "heading": "Choosing Font Families",
+        "explanation": "The font-family property picks the typeface for your text. You can list several fonts in order as a fallback chain. The browser uses the first one that is available.",
+        "code": "body {\n  font-family: Arial, Helvetica, sans-serif;\n}\n\n.heading {\n  font-family: Georgia, 'Times New Roman', serif;\n}"
+      },
+      {
+        "heading": "Font Sizes and Units",
+        "explanation": "Pixel sizes are fixed, while rem sizes scale with the root font size. The em unit scales with the current element. Using rem makes text easier to resize for accessibility.",
+        "code": "p {\n  font-size: 16px;\n}\n\nh1 {\n  font-size: 2rem;\n}\n\nblockquote {\n  font-size: 1.25em;\n}"
+      },
+      {
+        "heading": "Weight, Style and Spacing",
+        "explanation": "Font-weight makes text bold or light. Font-style switches between normal and italic. Letter-spacing adds room between each letter for style.",
+        "code": ".bold {\n  font-weight: 700;\n}\n\n.light {\n  font-weight: 300;\n}\n\n.italic {\n  font-style: italic;\n}\n\n.spaced {\n  letter-spacing: 2px;\n}"
+      },
+      {
+        "heading": "Line Height and Align",
+        "explanation": "Line-height sets the space between lines of text. Larger line height makes paragraphs easier to read. Text-align puts text on the left, right, center, or both edges.",
+        "code": "p {\n  line-height: 1.6;\n}\n\n.center {\n  text-align: center;\n}\n\n.right {\n  text-align: right;\n}"
+      },
+      {
+        "heading": "Text Decoration Cases",
+        "explanation": "Text-decoration adds lines like underline, overline, or strikethrough. Links often use a color and underline together. You can remove the underline from links with none.",
+        "code": "a {\n  text-decoration: none;\n  color: #1a73e8;\n}\n\n.done {\n  text-decoration: line-through;\n}\n\n.note {\n  text-decoration: underline dotted;\n}"
+      },
+      {
+        "heading": "Web Fonts with Imports",
+        "explanation": "To use fonts that are not installed, import them from a web service. The @import rule must come before other rules. The font-family then works just like a local font.",
+        "code": "@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');\n\nbody {\n  font-family: 'Roboto', sans-serif;\n}"
+      }
+    ]
+  },
+  {
+    "title": "CSS Pseudo-classes & Pseudo-elements",
+    "description": "Style special states of elements and style parts of an element with pseudo-classes and pseudo-elements.",
+    "category": "CSS",
+    "sections": [
+      {
+        "heading": "Hover and Focus States",
+        "explanation": "Hover styles apply when the mouse is over an element. Focus styles apply when a user clicks or tabs into a field. These states give helpful feedback during interaction.",
+        "code": "button:hover {\n  background: #333;\n  color: white;\n}\n\ninput:focus {\n  outline: 2px solid blue;\n}"
+      },
+      {
+        "heading": "First Child and Last",
+        "explanation": "The :first-child and :last-child selectors match the first or last item inside a parent. nth-child lets you pick any item by number. These are great for list styling.",
+        "code": "li:first-child {\n  font-weight: bold;\n}\n\nli:last-child {\n  color: gray;\n}\n\nli:nth-child(odd) {\n  background: #f0f0f0;\n}"
+      },
+      {
+        "heading": "Active and Disabled",
+        "explanation": "The active state applies while an element is being pressed. The disabled state styles elements users cannot use. This helps buttons appear clickable or grayed out.",
+        "code": "button:active {\n  transform: scale(0.95);\n}\n\nbutton:disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n}\n\ninput:enabled {\n  border: 1px solid green;\n}"
+      },
+      {
+        "heading": "Before and After Elements",
+        "explanation": "Pseudo-elements create extra content inside an element. The ::before and ::after pseudo-elements need the content property. You can use them for icons, quotes, or decorations.",
+        "code": ".note::before {\n  content: 'Note: ';\n  font-weight: bold;\n}\n\n.card::after {\n  content: '';\n  display: block;\n  height: 4px;\n  background: goldenrod;\n}"
+      },
+      {
+        "heading": "First Letter and First Line",
+        "explanation": "The first-letter pseudo-element styles the first letter of a block of text. The first-line pseudo-element styles the first line. These create a classic printed-text look on web pages.",
+        "code": "p::first-letter {\n  font-size: 2em;\n  font-weight: bold;\n}\n\np::first-line {\n  text-transform: uppercase;\n}"
+      },
+      {
+        "heading": "Placeholder Text Style",
+        "explanation": "The placeholder pseudo-element styles the hint text inside input fields. You can change its color, size, and font style. Keep the placeholder readable against the field background.",
+        "code": "input::placeholder {\n  color: #999;\n  font-style: italic;\n}\n\ntextarea::placeholder {\n  color: #aaa;\n  font-size: 14px;\n}"
+      }
+    ]
+  },
+  {
+    "title": "CSS Transitions & Animations",
+    "description": "Add motion to your page with smooth transitions between states and full keyframe animations.",
+    "category": "CSS",
+    "sections": [
+      {
+        "heading": "Transition Basics",
+        "explanation": "A transition smoothly changes a property over time. You need a starting state and a new state. The transition property names what changes and how long it takes.",
+        "code": ".button {\n  background: blue;\n  transition: background-color 0.3s;\n}\n\n.button:hover {\n  background: darkblue;\n}"
+      },
+      {
+        "heading": "Multiple Transitions",
+        "explanation": "You can transition several properties at once. Separate each transition with a comma. Add ease, ease-in, or ease-out to control the speed curve.",
+        "code": ".card {\n  transition:\n    transform 0.4s ease,\n    box-shadow 0.4s ease;\n}\n\n.card:hover {\n  transform: translateY(-4px);\n  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);\n}"
+      },
+      {
+        "heading": "Keyframe Animations",
+        "explanation": "Animations run automatically without user interaction. Keyframes define the steps of the animation with from and to, or percentage stops. They are more powerful than transitions.",
+        "code": "@keyframes fade {\n  from { opacity: 0; }\n  to { opacity: 1; }\n}\n\n.banner {\n  animation: fade 1s ease;\n}"
+      },
+      {
+        "heading": "Duration and Delay",
+        "explanation": "Animation-duration sets how long one cycle takes. Animation-delay pauses before the animation starts. The fill-mode can keep the final state after the animation ends.",
+        "code": ".box {\n  animation: grow 1s ease forwards;\n  animation-delay: 0.5s;\n}\n\n@keyframes grow {\n  from { width: 0; }\n  to { width: 100%; }\n}"
+      },
+      {
+        "heading": "Rotation Loop Example",
+        "explanation": "A common animation is a spinning loader. You rotate an element from 0 to 360 degrees. Setting the iteration count to infinite makes it keep going without stopping.",
+        "code": "@keyframes spin {\n  to { transform: rotate(360deg); }\n}\n\n.loader {\n  width: 40px;\n  height: 40px;\n  border: 4px solid #ccc;\n  border-top-color: #333;\n  border-radius: 50%;\n  animation: spin 1s linear infinite;\n}"
+      }
+    ]
+  },
+  {
+    "title": "CSS Responsive Design & Media Queries",
+    "description": "Make layouts adapt to any screen with flexible units, breakpoints, and media queries.",
+    "category": "CSS",
+    "sections": [
+      {
+        "heading": "Responsive Meta Tag",
+        "explanation": "The viewport meta tag tells mobile browsers how to size the page. Without it, phones show a zoomed-out desktop view. Add it to the head of every page.",
+        "code": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
+      },
+      {
+        "heading": "Media Query Basics",
+        "explanation": "Media queries apply styles only when a condition is true. The max-width condition targets screens smaller than a value. Styles inside the query override earlier rules.",
+        "code": ".grid {\n  display: grid;\n  grid-template-columns: 1fr 1fr;\n}\n\n@media (max-width: 600px) {\n  .grid {\n    grid-template-columns: 1fr;\n  }\n}"
+      },
+      {
+        "heading": "Mobile First Approach",
+        "explanation": "In mobile first, you write styles for small screens first. Then min-width queries add styles for larger screens. This approach is clean and loads fast on phones.",
+        "code": ".card {\n  width: 100%;\n}\n\n@media (min-width: 768px) {\n  .card {\n    width: 50%;\n  }\n}\n\n@media (min-width: 1024px) {\n  .card {\n    width: 33%;\n  }\n}"
+      },
+      {
+        "heading": "Flexible Layout Units",
+        "explanation": "Flexible units like percentages and fractions scale with the screen. The fr unit divides space in a grid proportionally. Flexbox can grow or shrink items to fit the width.",
+        "code": ".row {\n  display: flex;\n  flex-wrap: wrap;\n}\n\n.item {\n  flex: 1 1 200px;\n}\n\n.hero {\n  width: 100%;\n  max-width: 1200px;\n  margin: 0 auto;\n}"
+      },
+      {
+        "heading": "Responsive Fonts with Clamp",
+        "explanation": "The clamp function makes font sizes scale between a minimum and maximum. It uses the viewport width to pick a value in the middle. This removes the need for many font media queries.",
+        "code": "h1 {\n  font-size: clamp(1.5rem, 4vw, 3rem);\n}\n\np {\n  font-size: clamp(1rem, 2vw, 1.25rem);\n}"
+      },
+      {
+        "heading": "Choosing Breakpoints",
+        "explanation": "Breakpoints are screen widths where the layout changes. Common breakpoints are phones, tablets, and desktops. Test at the sizes where your design breaks, not only fixed numbers.",
+        "code": "@media (max-width: 480px) {\n  .menu { display: none; }\n}\n\n@media (min-width: 481px) and (max-width: 768px) {\n  .menu { display: block; }\n}\n\n@media (min-width: 769px) {\n  .menu { display: flex; }\n}"
+      }
+    ]
+  },
+  {
+    "title": "CSS Custom Properties (Variables)",
+    "description": "Store reusable values like colors and sizes in custom properties and keep your styles consistent.",
+    "category": "CSS",
+    "sections": [
+      {
+        "heading": "Defining Custom Properties",
+        "explanation": "Custom properties are variables you define yourself. They always start with two dashes. Define them inside a root rule so every element can use them.",
+        "code": ":root {\n  --main-color: #3498db;\n  --space: 16px;\n  --radius: 8px;\n}"
+      },
+      {
+        "heading": "Using a Variable",
+        "explanation": "Use a variable with the var function by its name. The browser replaces the variable with its value. This keeps colors and sizes in one place for easy updates.",
+        "code": ".button {\n  background: var(--main-color);\n  padding: var(--space);\n  border-radius: var(--radius);\n}"
+      },
+      {
+        "heading": "Scope and Inheritance",
+        "explanation": "Custom properties inherit from parent to child elements. Variables defined in a selector only work inside that selector. A root variable is global, while a local one is limited.",
+        "code": ".card {\n  --card-bg: #eee;\n}\n\n.card-title {\n  background: var(--card-bg); /* works */\n}\n\n.main {\n  color: var(--main-color); /* global */\n}"
+      },
+      {
+        "heading": "Fallback Values",
+        "explanation": "A fallback value is used if the variable is missing. Add the fallback as a second argument in var. This keeps the design safe when a variable is not defined.",
+        "code": ".hero {\n  background: var(--hero-color, #222);\n}\n\n.text {\n  color: var(--text-color, black);\n}"
+      },
+      {
+        "heading": "Media Query Variables",
+        "explanation": "You can change variables inside a media query. All elements that use the variable update at once. This is an easy way to change spacing on smaller screens.",
+        "code": ":root {\n  --pad: 20px;\n}\n\n.container {\n  padding: var(--pad);\n}\n\n@media (max-width: 600px) {\n  :root {\n    --pad: 10px;\n  }\n}"
+      },
+      {
+        "heading": "Change with JavaScript",
+        "explanation": "JavaScript can update custom properties at runtime. You set the value with style.setProperty on the root element. The whole page updates instantly when it changes.",
+        "code": "// set a new theme color\nconst root = document.documentElement;\nroot.style.setProperty('--main-color', 'tomato');\n\n// read the current value\nconst color = getComputedStyle(root).getPropertyValue('--main-color');"
+      }
+    ]
+  }
+]

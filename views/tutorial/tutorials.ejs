@@ -2,11 +2,11 @@
 <html lang="en">
 <%
   // Inline helper for category icons (plain EJS, no external deps)
-  const ICONS = { 'HTML': '🖥️', 'CSS': '🎨', 'JavaScript': '⚡', 'General': '📘' };
+  const ICONS = { 'HTML': '🖥️', 'CSS': '🎨', 'JavaScript': '⚡', 'PHP': '🐘', 'C++': '⚙️', 'React': '⚛️', 'Bootstrap': '🅱️' };
   function catIcon(c) { return ICONS[c] || '📘'; }
 %>
 <head>
-  <%- include('../partials/head', { title: 'Tutorials - DevHub' }) %>
+  <%- include('../partials/head', { title: 'Tutorials - Zero to Pro' }) %>
 </head>
 <body class="bg-gray-900 text-gray-100 font-sans min-h-screen flex flex-col">
 
@@ -15,7 +15,7 @@
   <main class="flex-1">
     <!-- Hero -->
     <section class="text-center px-6 py-14 max-w-3xl mx-auto">
-      <span class="inline-block text-xs font-semibold uppercase tracking-widest text-indigo-400 mb-3">DevHub Library</span>
+      <span class="inline-block text-xs font-semibold uppercase tracking-widest text-indigo-400 mb-3">Zero to Pro Library</span>
       <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Coding Tutorials</h1>
       <p class="text-gray-400 text-lg">Learn the fundamentals of HTML, CSS, and JavaScript with these hand-picked study guides.</p>
     </section>
@@ -49,6 +49,8 @@
                 <p class="text-gray-400 text-sm mb-4 flex-1"><%= t.description %></p>
                 <button data-tid="<%= t._id %>"
                   class="self-start bg-gray-700 hover:bg-indigo-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">Read Lesson</button>
+                <button data-pdf="<%= t._id %>" title="Download PDF summary (normal English, no code)"
+                  class="self-start bg-red-600/90 hover:bg-red-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">📄 PDF</button>
               </article>
             <% }) %>
           </div>
@@ -66,7 +68,10 @@
       <div class="p-6">
         <div class="flex items-center justify-between mb-4">
           <span id="readerCat" class="text-xs bg-indigo-500/15 text-indigo-300 px-2.5 py-1 rounded-full"></span>
-          <button id="readerClose" class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
+          <div class="flex items-center gap-2">
+            <button id="readerPdf" class="bg-red-600/90 hover:bg-red-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition">📄 PDF</button>
+            <button id="readerClose" class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
+          </div>
         </div>
         <h2 id="readerTitle" class="text-2xl font-bold mb-3"></h2>
         <div id="readerDesc" class="text-gray-400 mb-5"></div>
@@ -75,6 +80,29 @@
       </div>
     </div>
   </div>
+
+  <!-- PDF summary ka print area — screen par hidden, sirf print/PDF mein dikhta hai -->
+  <style>
+    #pdfArea { display: none; }
+    .tutorial-section { scroll-margin-top: 90px; }
+    @media print {
+      body > *:not(#pdfArea) { display: none !important; }
+      #pdfArea {
+        display: block !important;
+        font-family: Georgia, 'Times New Roman', serif;
+        color: #111;
+      }
+      #pdfArea h1 { font-size: 22pt; color: #111; margin: 0 0 4px; }
+      #pdfArea .meta { font-size: 9.5pt; color: #555; border-bottom: 1px solid #999; padding-bottom: 6px; margin-bottom: 12px; }
+      #pdfArea .desc { font-size: 11pt; line-height: 1.4; color: #222; }
+      #pdfArea .print-note { font-size: 10pt; font-style: italic; color: #555; }
+      #pdfArea h2 { font-size: 13.5pt; color: #1a1a1a; margin: 14px 0 3px; }
+      #pdfArea p { font-size: 10.5pt; line-height: 1.5; color: #222; }
+      #pdfArea .pdf-cta { font-size: 10pt; color: #444; margin-top: 16px; }
+      @page { margin: 18mm; }
+    }
+  </style>
+  <div id="pdfArea" aria-hidden="true"></div>
 
   <%- include('../partials/footer') %>
   <%- include('../partials/scripts') %>
@@ -97,6 +125,16 @@
       });
     });
 
+    // ─── Footer/category links (?cat=HTML): category auto-select + scroll ────
+    (function () {
+      const activeCat = "<%= activeCategory || '' %>";
+      if (!activeCat) return;
+      const btn = Array.from(document.querySelectorAll('.filter-btn')).find(b => b.dataset.cat === activeCat);
+      if (btn) btn.click();
+      const sec = Array.from(document.querySelectorAll('.tutorial-section')).find(s => s.dataset.section === activeCat);
+      if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    })();
+
     // ─── Reader modal ────────────────────────────────────────────────────────
     const modal = document.getElementById('readerModal');
     const readerSections = document.getElementById('readerSections');
@@ -107,6 +145,9 @@
       tutorialsData = JSON.parse(document.getElementById('tutorialsData').textContent);
     } catch (e) { /* empty data on first load is fine */ }
 
+    // Currently open reader tutorial (PDF button ke liye)
+    let currentReaderTid = null;
+
     function escapeHtml(str) {
       const div = document.createElement('div');
       div.textContent = str;
@@ -116,6 +157,7 @@
     function openReader(tid) {
       const tut = tutorialsData[tid];
       if (!tut) return;
+      currentReaderTid = tid;
 
       // Show the modal
       modal.classList.remove('hidden');
@@ -167,6 +209,52 @@
     document.getElementById('readerClose').addEventListener('click', closeReader);
     modal.addEventListener('click', (e) => { if (e.target === modal) closeReader(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeReader(); });
+
+    // ─── PDF summary (condensed: sirf points, normal English, CODE nahi) ─────
+    const pdfArea = document.getElementById('pdfArea');
+
+    function buildPdfHtml(tut) {
+      const cat = tut.category || 'General';
+      const title = escapeHtml(tut.title || '');
+      const desc = escapeHtml(tut.description || '').replace(/\n/g, ' ');
+      const today = new Date().toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+
+      let html = '';
+      html += '<h1>' + title + '</h1>';
+      html += '<div class="meta">Zero to Pro &bull; Free Course Notes &bull; ' + escapeHtml(cat) + ' &bull; ' + today + '</div>';
+      html += '<p class="desc">' + desc + '</p>';
+      html += '<p class="print-note">This PDF has the key points in simple English. For the full lesson with code examples, read this tutorial on the Zero to Pro website.</p>';
+
+      if (tut.sections && tut.sections.length > 0) {
+        tut.sections.forEach((sec) => {
+          if (!sec.heading) return;
+          html += '<h2>' + escapeHtml(sec.heading) + '</h2>';
+          if (sec.explanation) {
+            html += '<p>' + escapeHtml(sec.explanation).replace(/\n/g, ' ') + '</p>';
+          }
+        });
+      } else if (tut.content) {
+        html += '<p>' + escapeHtml(tut.content) + '</p>';
+      }
+
+      html += '<p class="pdf-cta">Zero to Pro — Keep coding, keep learning! &#128640;</p>';
+      return html;
+    }
+
+    function openPdf(tid) {
+      const tut = tutorialsData[tid];
+      if (!tut) return;
+      pdfArea.innerHTML = buildPdfHtml(tut);
+      window.print();
+    }
+
+    document.querySelectorAll('[data-pdf]').forEach(btn => {
+      btn.addEventListener('click', () => openPdf(btn.dataset.pdf));
+    });
+
+    document.getElementById('readerPdf').addEventListener('click', () => {
+      if (currentReaderTid) openPdf(currentReaderTid);
+    });
   </script>
 </body>
 </html>

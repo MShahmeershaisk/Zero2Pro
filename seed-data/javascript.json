@@ -1,0 +1,280 @@
+[
+  {
+    "title": "JavaScript Variables, Data Types & Operators",
+    "description": "Learn how to store values in variables, understand the main data types, and use operators to work with numbers and text.",
+    "category": "JavaScript",
+    "sections": [
+      {
+        "heading": "Declaring Variables",
+        "explanation": "Variables store data so you can use it later in your program. In JavaScript you use let for values that can change and const for values that stay the same. Using const when a value never changes helps avoid mistakes. You can also use var, but let and const are the modern way.",
+        "code": "let name = 'Ali';\nconst age = 25;\nname = 'Sara';\nconsole.log(name); // Sara"
+      },
+      {
+        "heading": "Common Data Types",
+        "explanation": "JavaScript has a few main data types. Strings hold text and numbers hold numeric values. Booleans are either true or false. Arrays and objects hold collections of data. Understanding these types helps you choose the right tool for your data.",
+        "code": "const city = 'Lahore';\nconst year = 2026;\nconst isOpen = true;\nconst colors = ['red', 'green', 'blue'];\nconsole.log(typeof year); // number"
+      },
+      {
+        "heading": "Numbers and Strings",
+        "explanation": "Numbers can be added, subtracted, multiplied, and divided. The plus sign joins two strings together. When you add a number and a string, JavaScript converts the number to text. This can cause surprises, so be careful when mixing types.",
+        "code": "const a = 10;\nconst b = 4;\nconsole.log(a + b); // 14\nconsole.log(a - b); // 6\nconsole.log(a * b); // 40\nconsole.log(a / b); // 2.5\nconsole.log('Hello ' + 'World'); // Hello World"
+      },
+      {
+        "heading": "Comparison Operators",
+        "explanation": "Comparison operators compare two values and give back true or false. The equal operator checks if values are the same. The strict equal operator also checks the data type. These comparisons are used often inside if statements and loops.",
+        "code": "console.log(5 > 3);    // true\nconsole.log(5 >= 5);   // true\nconsole.log(5 === 5);  // true\nconsole.log('5' === 5); // false\nconsole.log(5 !== 3);  // true"
+      },
+      {
+        "heading": "Logic with Booleans",
+        "explanation": "Logical operators combine boolean values. The AND operator returns true only when both sides are true. The OR operator returns true when at least one side is true. The NOT operator flips a boolean value. These operators help you build complex conditions.",
+        "code": "const age = 20;\nconst hasCard = true;\nconsole.log(age >= 18 && hasCard); // true\nconsole.log(age < 18 || hasCard); // true\nconsole.log(!hasCard); // false"
+      }
+    ]
+  },
+  {
+    "title": "JavaScript Conditionals & Switch",
+    "description": "Make decisions in your code with if and else statements, the ternary operator, and the switch statement.",
+    "category": "JavaScript",
+    "sections": [
+      {
+        "heading": "If Else Basics",
+        "explanation": "If statements run a block of code only when a condition is true. When the condition is false, the else block runs instead. Conditions use comparison operators like greater than or equal to. This is the most common way to control the flow of a program.",
+        "code": "let age = 18;\nif (age >= 18) {\n  console.log('Adult');\n} else {\n  console.log('Minor');\n}"
+      },
+      {
+        "heading": "Else If Chains",
+        "explanation": "You can test many conditions one after another with else if. The first condition that is true wins and the rest are skipped. Put the most specific condition first for the best result. This works well for grading and ranges.",
+        "code": "const score = 85;\nif (score >= 90) {\n  console.log('A');\n} else if (score >= 80) {\n  console.log('B');\n} else if (score >= 70) {\n  console.log('C');\n} else {\n  console.log('Fail');\n}"
+      },
+      {
+        "heading": "Switch Statements",
+        "explanation": "A switch statement compares one value against many cases. It is cleaner than a long else if chain for exact matches. Every case should end with break to stop the check. A default case runs when nothing else matches.",
+        "code": "const day = 'Monday';\nswitch (day) {\n  case 'Monday':\n    console.log('Start of week');\n    break;\n  case 'Friday':\n    console.log('Weekend is near');\n    break;\n  default:\n    console.log('Regular day');\n}"
+      },
+      {
+        "heading": "Ternary Operator",
+        "explanation": "The ternary operator is a short way to write an if else statement. It takes a condition, a value for true, and a value for false. It is best for simple choices where you want one value. For complex logic, use a normal if statement instead.",
+        "code": "const age = 20;\nconst status = age >= 18 ? 'Adult' : 'Minor';\nconsole.log(status); // Adult"
+      }
+    ]
+  },
+  {
+    "title": "JavaScript Loops",
+    "description": "Repeat code with for loops, while loops, and the forEach method on arrays.",
+    "category": "JavaScript",
+    "sections": [
+      {
+        "heading": "For Loops",
+        "explanation": "A for loop repeats code a set number of times. It has three parts: a start value, a condition, and an update. The loop runs while the condition is true. This is great for counting and stepping through arrays.",
+        "code": "for (let i = 0; i < 5; i++) {\n  console.log(i);\n}"
+      },
+      {
+        "heading": "While Loops",
+        "explanation": "A while loop runs as long as its condition is true. You must update the condition inside the loop to stop it. If you forget, the loop runs forever and freezes your page. While loops are good when you do not know how many times to repeat.",
+        "code": "let count = 0;\nwhile (count < 3) {\n  console.log(count);\n  count++;\n}"
+      },
+      {
+        "heading": "Do While Loops",
+        "explanation": "A do while loop runs its code once, then checks the condition. This means the code always runs at least one time. It is useful when you want action before checking a condition. After the first run, it behaves like a while loop.",
+        "code": "let num = 5;\ndo {\n  console.log(num);\n  num++;\n} while (num < 3);"
+      },
+      {
+        "heading": "Using forEach",
+        "explanation": "forEach is a method that runs a function for every item in an array. It is easier to read than a for loop for simple jobs. The function receives the current item as its first argument. Use it to log items or update each element.",
+        "code": "const fruits = ['apple', 'mango', 'banana'];\nfruits.forEach(function (fruit) {\n  console.log(fruit);\n});"
+      }
+    ]
+  },
+  {
+    "title": "JavaScript Functions & Scope",
+    "description": "Create reusable code with functions, pass data with parameters, and understand how scope controls which variables you can access.",
+    "category": "JavaScript",
+    "sections": [
+      {
+        "heading": "Function Basics",
+        "explanation": "A function is a block of code you can reuse many times. Use the function keyword followed by a name and parentheses. Call a function by writing its name with parentheses. This helps you avoid repeating the same code everywhere.",
+        "code": "function greet() {\n  console.log('Hello');\n}\ngreet();\ngreet();"
+      },
+      {
+        "heading": "Function Parameters",
+        "explanation": "Parameters are placeholders for data you pass into a function. Arguments are the real values you send when calling it. Functions can take one or more parameters. Inside the function you use the parameter names as variables.",
+        "code": "function greetUser(name, city) {\n  console.log('Hi ' + name + ' from ' + city);\n}\ngreetUser('Ali', 'Lahore');\ngreetUser('Sara', 'Karachi');"
+      },
+      {
+        "heading": "Return Values",
+        "explanation": "A function can send a value back with the return keyword. The code after return does not run. Store the returned value in a variable. This lets functions compute results for the rest of your program.",
+        "code": "function add(a, b) {\n  return a + b;\n}\nconst total = add(3, 4);\nconsole.log(total); // 7"
+      },
+      {
+        "heading": "Arrow Functions",
+        "explanation": "Arrow functions are a shorter way to write functions. They use the arrow symbol instead of the function keyword. For simple functions, you can skip the curly braces and return. They are very common in modern JavaScript code.",
+        "code": "const square = (n) => n * n;\nconst add = (a, b) => a + b;\nconsole.log(square(4)); // 16\nconsole.log(add(2, 3)); // 5"
+      },
+      {
+        "heading": "Scope Rules",
+        "explanation": "Scope decides where a variable can be seen. Variables declared inside a function are local to that function. Variables declared at the top level are global and visible everywhere. Block scope applies to let and const declared inside curly braces.",
+        "code": "let globalVar = 'global';\nfunction show() {\n  let localVar = 'local';\n  console.log(globalVar);\n  console.log(localVar);\n}\nshow();\nconsole.log(globalVar);"
+      }
+    ]
+  },
+  {
+    "title": "JavaScript Arrays & Array Methods",
+    "description": "Store lists of data in arrays and use powerful methods to add, remove, find, and transform items.",
+    "category": "JavaScript",
+    "sections": [
+      {
+        "heading": "Creating Arrays",
+        "explanation": "An array is a list of items stored in one variable. Use square brackets and separate items with commas. Arrays can hold any type of data. Each item has an index starting from zero.",
+        "code": "const names = ['Ali', 'Sara', 'Mina'];\nconsole.log(names[0]); // Ali\nconsole.log(names.length); // 3"
+      },
+      {
+        "heading": "Adding and Removing",
+        "explanation": "The push method adds an item to the end of an array. The pop method removes the last item. The unshift method adds to the front and shift removes the first item. These methods all change the array directly.",
+        "code": "const nums = [1, 2, 3];\nnums.push(4);\nconsole.log(nums); // [1, 2, 3, 4]\nnums.pop();\nconsole.log(nums); // [1, 2, 3]\nnums.shift();\nconsole.log(nums); // [2, 3]"
+      },
+      {
+        "heading": "Slice and Splice",
+        "explanation": "Slice copies part of an array without changing the original. You give it a start and an end index. Splice changes the original array by adding or removing items. Choose slice for copying and splice for editing.",
+        "code": "const letters = ['a', 'b', 'c', 'd'];\nconst copy = letters.slice(1, 3);\nconsole.log(copy); // ['b', 'c']\nletters.splice(1, 1, 'x');\nconsole.log(letters); // ['a', 'x', 'c', 'd']"
+      },
+      {
+        "heading": "Find and Filter",
+        "explanation": "Filter creates a new array with only the items that pass a test. Find returns the first item that passes the test. Both methods take a function that returns true or false. These methods make working with lists much easier.",
+        "code": "const nums = [5, 12, 8, 20];\nconst big = nums.filter(function (n) {\n  return n > 10;\n});\nconsole.log(big); // [12, 20]"
+      },
+      {
+        "heading": "Map and Reduce",
+        "explanation": "Map creates a new array by changing every item. Reduce combines all items into one value. Map is great for transforming lists like doubling numbers. Reduce is handy for totals like adding up a list of prices.",
+        "code": "const nums = [1, 2, 3];\nconst doubled = nums.map(function (n) {\n  return n * 2;\n});\nconsole.log(doubled); // [2, 4, 6]\nconst total = nums.reduce(function (sum, n) {\n  return sum + n;\n}, 0);\nconsole.log(total); // 6"
+      }
+    ]
+  },
+  {
+    "title": "JavaScript Objects, JSON & Destructuring",
+    "description": "Group related data with objects, convert objects to JSON, and pull values out quickly with destructuring.",
+    "category": "JavaScript",
+    "sections": [
+      {
+        "heading": "Object Basics",
+        "explanation": "An object stores data as key and value pairs. Write keys as names and values after a colon. Objects are great for describing one thing with many details. Use curly braces to create an object.",
+        "code": "const user = {\n  name: 'Ali',\n  age: 24,\n  city: 'Lahore'\n};\nconsole.log(user);"
+      },
+      {
+        "heading": "Accessing Properties",
+        "explanation": "You can read a property with dot notation. You can also use square brackets with a string key. Dot notation is faster to type and easier to read. Square brackets are useful for keys stored in variables.",
+        "code": "const book = {\n  title: 'The Ocean',\n  pages: 200\n};\nconsole.log(book.title);\nconsole.log(book['pages']);\nbook.author = 'Mina';\nconsole.log(book.author);"
+      },
+      {
+        "heading": "Object Methods",
+        "explanation": "A method is a function stored inside an object. It can use the other properties of the object. Define a method with a function expression as the value. Call it using the object name and parentheses.",
+        "code": "const car = {\n  brand: 'Toyota',\n  year: 2020,\n  describe: function () {\n    console.log(this.brand + ' ' + this.year);\n  }\n};\ncar.describe();"
+      },
+      {
+        "heading": "JSON and Objects",
+        "explanation": "JSON is a text format for sending data between systems. JSON.stringify turns an object into a JSON string. JSON.parse turns a JSON string back into an object. This is very common when working with web APIs.",
+        "code": "const user = { name: 'Sara', age: 30 };\nconst json = JSON.stringify(user);\nconsole.log(json);\nconst back = JSON.parse(json);\nconsole.log(back.name); // Sara"
+      },
+      {
+        "heading": "Destructuring Objects",
+        "explanation": "Destructuring pulls values from an object into variables in one step. This saves you from writing many separate lines. The variable names usually match the property names. You can also give values default values if they are missing.",
+        "code": "const user = { name: 'Ali', age: 25, city: 'Lahore' };\nconst { name, age, city } = user;\nconsole.log(name); // Ali\nconsole.log(age); // 25\nconsole.log(city); // Lahore"
+      }
+    ]
+  },
+  {
+    "title": "JavaScript Events & Event Listeners",
+    "description": "Make your pages interactive by responding to clicks, typing, and key presses with event listeners.",
+    "category": "JavaScript",
+    "sections": [
+      {
+        "heading": "What Are Events",
+        "explanation": "Events are actions that happen in the browser like clicks and key presses. JavaScript can wait for these events and run code when they occur. Each event has a type like click or keydown. This is how web pages become interactive.",
+        "code": "const button = document.querySelector('button');\nbutton.addEventListener('click', function () {\n  console.log('Button clicked');\n});"
+      },
+      {
+        "heading": "addEventListener Basics",
+        "explanation": "The addEventListener method attaches a listener to an element. It takes an event type and a function as arguments. The function runs every time the event happens. You can add many listeners to the same element.",
+        "code": "const box = document.getElementById('box');\nbox.addEventListener('mouseenter', function () {\n  console.log('Mouse entered');\n});"
+      },
+      {
+        "heading": "Handling Click Events",
+        "explanation": "Click events fire when the user clicks an element. Inside the handler, the this keyword refers to the clicked element. You can change styles, text, or classes inside the handler. This pattern powers buttons, links, and menus.",
+        "code": "const btn = document.querySelector('button');\nbtn.addEventListener('click', function () {\n  this.textContent = 'Clicked';\n  this.style.color = 'green';\n});"
+      },
+      {
+        "heading": "Input and Change",
+        "explanation": "The input event fires every time a field value changes. The change event fires when the user leaves the field. Both are useful for text inputs and select boxes. You can read the current value with the value property.",
+        "code": "const input = document.getElementById('name');\ninput.addEventListener('input', function () {\n  console.log(this.value);\n});"
+      },
+      {
+        "heading": "Keyboard Events",
+        "explanation": "Keyboard events fire when keys are pressed on the keyboard. Keydown fires when a key goes down and keyup when it goes up. The event object tells you which key was pressed. Use this for games, shortcuts, and forms.",
+        "code": "document.addEventListener('keydown', function (event) {\n  console.log(event.key);\n});"
+      }
+    ]
+  },
+  {
+    "title": "JavaScript Error Handling",
+    "description": "Catch and fix problems in your code with try, catch, and finally blocks and custom thrown errors.",
+    "category": "JavaScript",
+    "sections": [
+      {
+        "heading": "Why Handle Errors",
+        "explanation": "Errors stop your whole program when they are not handled. A bad network request or a missing value can cause an error. Try and catch blocks let you respond to problems. This keeps your app running and users happy.",
+        "code": "try {\n  undefinedFunction();\n} catch (error) {\n  console.log('Something went wrong');\n}"
+      },
+      {
+        "heading": "Try Catch Basics",
+        "explanation": "Code inside try runs first. If it throws an error, the catch block runs next. The catch block receives an error object with details. The program continues after the catch block instead of stopping.",
+        "code": "try {\n  let data = JSON.parse('not json');\n} catch (error) {\n  console.log('Invalid JSON');\n}"
+      },
+      {
+        "heading": "Finally Block",
+        "explanation": "The finally block runs no matter what happens. It runs after try succeeds or after catch handles an error. Use it for cleanup like closing files or hiding a loader. It is a good place for code that must always run.",
+        "code": "try {\n  console.log('Trying');\n} catch (error) {\n  console.log('Failed');\n} finally {\n  console.log('Always runs');\n}"
+      },
+      {
+        "heading": "Throwing Errors",
+        "explanation": "You can create your own errors with the throw keyword. Throw a new Error with a clear message. This is useful when a function gets bad input. The error then travels up to a catch block that can handle it.",
+        "code": "function divide(a, b) {\n  if (b === 0) {\n    throw new Error('Cannot divide by zero');\n  }\n  return a / b;\n}\ntry {\n  divide(4, 0);\n} catch (error) {\n  console.log(error.message);\n}"
+      },
+      {
+        "heading": "Reading Error Info",
+        "explanation": "The error object stores useful information. The message property holds the error description. The stack property shows where the error happened. Logging the message helps you debug problems quickly.",
+        "code": "try {\n  const value = null;\n  value.name = 'Ali';\n} catch (error) {\n  console.log(error.name);\n  console.log(error.message);\n}"
+      }
+    ]
+  },
+  {
+    "title": "JavaScript Fetch API & Async/Await",
+    "description": "Request data from servers with the fetch API and write cleaner async code with async and await.",
+    "category": "JavaScript",
+    "sections": [
+      {
+        "heading": "The Fetch API",
+        "explanation": "The fetch method makes a request to a server URL. It returns a Promise that handles the response. Fetch is built into modern browsers and Node.js. Use it to get data from web APIs.",
+        "code": "fetch('https://api.example.com/users')\n  .then(function (res) {\n    return res.json();\n  })\n  .then(function (data) {\n    console.log(data);\n  });"
+      },
+      {
+        "heading": "Working with Promises",
+        "explanation": "A Promise represents a value that may be ready later. The then method runs when the Promise succeeds. The catch method runs when the Promise fails. This style is called promise chaining.",
+        "code": "fetch('https://api.example.com/data')\n  .then(function (res) {\n    return res.json();\n  })\n  .catch(function (error) {\n    console.log('Request failed');\n  });"
+      },
+      {
+        "heading": "Async Functions",
+        "explanation": "An async function always returns a Promise. Mark a function with the async keyword. Inside it you can use the await keyword. This makes asynchronous code look like normal code.",
+        "code": "async function loadData() {\n  const res = await fetch('https://api.example.com/data');\n  const data = await res.json();\n  console.log(data);\n}"
+      },
+      {
+        "heading": "Await Expressions",
+        "explanation": "Await pauses the function until a Promise resolves. You can only use await inside an async function. The awaited value is the result of the Promise. Await makes request code much easier to read.",
+        "code": "async function getUser() {\n  const res = await fetch('https://api.example.com/users/1');\n  const user = await res.json();\n  console.log(user.name);\n}\ngetUser();"
+      },
+      {
+        "heading": "Fetch Error Handling",
+        "explanation": "A fetch Promise rejects only on network problems. HTTP errors like 404 still resolve with a response. You can check the ok property on the response. Always wrap await calls in try and catch.",
+        "code": "async function loadUsers() {\n  try {\n    const res = await fetch('https://api.example.com/users');\n    if (!res.ok) {\n      throw new Error('Request failed');\n    }\n    const data = await res.json();\n    console.log(data);\n  } catch (error) {\n    console.log(error.message);\n  }\n}\nloadUsers();"
+      }
+    ]
+  }
+]

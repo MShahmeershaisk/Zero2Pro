@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<%
+  // Har language ka apna accent color + emoji (certificate card ke liye)
+  const CATEGORY_COLORS = {
+    HTML: ['#fbbf24', '#f97316'],
+    CSS: ['#60a5fa', '#6366f1'],
+    JavaScript: ['#facc15', '#f59e0b'],
+    PHP: ['#a5b4fc', '#8b5cf6'],
+    'C++': ['#38bdf8', '#2563eb'],
+    React: ['#22d3ee', '#0891b2'],
+    Bootstrap: ['#c084fc', '#7c3aed'],
+    General: ['#34d399', '#059669'],
+  };
+  function accentColors(c) {
+    return CATEGORY_COLORS[c] ? [CATEGORY_COLORS[c][0], CATEGORY_COLORS[c][1]] : ['#22d3ee', '#6366f1'];
+  }
+  function langEmoji(c) {
+    const map = {
+      HTML: '🌐',
+      CSS: '🎨',
+      JavaScript: '⚡',
+      PHP: '🐘',
+      'C++': '⚙️',
+      React: '⚛️',
+      Bootstrap: '📐',
+      General: '🏆',
+    };
+    return map[c] || '🏆';
+  }
+  function formatDate(d) {
+    const dt = new Date(d);
+    if (isNaN(dt.getTime())) return '—';
+    return dt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  }
+%>
+<head>
+  <%- include('../partials/head', { title: 'My Certificates - Zero to Pro' }) %>
+  <style>
+    /* Print: sirf certificate cards dikhein, baaki sab chhupa do */
+    @media print {
+      @page { margin: 0.4in; }
+      body { background: #fff !important; }
+      nav, footer, .no-print, .cert-header { display: none !important; }
+      .certificate-card {
+        background: #fff !important;
+        border: 1px solid #e5e7eb !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+      }
+      .certificate-card .text-gray-400, .certificate-card .text-gray-500 { color: #6b7280 !important; }
+      .certificate-card .text-gray-300 { color: #374151 !important; }
+      .certificate-card .badge-grey { color: #1f2937 !important; }
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans min-h-screen flex flex-col">
+
+  <%- include('../partials/navbar') %>
+
+  <main class="flex-1 py-14 px-6">
+    <div class="max-w-5xl mx-auto">
+      <!-- ─── Heading ───────────────────────────────────────────────────── -->
+      <div class="cert-header text-center mb-12">
+        <div class="w-24 h-24 md:w-32 md:h-32 mx-auto mb-4 rounded-full overflow-hidden flex items-center justify-center bg-transparent">
+          <img src="/logo/certificate.png" alt="Zero to Pro" class="w-full h-full object-contain" />
+        </div>
+        <span class="text-sm font-bold uppercase tracking-widest text-indigo-400">Certificates</span>
+        <h1 class="text-4xl md:text-5xl font-extrabold mt-2">My Certificates</h1>
+        <p class="text-gray-400 mt-3 max-w-xl mx-auto">Pass each language's test (75% or more) and collect your verified Zero to Pro certificates here.</p>
+      </div>
+
+      <% if (typeof error !== "undefined" && error) { %>
+        <p class="text-center text-red-400 bg-red-500/10 border border-red-500/50 rounded-lg py-3 px-4 mb-8"><%= error %></p>
+      <% } %>
+
+      <% if (!certificates || certificates.length === 0) { %>
+        <!-- ─── No certificates ─────────────────────────────────────────── -->
+        <div class="max-w-md mx-auto text-center bg-gray-800/50 border border-gray-700 rounded-3xl p-10">
+          <div class="w-20 h-20 mx-auto rounded-full flex items-center justify-center overflow-hidden">
+            <img src="/logo/certificate.png" alt="Zero to Pro Certificate" class="w-full h-full object-cover" />
+          </div>
+          <p class="text-[10px] uppercase tracking-widest text-gray-500 mt-3">No Badge Yet</p>
+          <h2 class="text-2xl font-bold mt-4">No Certificates Yet</h2>
+          <p class="text-gray-400 mt-3">
+            You haven't passed a test yet. Complete any language quiz with at least
+            <span class="text-white font-semibold">75%</span> score and your certificate
+            will appear here automatically.
+          </p>
+          <a href="/test" class="no-print inline-block mt-8 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-7 py-3 rounded-xl transition">Take a Test</a>
+        </div>
+      <% } else { %>
+        <!-- ─── Earned certificates ─────────────────────────────────────── -->
+        <div class="grid md:grid-cols-1 lg:grid-cols-2 gap-8">
+          <% certificates.forEach((cert, idx) => { %>
+            <% const [c1, c2] = accentColors(cert.category); %>
+            <article class="certificate-card bg-gray-800/60 border border-gray-700 rounded-2xl overflow-hidden shadow-xl shadow-black/20 transition hover:shadow-2xl">
+              <!-- Top accent bar -->
+              <div class="h-2" style="background:linear-gradient(90deg,<%= c1 %>,<%= c2 %>)"></div>
+
+              <div class="p-7">
+                <!-- Badge -->
+                <div class="flex justify-center">
+                  <svg width="150" height="150" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <linearGradient id="badgeGrad<%= idx %>" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:<%= c1 %>;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:<%= c2 %>;stop-opacity:1" />
+                      </linearGradient>
+                    </defs>
+                    <circle cx="75" cy="75" r="71" fill="none" stroke="url(#badgeGrad<%= idx %>)" stroke-width="3" opacity="0.35"/>
+                    <circle cx="75" cy="75" r="62" fill="none" stroke="url(#badgeGrad<%= idx %>)" stroke-width="1.5" opacity="0.25"/>
+                    <circle cx="75" cy="75" r="54" fill="#111827" stroke="url(#badgeGrad<%= idx %>)" stroke-width="2.5"/>
+                    <path id="topArc<%= idx %>" d="M 21 75 A 54 54 0 0 1 129 75" fill="none"/>
+                    <text fill="#9ca3af" font-size="10" font-weight="bold" letter-spacing="2">
+                      <textPath href="#topArc<%= idx %>" startOffset="50%" text-anchor="middle">ZERO TO PRO</textPath>
+                    </text>
+                    <path id="bottomArc<%= idx %>" d="M 129 80 A 54 54 0 0 1 21 80" fill="none"/>
+                    <text fill="#9ca3af" font-size="9" font-weight="bold" letter-spacing="1.5">
+                      <textPath href="#bottomArc<%= idx %>" startOffset="50%" text-anchor="middle">CERTIFIED • <%= new Date(cert.earnedAt).getFullYear() %></textPath>
+                    </text>
+                    <text x="75" y="84" text-anchor="middle" font-size="30"><%= langEmoji(cert.category) %></text>
+                  </svg>
+                </div>
+
+                <!-- Details -->
+                <div class="text-center mt-4">
+                  <p class="uppercase tracking-[0.3em] text-xs text-gray-500 font-semibold">Zero to Pro</p>
+                  <h2 class="text-2xl md:text-3xl font-extrabold mt-1" style="color:<%= c1 %>">Certificate of Achievement</h2>
+                  <p class="text-gray-400 mt-4">This certifies that</p>
+                  <p class="text-2xl font-bold mt-1 bg-clip-text text-transparent" style="background-image:linear-gradient(90deg,<%= c1 %>,<%= c2 %>)"><%= user.name %></p>
+                  <p class="text-gray-400 mt-4">has successfully passed the</p>
+                  <p class="text-xl font-bold mt-1 text-gray-100"><%= langEmoji(cert.category) %> <%= cert.category %> Certification Test</p>
+                  <p class="text-gray-400 mt-3">with a score of</p>
+                  <p class="text-5xl font-extrabold mt-1" style="color:<%= c2 %>"><%= cert.percentage %>%</p>
+                  <p class="text-xs text-gray-500 mt-2"><%= cert.testTitle %></p>
+                </div>
+
+                <!-- Meta -->
+                <div class="border-t border-gray-700 mt-6 pt-4 flex flex-wrap justify-between gap-3 text-xs text-gray-500">
+                  <span>ID: <span class="text-gray-300 font-mono"><%= cert.certId || "—" %></span></span>
+                  <span>Issued: <span class="text-gray-300"><%= formatDate(cert.earnedAt) %></span></span>
+                </div>
+
+                <div class="no-print mt-6 text-center">
+                  <button type="button" onclick="window.print()"
+                    class="border border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white font-semibold px-5 py-2.5 rounded-lg text-sm transition">
+                    🖨️ Print Certificate
+                  </button>
+                </div>
+              </div>
+            </article>
+          <% }) %>
+        </div>
+
+        <p class="no-print text-center text-gray-500 text-sm mt-10">
+          Want more? <a href="/test" class="text-indigo-400 hover:text-indigo-300 font-semibold">Take another test</a> to earn certificates for more languages.
+        </p>
+      <% } %>
+    </div>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

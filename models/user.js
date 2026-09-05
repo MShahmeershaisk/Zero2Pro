@@ -24,6 +24,31 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "admin"],
       default: "user",
     },
+    // Har user ke earned certificates — test pass karne par per-language
+    // ek certificate add hota hai (same category retake hone par update).
+    certificates: [
+      {
+        category: {
+          type: String,
+          required: true,
+        },
+        testTitle: {
+          type: String,
+          default: "Zero to Pro Certification Test",
+        },
+        percentage: {
+          type: Number,
+          default: 0,
+        },
+        certId: {
+          type: String,
+        },
+        earnedAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );

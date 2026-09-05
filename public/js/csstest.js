@@ -153,7 +153,7 @@
       const res = await fetch(`/api/test/${testId}/submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ answers, questionIds }),
+        body: JSON.stringify({ answers, questionIds, category }),
       });
       const data = await res.json();
 

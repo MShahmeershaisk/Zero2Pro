@@ -3,10 +3,13 @@
   font-family: "Segoe UI", Arial, sans-serif;
 }
 
+/* ============================================================
+   DARK THEME (default) — matches head.ejs dark palette
+   ============================================================ */
 body {
   margin: 0;
-  background: #f4f6f9;
-  color: #222;
+  background: #0f172a;
+  color: #e2e8f0;
 }
 
 .navbar {
@@ -31,7 +34,7 @@ body {
 }
 
 .nav-links a:hover {
-  color: #60a5fa;
+  color: #818cf8;
 }
 
 .hero {
@@ -44,7 +47,7 @@ body {
 }
 
 .btn, button {
-  background: #2563eb;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
   color: #fff;
   border: none;
   padding: 10px 18px;
@@ -57,7 +60,7 @@ body {
 }
 
 .btn:hover, button:hover {
-  background: #1d4ed8;
+  background: linear-gradient(135deg, #4f46e5, #4338ca);
 }
 
 .btn-danger {
@@ -71,22 +74,25 @@ body {
 .auth-box {
   max-width: 380px;
   margin: 80px auto;
-  background: #fff;
+  background: #1e293b;
   padding: 30px;
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  border: 1px solid #334155;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 
 .auth-box input {
   width: 100%;
   padding: 10px;
   margin-bottom: 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid #475569;
   border-radius: 6px;
+  background: #0f172a;
+  color: #e2e8f0;
 }
 
 .error {
-  color: #dc2626;
+  color: #f87171;
   font-size: 14px;
 }
 
@@ -97,7 +103,7 @@ body {
 }
 
 .form-box, .inline-form {
-  background: #fff;
+  background: #1e293b;
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 20px;
@@ -109,8 +115,10 @@ body {
 .form-box input, .form-box textarea,
 .inline-form input, .inline-form textarea {
   padding: 8px;
-  border: 1px solid #d1d5db;
+  border: 1px solid #475569;
   border-radius: 6px;
+  background: #0f172a;
+  color: #e2e8f0;
 }
 
 .card-list {
@@ -119,16 +127,17 @@ body {
 }
 
 .card {
-  background: #fff;
+  background: #1e293b;
   padding: 18px;
   border-radius: 8px;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  border: 1px solid #334155;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.2);
 }
 
 .tag {
   font-size: 12px;
-  background: #e0e7ff;
-  color: #3730a3;
+  background: #312e81;
+  color: #a5b4fc;
   padding: 2px 8px;
   border-radius: 10px;
 }
@@ -138,7 +147,9 @@ body {
   font-family: monospace;
   padding: 12px;
   border-radius: 6px;
-  border: 1px solid #d1d5db;
+  border: 1px solid #475569;
+  background: #0d1117;
+  color: #e5e7eb;
 }
 
 .output-box {
@@ -151,10 +162,11 @@ body {
 }
 
 .question-block {
-  background: #fff;
+  background: #1e293b;
   padding: 16px;
   border-radius: 8px;
   margin-bottom: 12px;
+  border: 1px solid #334155;
 }
 
 .option-label {
@@ -166,5 +178,105 @@ body {
   margin-top: 16px;
   font-size: 18px;
   font-weight: bold;
+}
+
+/* ============================================================
+   LIGHT THEME — Landing page exact colors
+   ============================================================ */
+html[data-theme="light"] body {
+  background: #ffffff;
+  color: #1e293b;
+}
+
+html[data-theme="light"] .navbar {
+  background: rgba(255,255,255,0.95);
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(15,23,42,0.06);
+}
+
+html[data-theme="light"] .navbar .brand {
+  color: #0f172a;
+}
+
+html[data-theme="light"] .nav-links a {
+  color: #334155;
+}
+
+html[data-theme="light"] .nav-links a:hover {
+  color: #4f46e5;
+}
+
+html[data-theme="light"] .btn,
+html[data-theme="light"] button {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.3);
+}
+
+html[data-theme="light"] .btn:hover,
+html[data-theme="light"] button:hover {
+  background: linear-gradient(135deg, #4f46e5, #4338ca);
+  box-shadow: 0 4px 12px rgba(99,102,241,0.4);
+}
+
+html[data-theme="light"] .btn-danger {
+  background: #dc2626;
+}
+
+html[data-theme="light"] .btn-danger:hover {
+  background: #b91c1c;
+}
+
+html[data-theme="light"] .auth-box {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 6px rgba(15,23,42,0.08);
+}
+
+html[data-theme="light"] .auth-box input {
+  background: #ffffff;
+  color: #1e293b;
+  border-color: #cbd5e1;
+}
+
+html[data-theme="light"] .error {
+  color: #dc2626;
+}
+
+html[data-theme="light"] .form-box,
+html[data-theme="light"] .inline-form {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+html[data-theme="light"] .form-box input,
+html[data-theme="light"] .form-box textarea,
+html[data-theme="light"] .inline-form input,
+html[data-theme="light"] .inline-form textarea {
+  background: #ffffff;
+  color: #1e293b;
+  border-color: #cbd5e1;
+}
+
+html[data-theme="light"] .card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 6px rgba(15,23,42,0.08);
+}
+
+html[data-theme="light"] .tag {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+html[data-theme="light"] #codeInput {
+  background: #ffffff;
+  color: #1e293b;
+  border-color: #cbd5e1;
+}
+
+html[data-theme="light"] .question-block {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
 }
 

@@ -1,0 +1,194 @@
+[
+  {
+    "title": "C++ Arrays & Strings",
+    "description": "Learn how to store lists of values with arrays and work with text using strings in C++.",
+    "category": "C++",
+    "sections": [
+      {
+        "heading": "Declaring Arrays",
+        "explanation": "An array stores many values of the same type in one variable. You declare an array with a type, a name, and a size. You can also give values right away inside curly braces. Use an index to reach each stored value.",
+        "code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int scores[5];\n    int marks[3] = {90, 85, 95};\n    cout << marks[0];\n    return 0;\n}"
+      },
+      {
+        "heading": "Array Indexing",
+        "explanation": "Every item in an array has an index number. The first item has index zero. Use square brackets to read or change an item. The last valid index is the size minus one.",
+        "code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int marks[3] = {90, 85, 95};\n    marks[1] = 88;\n    cout << marks[0] << \" \" << marks[1] << \" \" << marks[2];\n    return 0;\n}"
+      },
+      {
+        "heading": "Looping Through Arrays",
+        "explanation": "A loop helps you visit every item in an array. The loop counter doubles as the current index. You can print, add, or edit each item inside the loop. This is the most common way to work with all the values.",
+        "code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int marks[4] = {90, 85, 95, 80};\n    for (int i = 0; i < 4; i++) {\n        cout << marks[i] << endl;\n    }\n    return 0;\n}"
+      },
+      {
+        "heading": "String Basics",
+        "explanation": "A string stores whole words or sentences. You include the string header to use it. You can join strings with the plus sign. The length method tells you how many characters it has.",
+        "code": "#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    string name = \"Ali\";\n    string greeting = \"Hello \" + name;\n    cout << greeting << \" (\" << greeting.length() << \")\";\n    return 0;\n}"
+      },
+      {
+        "heading": "Changing String Characters",
+        "explanation": "You can read one character from a string with an index. Characters also start at index zero. You can replace a character just like an array item. This helps you edit text piece by piece.",
+        "code": "#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    string word = \"cat\";\n    word[0] = 'b';\n    cout << word;\n    return 0;\n}"
+      }
+    ]
+  },
+  {
+    "title": "C++ Pointers & References",
+    "description": "Understand how pointers store memory addresses and how references act as aliases for variables.",
+    "category": "C++",
+    "sections": [
+      {
+        "heading": "What Is a Pointer",
+        "explanation": "A pointer is a variable that stores a memory address. The address tells the pointer where another value lives. You declare a pointer with an asterisk before its name. Pointers let functions reach data without copying it.",
+        "code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int value = 25;\n    int* ptr = &value;\n    cout << ptr;\n    return 0;\n}"
+      },
+      {
+        "heading": "Address Of Operator",
+        "explanation": "The ampersand symbol takes the address of a variable. The address shows where the variable lives in memory. You can store that address in a pointer. Printing the address shows a memory location number.",
+        "code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int value = 25;\n    cout << \"value: \" << value << endl;\n    cout << \"address: \" << &value << endl;\n    return 0;\n}"
+      },
+      {
+        "heading": "Dereferencing a Pointer",
+        "explanation": "Dereferencing means following the pointer to the original value. You use the asterisk before the pointer name. Once dereferenced, you can read or change the value. Changes affect the original variable too.",
+        "code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int value = 25;\n    int* ptr = &value;\n    *ptr = 40;\n    cout << value;\n    return 0;\n}"
+      },
+      {
+        "heading": "What Is a Reference",
+        "explanation": "A reference is another name for an existing variable. You declare it with an ampersand after the type. References must be set when they are created. They are safer and easier to read than pointers.",
+        "code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int score = 10;\n    int& alias = score;\n    alias = 30;\n    cout << score;\n    return 0;\n}"
+      },
+      {
+        "heading": "References in Functions",
+        "explanation": "Passing by reference lets a function change the original value. You add an ampersand to the parameter name. The function works on the same variable, not a copy. This is useful when a function must update data.",
+        "code": "#include <iostream>\nusing namespace std;\n\nvoid addTen(int& num) {\n    num = num + 10;\n}\n\nint main() {\n    int total = 5;\n    addTen(total);\n    cout << total;\n    return 0;\n}"
+      }
+    ]
+  },
+  {
+    "title": "C++ Function Overloading & Default Arguments",
+    "description": "Learn to reuse function names with different parameters and give arguments helpful default values.",
+    "category": "C++",
+    "sections": [
+      {
+        "heading": "Function Overloading",
+        "explanation": "Overloading lets you use the same name for several functions. The versions must differ in their parameters. The compiler picks the best match from your arguments. This makes your code simpler and clearer.",
+        "code": "#include <iostream>\nusing namespace std;\n\nint add(int a, int b) {\n    return a + b;\n}\n\ndouble add(double a, double b) {\n    return a + b;\n}\n\nint main() {\n    cout << add(3, 4) << endl;\n    cout << add(2.5, 1.5);\n    return 0;\n}"
+      },
+      {
+        "heading": "Overload by Type",
+        "explanation": "Two overloaded functions can accept different data types. One version may take integers and another doubles. The compiler matches your arguments to the right version. Choose the version that fits the values you pass.",
+        "code": "#include <iostream>\nusing namespace std;\n\nvoid show(int number) {\n    cout << \"Integer: \" << number << endl;\n}\n\nvoid show(double number) {\n    cout << \"Double: \" << number << endl;\n}\n\nint main() {\n    show(7);\n    show(3.5);\n    return 0;\n}"
+      },
+      {
+        "heading": "Overload by Count",
+        "explanation": "Overloaded functions can take a different number of arguments. One version may take two numbers and another three. This lets one name handle simple and complex calls. Callers do not need separate names for each case.",
+        "code": "#include <iostream>\nusing namespace std;\n\nint multiply(int a, int b) {\n    return a * b;\n}\n\nint multiply(int a, int b, int c) {\n    return a * b * c;\n}\n\nint main() {\n    cout << multiply(2, 3) << endl;\n    cout << multiply(2, 3, 4);\n    return 0;\n}"
+      },
+      {
+        "heading": "Default Arguments",
+        "explanation": "A default argument gives a value when the caller skips it. You write the default value next to the parameter. The caller may pass nothing and still get a result. This keeps code short and flexible.",
+        "code": "#include <iostream>\n#include <string>\nusing namespace std;\n\nvoid greet(string name = \"Guest\") {\n    cout << \"Hello \" << name << endl;\n}\n\nint main() {\n    greet(\"Ayesha\");\n    greet();\n    return 0;\n}"
+      },
+      {
+        "heading": "Default Argument Rules",
+        "explanation": "Default values must come last in the parameter list. You cannot skip an earlier argument to pass a later one. After a default parameter, later ones need defaults too. Following this rule keeps calls easy to read.",
+        "code": "#include <iostream>\n#include <string>\nusing namespace std;\n\nvoid ticket(string name, int seats = 1, string type = \"General\") {\n    cout << name << \" seats: \" << seats << \" type: \" << type << endl;\n}\n\nint main() {\n    ticket(\"Ali\");\n    ticket(\"Ali\", 2);\n    return 0;\n}"
+      }
+    ]
+  },
+  {
+    "title": "C++ Exception Handling (try/catch)",
+    "description": "Handle runtime errors safely with try, catch, and throw in C++.",
+    "category": "C++",
+    "sections": [
+      {
+        "heading": "What Are Exceptions",
+        "explanation": "An exception is an error that happens while a program runs. Bad input and invalid values are common causes. The throw keyword sends an error out of the current code. Throwing without a catch stops the program, so always add handling.",
+        "code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int score = 105;\n    if (score > 100) {\n        throw score;\n    }\n    cout << \"Score accepted\";\n    return 0;\n}"
+      },
+      {
+        "heading": "The Try Block",
+        "explanation": "The try block holds code that may cause an error. You place the risky code inside its curly braces. If an exception happens, the program looks for a catch. If nothing goes wrong, the catch is skipped.",
+        "code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    try {\n        int score = 105;\n        if (score > 100) {\n            throw \"Score is too high\";\n        }\n        cout << \"Score accepted\";\n    } catch (const char* msg) {\n        cout << \"Error: \" << msg;\n    }\n    return 0;\n}"
+      },
+      {
+        "heading": "Catching an Exception",
+        "explanation": "The catch block runs only when an exception is thrown. It must come right after the try block. You name the type of error you expect. Inside, you can print a message or fix the data.",
+        "code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    try {\n        int number = -1;\n        if (number < 0) {\n            throw number;\n        }\n        cout << \"Number is positive\";\n    } catch (int error) {\n        cout << \"Negative number: \" << error;\n    }\n    return 0;\n}"
+      },
+      {
+        "heading": "Catching All Errors",
+        "explanation": "Sometimes you want to catch any type of error. Use three dots inside the catch parentheses. This catches exceptions you did not expect. Put it after your specific catch blocks.",
+        "code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    try {\n        throw 42;\n    } catch (int error) {\n        cout << \"Caught integer: \" << error << endl;\n    } catch (...) {\n        cout << \"Caught something else\";\n    }\n    return 0;\n}"
+      },
+      {
+        "heading": "Functions That Throw",
+        "explanation": "Functions can throw exceptions from inside their body. The calling code must handle the throw with try and catch. This keeps error checks close to the data. It also avoids crashing the whole program.",
+        "code": "#include <iostream>\nusing namespace std;\n\ndouble divide(int a, int b) {\n    if (b == 0) {\n        throw \"Cannot divide by zero\";\n    }\n    return (double)a / b;\n}\n\nint main() {\n    try {\n        cout << divide(10, 0);\n    } catch (const char* msg) {\n        cout << \"Error: \" << msg;\n    }\n    return 0;\n}"
+      }
+    ]
+  },
+  {
+    "title": "C++ File Handling (ofstream & ifstream)",
+    "description": "Save data to files and read it back with ofstream and ifstream in C++.",
+    "category": "C++",
+    "sections": [
+      {
+        "heading": "Writing to a File",
+        "explanation": "The ofstream type writes data to a file. Include the fstream header to use it. Give the file a name when you create the object. Then you print to the file just like the screen.",
+        "code": "#include <iostream>\n#include <fstream>\nusing namespace std;\n\nint main() {\n    ofstream file(\"notes.txt\");\n    file << \"Hello file!\";\n    file.close();\n    return 0;\n}"
+      },
+      {
+        "heading": "Reading a File",
+        "explanation": "The ifstream type reads data from a file. You pass the file name when you open it. Use getline to read whole lines of text. Reading stops when the end of the file is reached.",
+        "code": "#include <iostream>\n#include <fstream>\n#include <string>\nusing namespace std;\n\nint main() {\n    ifstream file(\"notes.txt\");\n    string line;\n    while (getline(file, line)) {\n        cout << line << endl;\n    }\n    file.close();\n    return 0;\n}"
+      },
+      {
+        "heading": "Checking the File",
+        "explanation": "A file may fail to open for several reasons. You should check the file object before using it. The is_open method tells you if it is ready. An else branch can handle a failed open.",
+        "code": "#include <iostream>\n#include <fstream>\nusing namespace std;\n\nint main() {\n    ifstream file(\"missing.txt\");\n    if (file.is_open()) {\n        cout << \"File opened\";\n    } else {\n        cout << \"Could not open file\";\n    }\n    return 0;\n}"
+      },
+      {
+        "heading": "Appending to a File",
+        "explanation": "The default write mode replaces the whole file. Append mode adds text to the end instead. Pass ios::app when you open the file. Old content stays and new lines follow it.",
+        "code": "#include <iostream>\n#include <fstream>\nusing namespace std;\n\nint main() {\n    ofstream file(\"notes.txt\", ios::app);\n    file << \"One more line\" << endl;\n    file.close();\n    return 0;\n}"
+      },
+      {
+        "heading": "Closing Files",
+        "explanation": "Close a file when you are done working with it. The close method frees the file for other programs. Forgetting to close may leave data unsaved. Closing is a simple habit that keeps files safe.",
+        "code": "#include <iostream>\n#include <fstream>\nusing namespace std;\n\nint main() {\n    ofstream file(\"data.csv\");\n    file << \"name, score\" << endl;\n    file << \"Ali, 85\" << endl;\n    file.close();\n    cout << \"File saved\";\n    return 0;\n}"
+      }
+    ]
+  },
+  {
+    "title": "C++ Standard Template Library (vector & sort)",
+    "description": "Use ready-made tools from the STL to store lists and arrange them in order.",
+    "category": "C++",
+    "sections": [
+      {
+        "heading": "What Is the STL",
+        "explanation": "The STL is a library of ready-made C++ tools. It provides collections and useful functions. You include only the headers you need. Vector and sort are friendly places to start.",
+        "code": "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> numbers;\n    cout << \"Vector ready\";\n    return 0;\n}"
+      },
+      {
+        "heading": "Creating a Vector",
+        "explanation": "A vector is a list that grows and shrinks as needed. You write the data type inside angle brackets. You can start empty or with initial values. Vectors manage their own memory for you.",
+        "code": "#include <iostream>\n#include <vector>\n#include <string>\nusing namespace std;\n\nint main() {\n    vector<int> empty;\n    vector<string> names = {\"Ali\", \"Sana\"};\n    cout << names[1];\n    return 0;\n}"
+      },
+      {
+        "heading": "Adding Items",
+        "explanation": "The push_back method adds an item to the end. Each call makes the vector one item larger. You pass the new value inside the parentheses. This is the easiest way to build a growing list.",
+        "code": "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> scores;\n    scores.push_back(85);\n    scores.push_back(90);\n    scores.push_back(78);\n    cout << scores.size();\n    return 0;\n}"
+      },
+      {
+        "heading": "Looping Over a Vector",
+        "explanation": "A for loop can visit every element in a vector. The counter runs from zero to the size. Read each element with its index. This pattern works for vectors of any type.",
+        "code": "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> scores = {85, 90, 78};\n    for (int i = 0; i < scores.size(); i++) {\n        cout << scores[i] << \" \";\n    }\n    return 0;\n}"
+      },
+      {
+        "heading": "Sorting a Vector",
+        "explanation": "The sort function arranges vector items in order. Include the algorithm header to use it. You pass the start and end of the vector. After sorting, the smallest value comes first.",
+        "code": "#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    vector<int> scores = {85, 78, 90, 72};\n    sort(scores.begin(), scores.end());\n    for (int i = 0; i < scores.size(); i++) {\n        cout << scores[i] << \" \";\n    }\n    return 0;\n}"
+      }
+    ]
+  }
+]

@@ -1,6 +1,6 @@
 function landing(req, res) {
   res.render("home/index", {
-    title: "DevHub - Learn & Practice Coding",
+    title: "Zero to Pro - Learn & Practice Coding",
   });
 }
 
