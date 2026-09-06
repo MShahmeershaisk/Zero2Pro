@@ -9,15 +9,14 @@
 
     <!-- Desktop Navigation (CENTER) -->
     <div class="hidden lg:flex space-x-6 items-center absolute left-1/2 -translate-x-1/2">
-      <a href="/tutorials" class="hover:text-indigo-400 font-medium transition text-sm">TUTORIALS</a>
-      <a href="/tutorials" class="hover:text-indigo-400 font-medium transition text-sm">COURSES</a>
-      <a href="/test" class="hover:text-indigo-400 font-medium transition text-sm">EXERCISES</a>
-      <a href="/compiler" class="hover:text-indigo-400 font-medium transition text-sm">COMPILER</a>
-      <a href="/certificates" class="hover:text-indigo-400 font-medium transition text-sm">CERTIFICATES</a>
+      <a href="/tutorials" class="text-gray-300 hover:text-indigo-400 font-medium transition text-sm">TUTORIALS</a>
+      <a href="/test" class="text-gray-300 hover:text-indigo-400 font-medium transition text-sm">EXERCISES</a>
+      <a href="/compiler" class="text-gray-300 hover:text-indigo-400 font-medium transition text-sm">COMPILER</a>
+      <a href="/certificates" class="text-gray-300 hover:text-indigo-400 font-medium transition text-sm">CERTIFICATES</a>
       <% if (user) { %>
-        <a href="/profile" class="hover:text-indigo-400 font-medium transition text-sm">PROFILE</a>
+        <a href="/profile" class="text-gray-300 hover:text-indigo-400 font-medium transition text-sm">PROFILE</a>
         <% if (user.role === 'admin') { %>
-          <a href="/admin" class="hover:text-indigo-400 font-medium transition text-sm">ADMIN</a>
+          <a href="/admin" class="text-gray-300 hover:text-indigo-400 font-medium transition text-sm">ADMIN</a>
         <% } %>
       <% } %>
     </div>
@@ -60,15 +59,14 @@
         </svg>
         <span id="themeToggleLabel">Switch to Light Mode</span>
       </button>
-      <a href="/tutorials" class="hover:text-indigo-400 font-medium transition py-2 px-2 rounded-lg hover:bg-gray-800">Tutorials</a>
-      <a href="/tutorials" class="hover:text-indigo-400 font-medium transition py-2 px-2 rounded-lg hover:bg-gray-800">Courses</a>
-      <a href="/test" class="hover:text-indigo-400 font-medium transition py-2 px-2 rounded-lg hover:bg-gray-800">Exercises</a>
-      <a href="/compiler" class="hover:text-indigo-400 font-medium transition py-2 px-2 rounded-lg hover:bg-gray-800">Compiler</a>
-      <a href="/certificates" class="hover:text-indigo-400 font-medium transition py-2 px-2 rounded-lg hover:bg-gray-800">Certificates</a>
+      <a href="/tutorials" class="text-gray-300 hover:text-indigo-400 font-medium transition py-2 px-2 rounded-lg hover:bg-gray-800">Tutorials</a>
+      <a href="/test" class="text-gray-300 hover:text-indigo-400 font-medium transition py-2 px-2 rounded-lg hover:bg-gray-800">Exercises</a>
+      <a href="/compiler" class="text-gray-300 hover:text-indigo-400 font-medium transition py-2 px-2 rounded-lg hover:bg-gray-800">Compiler</a>
+      <a href="/certificates" class="text-gray-300 hover:text-indigo-400 font-medium transition py-2 px-2 rounded-lg hover:bg-gray-800">Certificates</a>
       <% if (user) { %>
-        <a href="/profile" class="hover:text-indigo-400 font-medium transition py-2 px-2 rounded-lg hover:bg-gray-800">Profile</a>
+        <a href="/profile" class="text-gray-300 hover:text-indigo-400 font-medium transition py-2 px-2 rounded-lg hover:bg-gray-800">Profile</a>
         <% if (user.role === 'admin') { %>
-          <a href="/admin" class="hover:text-indigo-400 font-medium transition py-2 px-2 rounded-lg hover:bg-gray-800">Admin</a>
+          <a href="/admin" class="text-gray-300 hover:text-indigo-400 font-medium transition py-2 px-2 rounded-lg hover:bg-gray-800">Admin</a>
         <% } %>
         <!-- Mobile User Info & Logout -->
         <div class="pt-3 mt-3 border-t border-gray-700">
