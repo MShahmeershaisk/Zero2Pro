@@ -7,8 +7,8 @@ const User = require("./models/user");
 const Home = require("./models/home");
 const questions = require("./data/questions.json");
 
-// Full-course content: seed-data/*.json files (har language ka complete course).
-// Ye JSON files alag se bani hain taake content ko easy add/update kiya ja sake.
+// Full-course content: seed-data/*.json files (a complete course for each language).
+// These JSON files are kept separate so the content is easy to add to or update.
 function loadSeedDataTutorials() {
   const dir = path.join(__dirname, "seed-data");
   if (!fs.existsSync(dir)) return [];
@@ -960,7 +960,7 @@ async function seed() {
   const result = await seedTutorials();
   console.log(`Tutorials: ${result.created} created, ${result.updated} updated, ${result.total - result.created - result.updated} unchanged (${result.total} total in seed)`);
 
-  // One-time cleanup: rename ke pehle ke purane "DevHub" tutorials hatao
+  // One-time cleanup: remove the old "DevHub" tutorials from before the rename
   const stale = await Home.deleteMany({ title: /DevHub/i });
   if (stale.deletedCount > 0) console.log(`Removed ${stale.deletedCount} stale "DevHub" tutorial(s)`);
 

@@ -16,6 +16,11 @@ const certificateRoutes = require("./routes/certificateRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const SESSION_SECRET = process.env.SESSION_SECRET || "dev-only-insecure-secret";
+
+if (SESSION_SECRET === "dev-only-insecure-secret" && process.env.NODE_ENV === "production") {
+  console.warn("WARNING: SESSION_SECRET is not set — set a strong random value in .env before deploying.");
+}
 
 // ---------- Middleware ----------
 app.use(cors());
@@ -28,7 +33,7 @@ app.use(express.json());
 
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "secret",
+    secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -40,58 +45,20 @@ app.use(
   })
 );
 
-// User ko har page par available karo (navbar ke liye)
+// Make the logged-in user available on every page (for the navbar)
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
   next();
 });
 
 // ---------- MongoDB Connect ----------
-const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/quiz_database";
+const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/crud";
 mongoose
   .connect(MONGO_URI)
   .then(() => console.log("MongoDB Connected Successfully"))
   .catch((err) => console.error("MongoDB Connection Error:", err));
 
-// ---------- Model ----------
-// Sawal "Test" collection ke andar embedded hote hain (seed.js dekhein),
-// isliye yahan ek alag "Question" model banane ki zaroorat nahi.
-const Test = require("./models/test");
-
-// ---------- API Endpoint to Fetch Questions by Category ----------
-app.get("/api/questions", async (req, res) => {
-  try {
-    const { category } = req.query;
-
-    // Test collection ke andar se embedded questions nikalein
-    const pipeline = [
-      { $unwind: "$questions" },
-      ...(category ? [{ $match: { "questions.category": category } }] : []),
-      { $sample: { size: 10 } },
-      {
-        $project: {
-          _id: "$questions._id",
-          question: "$questions.questionText",
-          options: "$questions.options",
-          correctAnswer: "$questions.correctAnswerIndex",
-          category: "$questions.category",
-        },
-      },
-    ];
-
-    const questions = await Test.aggregate(pipeline);
-
-    res.status(200).json(questions);
-  } catch (error) {
-    res.status(500).json({ 
-      success: false, 
-      message: "Questions fetch karne mein error aaya.", 
-      error: error.message 
-    });
-  }
-});
-
-// ---------- Existing Routes ----------
+// ---------- Routes ----------
 app.use("/", homeRoutes);
 app.use("/", compilerRoutes);
 app.use("/", testRoutes);
@@ -101,14 +68,20 @@ app.use("/", adminRoutes);
 app.use("/", userRoutes);
 app.use("/", certificateRoutes);
 
+
 // ---------- 404 Handler ----------
+// Return JSON for API requests, plain text for everything else.
 app.use((req, res) => {
-  res.status(404).render("errors/404");
+  res.status(404);
+  if (req.path.startsWith("/api/")) {
+    return res.json({ success: false, message: "Not Found" });
+  }
+  res.send("404 - Page Not Found");
 });
 
 // ---------- Global Error Handler ----------
 app.use((err, req, res, next) => {
-  // Body parse errors (invalid JSON / too large) ko clean jawab do — server crash na ho
+  // Handle body parse errors (invalid JSON / too large) cleanly so the server does not crash
   if (err && (err.type === "entity.parse.failed" || err.type === "entity.too.large")) {
     console.error("Request body error:", err);
     if (req.path.startsWith("/api/")) {
@@ -119,17 +92,12 @@ app.use((err, req, res, next) => {
 
   console.error("Unhandled error:", err);
 
+  // The error page files (views/errors/*) were removed, so send a plain response instead.
   res.status(500);
-  const locals = { user: (req.session && req.session.user) || null };
-  try {
-    res.render("errors/500", locals);
-  } catch (renderErr) {
-    console.error("500 page render failed:", renderErr);
-    if (req.path.startsWith("/api/")) {
-      res.json({ success: false, reply: "Server error: " + (err && err.message) });
-    } else {
-      res.send("Internal Server Error");
-    }
+  if (req.path.startsWith("/api/")) {
+    res.json({ success: false, reply: "Server error: " + (err && err.message) });
+  } else {
+    res.send("Internal Server Error");
   }
 });
 

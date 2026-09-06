@@ -1,5 +1,8 @@
 const User = require("../models/user");
 
+const PASSWORD_MIN_LENGTH = 6;
+const EMAIL_REGEX = /^[^\s@]+@gmail\.com$/i;
+
 // Login check middleware — protects any route that needs a logged-in user
 function requireAuth(req, res, next) {
   if (!req.session.user) return res.redirect("/login");
@@ -13,6 +16,19 @@ function requireAdmin(req, res, next) {
   next();
 }
 
+// Lightweight signup validation — returns an error message, or null if valid.
+function validateSignup({ name, email, password, confirmPassword }) {
+  if (!name || !name.trim()) return "Name is required.";
+  if (!EMAIL_REGEX.test(email || "")) return "Email must be a valid @gmail.com address";
+  if (typeof password !== "string" || password.length < PASSWORD_MIN_LENGTH) {
+    return `Password must be at least ${PASSWORD_MIN_LENGTH} characters`;
+  }
+  if (confirmPassword !== undefined && password !== confirmPassword) {
+    return "Password and Confirm Password must match";
+  }
+  return null;
+}
+
 function getSignup(req, res) {
   res.render("auth/signup", { error: null });
 }
@@ -21,26 +37,24 @@ async function postSignup(req, res) {
   try {
     const { name, email, password, confirmPassword } = req.body;
 
-    if (!/^[^\s@]+@gmail\.com$/i.test(email || "")) {
-      return res.render("auth/signup", { error: "Email must be a valid @gmail.com address" });
-    }
-
-    if (confirmPassword !== undefined && password !== confirmPassword) {
-      return res.render("auth/signup", { error: "Password and Confirm Password must match" });
+    // Validate before touching the database
+    const validationError = validateSignup({ name, email, password, confirmPassword });
+    if (validationError) {
+      return res.render("auth/signup", { error: validationError });
     }
 
     const existing = await User.findOne({ email });
     if (existing) {
       return res.render("auth/signup", { error: "Email already registered" });
     }
-    const user = new User({ name, email, password });
+    const user = new User({ name: name.trim(), email, password });
     await user.save();
     req.session.regenerate(() => {
       req.session.user = { id: user._id, name: user.name, email: user.email, role: user.role };
-      res.redirect("/"); // Home/Landing page par redirect karega
+      res.redirect("/"); // Redirect to the Home/Landing page
     });
   } catch (err) {
-    console.error(err);
+    console.error("Signup error:", err);
     res.render("auth/signup", { error: "Something went wrong. Try again." });
   }
 }
@@ -60,7 +74,7 @@ async function postLogin(req, res) {
 
     req.session.regenerate(() => {
       req.session.user = { id: user._id, name: user.name, email: user.email, role: user.role };
-      res.redirect("/"); // Home/Landing page par redirect karega
+      res.redirect("/"); // Redirect to the Home/Landing page
     });
   } catch (err) {
     console.error(err);

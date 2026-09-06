@@ -24,8 +24,8 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "admin"],
       default: "user",
     },
-    // Har user ke earned certificates — test pass karne par per-language
-    // ek certificate add hota hai (same category retake hone par update).
+    // The user's earned certificates — one is added per language when they
+    // pass a test (and updated when they retake the same category).
     certificates: [
       {
         category: {
@@ -53,14 +53,14 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Password ko save karne se pehle hash karo
+// Hash the password before saving it
 userSchema.pre("save", async function () {
   if (!this.isModified("password")) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-// Login ke waqt password compare karne ke liye method
+// Method to compare the password during login
 userSchema.methods.comparePassword = function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };

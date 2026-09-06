@@ -59,7 +59,7 @@ async function listTutorials(req, res) {
       };
     });
 
-    // /tutorials?cat=HTML — footer / any link se category pre-select hoti hai
+    // /tutorials?cat=HTML — the category is pre-selected via the footer / any link
     const requestedCat = req.query.cat || null;
     const activeCategory = requestedCat && grouped[requestedCat] ? requestedCat : null;
 

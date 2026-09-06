@@ -7,11 +7,11 @@ if (!fs.existsSync(tempDir)) {
   fs.mkdirSync(tempDir);
 }
 
-// Bade programs ka output bhi poori tarah pakdo (default Node limit sirf
-// 200KB hai — usse bada output aane par error milta tha).
+// Capture the output of large programs completely (the default Node limit is
+// only 200KB — larger output used to throw an error).
 const EXEC_OPTIONS = {
-  timeout: 30000, // 30s — lambi compilation/execution ke liye
-  maxBuffer: 20 * 1024 * 1024, // 20MB output available
+  timeout: 30000, // 30s — for long compilation/execution
+  maxBuffer: 20 * 1024 * 1024, // 20MB of output allowed
   windowsHide: true,
 };
 
@@ -31,11 +31,11 @@ function cleanupFiles(files) {
   });
 }
 
-// Jo language browser me live-preview se chalti hai, server ko uske liye
-// kuch nahi karna padta. (CSS/Bootstrap/React/HTML client-side render hote hain.)
+// Languages that run as a live browser preview need nothing from the server.
+// (CSS/Bootstrap/React/HTML are rendered client-side.)
 const PREVIEW_LANGS = new Set(["html", "css", "bootstrap", "react"]);
 
-// Check: kya ek command system par installed hai? (where/which dono try karo)
+// Check whether a command is installed on the system (try both where/which)
 function findBinary(cmd) {
   const checkCmd = process.platform === "win32" ? `where ${cmd}` : `which ${cmd}`;
   try {
@@ -46,9 +46,9 @@ function findBinary(cmd) {
   }
 }
 
-// Agar binary PATH par nahi mili to common install locations scan karo.
-// XAMPP/WAMP/Laragon (PHP) aur MinGW/MSYS2/CodeBlocks/Dev-C++ (g++) —
-// ye Windows par aam jaghein hote hain jahan PATH set nahi hota.
+// If the binary is not on PATH, scan common install locations.
+// XAMPP/WAMP/Laragon (PHP) and MinGW/MSYS2/CodeBlocks/Dev-C++ (g++) —
+// these are common places on Windows where PATH is not set.
 function findInCommonLocations(cmd) {
   const candidates = [];
   if (cmd === "php") {
@@ -88,7 +88,7 @@ function findInCommonLocations(cmd) {
   return null;
 }
 
-// PHP / C++ ke liye — binary exist karti hai ya nahi, pehle check karo
+// For PHP / C++ — check first whether the binary exists
 const PHP_BIN = findBinary("php") || findInCommonLocations("php");
 const GPP_BIN = findBinary("g++") || findInCommonLocations("g++");
 if (PHP_BIN) console.log("Compiler: PHP found at " + PHP_BIN);
@@ -129,10 +129,12 @@ function checkForbiddenLibraries(lang, code) {
       }
     }
   } else if (lang === "javascript") {
-    // Node.js built-in modules list (allowed ones)
+    // Node.js built-in modules list (allowed ones).
+    // Deliberately excludes fs / child_process / vm / net / dgram / http — the
+    // dangerous modules that would give code filesystem or network access.
     const allowedModules = [
       "assert", "buffer", "crypto", "events", "path", "querystring",
-      "readline", "string_decoder", "url", "util", "math",
+      "readline", "string_decoder", "url", "util",
     ];
 
     // Catch both require("x") and ES-module import statements
@@ -150,9 +152,9 @@ function checkForbiddenLibraries(lang, code) {
       }
     }
   } else if (lang === "php") {
-    // Dangerous functions block — server command execution roko
+    // Block dangerous functions — stop server command execution
     if (/\b(?:system|shell_exec|passthru|exec|popen|proc_open)\s*\(/.test(code)) {
-      return "Security Error: system/exec/shell_exec allowed nahi hain is compiler mein!";
+      return "Security Error: system/exec/shell_exec are not allowed in this compiler!";
     }
   }
   return null;
@@ -195,7 +197,7 @@ function runLocalCode(lang, code, stdin = "") {
       if (!PHP_BIN) {
         return resolve({
           success: false,
-          output: "PHP compiler (php CLI) is server par install nahi hai. PHP chalane ke liye XAMPP/WAMP install karein ya mujhse online compiler (Piston/Judge0) integrate karwa dein.",
+          output: "PHP compiler (php CLI) is not installed on this server. To run PHP, install XAMPP/WAMP, or ask me to integrate an online compiler (Piston/Judge0).",
         });
       }
       mainFilePath = path.join(tempDir, `script_${timestamp}.php`);
@@ -206,7 +208,7 @@ function runLocalCode(lang, code, stdin = "") {
       if (!GPP_BIN) {
         return resolve({
           success: false,
-          output: "C++ compiler (g++) is not installed on this server yet. C++ isliye chal nahi sakta abhi — local install (XAMPP/g++) ya online compiler (Piston/Judge0) integrate karna ho to bata dein.",
+          output: "C++ compiler (g++) is not installed on this server yet, so C++ cannot run right now. Let me know if you want a local install (XAMPP/g++) or an online compiler (Piston/Judge0).",
         });
       }
       const cppRunDir = path.join(tempDir, `cpp_${timestamp}`);
@@ -219,24 +221,24 @@ function runLocalCode(lang, code, stdin = "") {
     } else if (PREVIEW_LANGS.has(lang)) {
       return resolve({
         success: false,
-        output: `${lang} browser mein live preview ke roop mein chalti hai — Run Code button hi use karein (backend execution needed nahi).`,
+        output: `${lang} runs as a live preview in the browser — just use the Run Code button (no backend execution needed).`,
       });
     } else {
       return resolve({
         success: false,
-        output: "General ek tutorial/concept category hai, ek programming language nahi. Upar se koi language select karein (JavaScript, HTML, C++, PHP, Python, etc.) aur code likhein.",
+        output: `'${lang}' execution is not supported yet. Supported languages: Python, Java, JavaScript, CSS, HTML, PHP, C++, React, Bootstrap.`,
       });
     }
 
     const childProcess = exec(command, EXEC_OPTIONS, (error, stdout, stderr) => {
       cleanupFiles(filesToClean);
       if (error) {
-        // maxBuffer jaisi bade-output wali error ko bhi friendly banao
+        // Make big-output errors (like maxBuffer) friendly too
         if (error.killed) {
-          return resolve({ success: false, output: "Error: Code execution timed out (30s limit). Input loop ya infinite program check karein!" });
+          return resolve({ success: false, output: "Error: Code execution timed out (30s limit). Check for an input loop or an infinite program!" });
         }
         if (error.message && /maxBuffer/.test(error.message)) {
-          return resolve({ success: false, output: "Error: Output bahut bada hai (20MB limit). Kam output print karein." });
+          return resolve({ success: false, output: "Error: Output is too large (20MB limit). Print less output." });
         }
         return resolve({ success: false, output: stderr || error.message });
       }

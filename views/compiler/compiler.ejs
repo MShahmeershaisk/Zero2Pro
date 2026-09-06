@@ -26,7 +26,6 @@
           <option value="cpp">C++</option>
           <option value="react">React (JSX)</option>
           <option value="bootstrap">Bootstrap</option>
-          <option value="general">General</option>
         </select>
         <button id="runBtn"
           class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed">Run Code</button>
@@ -67,11 +66,11 @@
   <%- include('../partials/footer') %>
   <%- include('../partials/scripts') %>
 
-  <!-- User logged-in info (AI sirf logged-in users ke liye auto-open hota hai) -->
+  <!-- User logged-in info (the AI only auto-opens for logged-in users) -->
   <script>window.ZTP_SIGNED_IN = <%= typeof user !== 'undefined' && user ? true : false %>;</script>
 
   <!-- Monaco Editor loader -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
-  <script src="/js/compiler.js?v=10"></script>
+  <script src="/js/compiler.js?v=11"></script>
 </body>
 </html>

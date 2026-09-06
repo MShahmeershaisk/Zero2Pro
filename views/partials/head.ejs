@@ -1,6 +1,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title><%= typeof title !== 'undefined' ? title : 'Zero to Pro - Learn & Practice Coding' %></title>
+<link rel="icon" href="/logo/brand-icon.png" />
 <!-- Theme init: apply saved theme BEFORE page renders to prevent flash -->
 <script>
   (function(){var t=localStorage.getItem('ztp-theme');var s=(t==='light'||t==='dark')?t:'light';document.documentElement.setAttribute('data-theme',s);})();
@@ -54,6 +55,11 @@
      ============================================================ */
   html[data-theme="light"] body { background-color: #ffffff; color: #1e293b; }
 
+  /* Native controls (select popups, inputs, scrollbars) follow the page theme,
+     not the browser/OS color scheme — fixes white option text in light mode */
+  html[data-theme="light"] { color-scheme: light; }
+  html[data-theme="dark"] { color-scheme: dark; }
+
   /* Hero — dark purple-to-blue gradient card (matches landing page hero) */
   html[data-theme="light"] .hero-gradient {
     background: linear-gradient(135deg, #4f46e5 0%, #2563eb 40%, #0ea5e9 100%) !important;
@@ -105,16 +111,35 @@
   html[data-theme="light"] input, html[data-theme="light"] select, html[data-theme="light"] textarea {
     color: #1e293b !important; border-color: #cbd5e1 !important; background-color: #ffffff !important;
   }
+  /* Auth page inputs (login/signup use "text-white") — force black text on white in light mode
+     so the typed email/password stays visible. Scoped to light mode; dark mode keeps white text. */
+  html[data-theme="light"] input.text-white,
+  html[data-theme="light"] select.text-white,
+  html[data-theme="light"] textarea.text-white {
+    color: #111827 !important;
+    background-color: #ffffff !important;
+  }
+  /* Auth inputs (login/signup) — our own class, so Tailwind can't override it.
+     White text in dark mode, black on white in light mode. */
+  .auth-input { color: #f8fafc; }
+  html[data-theme="light"] .auth-input {
+    color: #111827 !important;
+    background-color: #ffffff !important;
+    border-color: #cbd5e1 !important;
+  }
   html[data-theme="light"] .placeholder-gray-400::placeholder { color: #94a3b8 !important; }
   html[data-theme="light"] .placeholder-gray-500::placeholder { color: #94a3b8 !important; }
 
-  /* Light mode: language dropdowns (test + compiler) — BLACK text for readability */
+  /* Language dropdowns (test + compiler) — our own class, white in dark, black in light */
+  select.lang-select, select#langSelect { color: #f8fafc; }
   html[data-theme="light"] select.lang-select,
   html[data-theme="light"] select#langSelect {
     color: #000000 !important;
     background-color: #ffffff !important;
     border-color: #cbd5e1 !important;
+    color-scheme: light;
   }
+  /* Native popup options — force black text on white in light mode */
   html[data-theme="light"] .lang-select option,
   html[data-theme="light"] #langSelect option {
     color: #000000 !important;
@@ -128,6 +153,29 @@
   html[data-theme="dark"] select.lang-select option:disabled,
   html[data-theme="dark"] select#langSelect option:disabled {
     color: #ffffff !important;
+  }
+
+  /* Same-page controls — no invisible white-on-white in light mode */
+  html[data-theme="light"] #stdinInput {
+    color: #1e293b !important;
+    background-color: #ffffff !important;
+  }
+  html[data-theme="light"] #clearBtn {
+    color: #1e293b !important;
+  }
+  html[data-theme="light"] #clearBtn:hover {
+    color: #1e293b !important;
+    background-color: #e2e8f0 !important;
+  }
+  /* Output box — consistent in light theme (no random black box).
+     Python/Java/JS ka output aur HTML/CSS ka preview dono white + dark text */
+  html[data-theme="light"] #output {
+    background-color: #ffffff !important;
+    color: #1e293b !important;
+    border-color: #e2e8f0 !important;
+  }
+  html[data-theme="light"] #previewFrame {
+    border-color: #e2e8f0 !important;
   }
 
   /* Code editor stays dark (landing page keeps code editor dark) */
@@ -274,4 +322,7 @@
     font-size: 0.9rem;
   }
   .nav-theme-toggle-mobile span { display: inline-block; }
+
+  /* Compiler output box — black bg in light mode */
+  html[data-theme="light"] #output { background-color: #000000; }
 </style>

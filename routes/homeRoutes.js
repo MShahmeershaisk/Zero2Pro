@@ -12,7 +12,7 @@ router.get("/", homeController.landing);
 router.get("/tutorials", requireAuth, tutorialController.listTutorials);
 
 // Tutorial management dashboard (admin only)
-router.get("/home", requireAuth, tutorialController.dashboard);
+router.get("/home", requireAdmin, tutorialController.dashboard);
 
 // Tutorial management actions (admin only)
 router.post("/home/add", requireAdmin, tutorialController.addTutorial);

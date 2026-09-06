@@ -1,5 +1,7 @@
 // Zero to Pro Compiler — Monaco Editor integration
 // Loads Monaco via CDN, wires language selector, run/clear, output + previews.
+// If the Monaco CDN fails to load (slow/blocked network), a plain textarea
+// fallback is used, so Python/Java/JS can always be compiled.
 
 // Default starting code per language
 const PLACEHOLDERS = {
@@ -26,7 +28,6 @@ const PLACEHOLDERS = {
     '  <h1 class="fw-bold">Bootstrap Demo</h1>\n' +
     '  <button class="btn btn-success mt-3">Click Me</button>\n' +
     "</div>",
-  general: "",
 };
 
 // Map our select values to Monaco language ids
@@ -40,45 +41,116 @@ const MONACO_LANG = {
   cpp: "cpp",
   react: "javascript",
   bootstrap: "html",
-  general: "plaintext",
 };
 
 // These languages run as a live browser preview (no backend call)
 const PREVIEW_LANGS = new Set(["html", "css", "bootstrap", "react"]);
 
-let editor = null;
+let editor = null;        // Monaco editor instance
+let fallbackEditor = null; // plain <textarea>, used when Monaco does not load
 
-// Configure Monaco's AMD loader to fetch from the CDN
-require.config({ paths: { vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs" } });
+// ---- Editor helpers (same API for both Monaco and fallback) ----
+function getEditorUI() {
+  return editor || fallbackEditor;
+}
+function getEditorValue() {
+  if (editor) return editor.getValue();
+  if (fallbackEditor) return fallbackEditor.value;
+  return "";
+}
+function setEditorValue(v) {
+  if (editor) editor.setValue(v);
+  if (fallbackEditor) fallbackEditor.value = v;
+}
+function setEditorLang(lang) {
+  if (editor) {
+    monaco.editor.setModelLanguage(editor.getModel(), MONACO_LANG[lang] || "plaintext");
+  }
+}
 
-function initMonaco(initialLang, initialValue) {
-  require(["vs/editor/editor.main"], function () {
-    editor = monaco.editor.create(document.getElementById("editor"), {
-      value: initialValue,
-      language: MONACO_LANG[initialLang] || "python",
-      theme: "vs-dark",
-      automaticLayout: true,
-      fontSize: 14,
-      minimap: { enabled: false },
-      scrollBeyondLastLine: false,
-      tabSize: 4,
-      lineNumbers: "on",
-      wordWrap: "on",
+// Configure Monaco's AMD loader from the CDN.
+// Only guard with require when it is the AMD loader (its config exists),
+// to avoid any other accidental global require.
+const HAS_AMD_LOADER =
+  typeof require === "function" && typeof require.config === "function";
+if (HAS_AMD_LOADER) {
+  require.config({ paths: { vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs" } });
+}
+
+function startEditor(initialLang, initialValue) {
+  // The loader did not load either (whole CDN blocked) — go straight to fallback
+  if (!HAS_AMD_LOADER) {
+    startFallbackEditor(initialLang, initialValue);
+    return;
+  }
+
+  let settled = false;
+
+  // Wait for Monaco to load — 8s (editor.main.js is 3.5MB+, so on a slow
+  // network it may fail before that). After that, switch to a plain textarea.
+  const timeout = setTimeout(() => {
+    if (settled) return;
+    settled = true;
+    console.warn("[compiler] Monaco load timeout — plain editor fallback.");
+    startFallbackEditor(initialLang, initialValue);
+  }, 8000);
+
+  try {
+    require(["vs/editor/editor.main"], function () {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      const holder = document.getElementById("editor");
+      if (!holder) return;
+      editor = monaco.editor.create(holder, {
+        value: initialValue,
+        language: MONACO_LANG[initialLang] || "python",
+        theme: "vs-dark",
+        automaticLayout: true,
+        fontSize: 14,
+        minimap: { enabled: false },
+        scrollBeyondLastLine: false,
+        tabSize: 4,
+        lineNumbers: "on",
+        wordWrap: "on",
+      });
+
+      wireEvents();
     });
+  } catch (e) {
+    if (!settled) {
+      settled = true;
+      clearTimeout(timeout);
+    }
+    console.warn("[compiler] Monaco failed to start — plain editor fallback.", e);
+    startFallbackEditor(initialLang, initialValue);
+  }
+}
 
-    // After editor loads, wire everything that depends on it
-    wireEvents();
-    updateUIForLanguage(initialLang);
-  });
+function startFallbackEditor(initialLang, initialValue) {
+  const holder = document.getElementById("editor");
+  if (!holder) return;
+  holder.innerHTML = "";
+  const ta = document.createElement("textarea");
+  ta.id = "fallbackEditor";
+  ta.value = initialValue;
+  ta.spellcheck = false;
+  ta.setAttribute("aria-label", "Code editor");
+  ta.style.cssText =
+    "width:100%;height:100%;min-height:420px;resize:vertical;box-sizing:border-box;" +
+    "background:#0d1117;color:#e5e7eb;border:0;outline:none;padding:16px;" +
+    "font-family:Consolas,Menlo,monospace;font-size:14px;line-height:1.5;white-space:pre;overflow:auto;";
+  holder.appendChild(ta);
+  fallbackEditor = ta;
+  wireEvents();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   const langSelect = document.getElementById("langSelect");
   const initialLang = langSelect ? langSelect.value.toLowerCase().trim() : "python";
 
-  // Start Monaco with the initial language placeholder.
-  // "Select Language" selected hoga to empty editor aata hai — Python code nahi.
-  initMonaco(initialLang, initialLang ? (PLACEHOLDERS[initialLang] || "") : "");
+  // If "Select Language" is selected, an empty editor appears — not Python code.
+  startEditor(initialLang, initialLang ? (PLACEHOLDERS[initialLang] || "") : "");
 });
 
 function wireEvents() {
@@ -93,7 +165,7 @@ function wireEvents() {
   let lastDebugPrompt = "";
   let lastDebugLang = "";
 
-  // Language choose hone tak Run disabled rehta hai
+  // Run stays disabled until a language is chosen
   if (runBtn) runBtn.disabled = true;
 
   function langDisplayName(lang) {
@@ -105,22 +177,21 @@ function wireEvents() {
       cpp: "C++",
       react: "React",
       bootstrap: "Bootstrap",
-      general: "General",
     };
     return names[lang] || lang.charAt(0).toUpperCase() + lang.slice(1);
   }
 
   function buildDebugPrompt(langName, code, errorOutput) {
     return (
-      "Mujhe compiler par program error de raha hai. Language: " + langName + ".\n\n" +
-      "Mera code:\n---\n" + code + "\n---\n\n" +
+      "My program is giving an error in the compiler. Language: " + langName + ".\n\n" +
+      "My code:\n---\n" + code + "\n---\n\n" +
       "Compiler error:\n---\n" + (errorOutput || "(No output)") + "\n---\n\n" +
-      "Is error ka sahi fix batayein. Sahi code likh kar dein (poora program) aur chota sa bata dein ke kya galti thi."
+      "Please tell me the correct fix. Write the corrected code (the full program) and briefly explain what was wrong."
     );
   }
 
-  // Compiler run ke baad error aaya to AI khud open ho kar fix batata hai.
-  // AI sirf code + language + error READ karta hai — koi write access nahi.
+  // If the compiler reports an error after running, the AI opens by itself and
+  // explains the fix. The AI only READS the code + language + error — no write access.
   function handleRunResult(lang, code, data) {
     if (fixAI) fixAI.classList.add("hidden");
 
@@ -157,7 +228,7 @@ function wireEvents() {
     doc.close();
   }
 
-  // Kaunsi language live-preview (browser) mein chalti hai, uska HTML build karo
+  // Build the HTML for languages that run as a live preview in the browser
   function buildPreviewDoc(lang, code) {
     if (lang === "html") return code;
     if (lang === "css") {
@@ -171,7 +242,7 @@ function wireEvents() {
 <body>
   <main style="max-width:640px;margin:auto;padding:2rem 1rem">
     <h1>CSS Live Preview</h1>
-    <p>Apna CSS yahan apply hote hue dekho — heading, text, aur button sab is CSS se style hote hain.</p>
+    <p>See your CSS applied here — the heading, text, and button are all styled by this CSS.</p>
     <button>Click Me</button>
   </main>
 </body>
@@ -216,11 +287,11 @@ ${code}
   if (runBtn) {
     runBtn.addEventListener("click", async () => {
       const selectedLang = langSelect ? langSelect.value.toLowerCase().trim() : "python";
-      const code = editor ? editor.getValue() : "";
+      const code = getEditorValue();
 
-      // Pehle language select karna zaroori hai
+      // A language must be selected first
       if (!selectedLang) {
-        output.textContent = "Pehle language select karein (Select Language dropdown se).";
+        output.textContent = "Please select a language first (from the Select Language dropdown).";
         return;
       }
 
@@ -233,15 +304,7 @@ ${code}
         return;
       }
 
-      // General — concept category, code language nahi
-      if (selectedLang === "general") {
-        output.style.display = "block";
-        previewFrame.style.display = "none";
-        output.textContent = "General ek tutorial/concept category hai, ek programming language nahi. Upar se koi language select karein (JavaScript, HTML, C++, PHP, etc.) aur code likhein.";
-        return;
-      }
-
-      // Browser preview languages — koi backend call nahi
+      // Browser preview languages — no backend call
       if (PREVIEW_LANGS.has(selectedLang)) {
         output.style.display = "none";
         previewFrame.style.display = "block";
@@ -278,13 +341,13 @@ ${code}
 
   if (clearBtn) {
     clearBtn.addEventListener("click", () => {
-      if (!editor) return;
+      if (!getEditorUI()) return;
       const lang = langSelect ? langSelect.value.toLowerCase().trim() : "python";
-      editor.setValue(PLACEHOLDERS[lang] || "");
+      setEditorValue(PLACEHOLDERS[lang] || "");
       if (output) output.textContent = "";
       if (stdinInput) stdinInput.value = "";
       if (stdinWrapper) stdinWrapper.style.display = "none";
-      // Preview languages par preview reset karo (fairly empty demo)
+      // Reset the preview for preview languages (a fairly empty demo)
       const isPreview = PREVIEW_LANGS.has(lang);
       if (previewFrame) {
         if (isPreview) {
@@ -300,9 +363,9 @@ ${code}
 
   // Check whether the code uses an input function, and show the input box if so
   function checkInputRequirement() {
-    if (!langSelect || !stdinWrapper || !editor) return;
+    if (!langSelect || !stdinWrapper) return;
     const lang = langSelect.value.toLowerCase().trim();
-    const code = editor.getValue();
+    const code = getEditorValue();
 
     let needsInput = false;
 
@@ -328,7 +391,7 @@ ${code}
 
   function updateUIForLanguage(lang) {
     const selectedLang = lang || (langSelect ? langSelect.value.toLowerCase().trim() : "python");
-    if (!editor) return;
+    if (!getEditorUI()) return;
 
     // Keep the editor value if the user has typed something in this language;
     // otherwise reset to the placeholder
@@ -336,8 +399,8 @@ ${code}
       if (output) output.style.display = "none";
       if (previewFrame) {
         previewFrame.style.display = "block";
-        // Language change par placeholder/current code ka preview turant dikha do
-        renderPreview(buildPreviewDoc(selectedLang, editor.getValue() || PLACEHOLDERS[selectedLang] || ""));
+        // On a language change, show the preview of the placeholder/current code right away
+        renderPreview(buildPreviewDoc(selectedLang, getEditorValue() || PLACEHOLDERS[selectedLang] || ""));
       }
     } else {
       if (output) output.style.display = "block";
@@ -350,18 +413,19 @@ ${code}
   if (langSelect) {
     langSelect.addEventListener("change", () => {
       const lang = langSelect.value.toLowerCase().trim();
-      // Set the Monaco language mode and swap in the placeholder for that language
-      if (editor) {
-        monaco.editor.setModelLanguage(editor.getModel(), MONACO_LANG[lang] || "python");
-        editor.setValue(PLACEHOLDERS[lang] || "");
-      }
+      // Set the editor language mode and swap in the placeholder for that language
+      setEditorLang(lang);
+      setEditorValue(PLACEHOLDERS[lang] || "");
       updateUIForLanguage(lang);
-      // Language select karne par hi Run enabled hota hai
+      // Run is only enabled once a language is selected
       if (runBtn) runBtn.disabled = !lang;
     });
   }
 
+  // Check for the input box while typing, in both Monaco and the fallback
   if (editor) {
     editor.onDidChangeModelContent(checkInputRequirement);
+  } else if (fallbackEditor) {
+    fallbackEditor.addEventListener("input", checkInputRequirement);
   }
 }

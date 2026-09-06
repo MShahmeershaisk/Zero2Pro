@@ -1,18 +1,18 @@
 // Floating AI Chat Widget
-// - Har page pe dikhta hai, SIRF /test wale page pe hide ho jaata hai.
-// - Bubble button click karke chat panel khulta hai.
-// - Panel ke andar X (close) button se band ho jaata hai, bubble button wapas
-//   reh jaata hai jisse dobara khola ja sakta hai.
-// - Backend /api/ai/chat endpoint ko call karta hai (Gemini API server-side hai).
+// - Shows on every page, but is hidden ONLY on the /test page.
+// - Clicking the bubble button opens the chat panel.
+// - The X (close) button inside the panel closes it; the bubble button stays
+//   so the panel can be reopened.
+// - Calls the backend /api/ai/chat endpoint (the Gemini API is server-side).
 
 (function () {
-  // ---- 1. Test page par widget bilkul mount hi nahi hoga ----
+  // ---- 1. The widget is not mounted on the test page at all ----
   const path = window.location.pathname.replace(/\/+$/, "") || "/";
   if (path === "/test" || path.startsWith("/test/")) {
     return;
   }
 
-  // ---- 2. Styles inject karo ----
+  // ---- 2. Inject the styles ----
   const style = document.createElement("style");
   style.textContent = `
     #ai-widget-btn {
@@ -155,7 +155,7 @@
   panel.innerHTML = `
     <div id="ai-widget-header">
       <span>🤖 AI Assistant</span>
-      <button id="ai-widget-close" title="Band karein">✕</button>
+      <button id="ai-widget-close" title="Close">✕</button>
     </div>
     <div id="ai-widget-messages"></div>
     <div id="ai-widget-inputRow">
@@ -214,7 +214,7 @@
     inputEl.value = "";
     sendBtn.disabled = true;
 
-    const typingEl = addMessage("bot", "Type kar raha hai...");
+    const typingEl = addMessage("bot", "Typing...");
     typingEl.classList.add("typing");
 
     try {
@@ -231,7 +231,7 @@
         addMessage("bot", data.reply);
         history.push({ role: "assistant", text: data.reply });
       } else {
-        addMessage("bot", data.reply || "Kuch masla ho gaya, dobara try karein.");
+        addMessage("bot", data.reply || "Something went wrong, please try again.");
       }
     } catch (err) {
       typingEl.remove();
@@ -249,7 +249,7 @@
     }
   });
 
-  // ---- 5. Global API (compiler page ise call karta hai: AI khud open ho kar send kare) ----
+  // ---- 5. Global API (the compiler page calls this: the AI opens by itself and sends) ----
   function askAI(text) {
     if (typeof text !== "string" || !text.trim()) return;
     openPanel();
@@ -257,9 +257,9 @@
     sendMessage();
   }
 
-  // Har page se UI khole bina code dekhe (sidebar read karke) ise use kiya ja sakta hai.
+  // Can be used from any page without opening the UI (by reading the sidebar).
   window.ZTPAI = {
-    ask: askAI,   // panel kholega + message auto-send karega
+    ask: askAI,   // opens the panel + auto-sends the message
     open: openPanel,
     close: closePanel,
   };

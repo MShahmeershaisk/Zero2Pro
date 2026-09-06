@@ -81,7 +81,7 @@
     </div>
   </div>
 
-  <!-- PDF summary ka print area — screen par hidden, sirf print/PDF mein dikhta hai -->
+  <!-- Print area for the PDF summary — hidden on screen, only visible in print/PDF -->
   <style>
     #pdfArea { display: none; }
     .tutorial-section { scroll-margin-top: 90px; }
@@ -125,7 +125,7 @@
       });
     });
 
-    // ─── Footer/category links (?cat=HTML): category auto-select + scroll ────
+    // ─── Footer/category links (?cat=HTML): auto-select the category + scroll ────
     (function () {
       const activeCat = "<%= activeCategory || '' %>";
       if (!activeCat) return;
@@ -145,7 +145,7 @@
       tutorialsData = JSON.parse(document.getElementById('tutorialsData').textContent);
     } catch (e) { /* empty data on first load is fine */ }
 
-    // Currently open reader tutorial (PDF button ke liye)
+    // The tutorial currently open in the reader (for the PDF button)
     let currentReaderTid = null;
 
     function escapeHtml(str) {
@@ -210,7 +210,7 @@
     modal.addEventListener('click', (e) => { if (e.target === modal) closeReader(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeReader(); });
 
-    // ─── PDF summary (condensed: sirf points, normal English, CODE nahi) ─────
+    // ─── PDF summary (condensed: key points only, plain English, NO code) ─────
     const pdfArea = document.getElementById('pdfArea');
 
     function buildPdfHtml(tut) {

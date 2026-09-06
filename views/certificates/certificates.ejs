@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <%
-  // Har language ka apna accent color + emoji (certificate card ke liye)
+  // Each language has its own accent color + emoji (for the certificate card)
   const CATEGORY_COLORS = {
     HTML: ['#fbbf24', '#f97316'],
     CSS: ['#60a5fa', '#6366f1'],
@@ -37,7 +37,7 @@
 <head>
   <%- include('../partials/head', { title: 'My Certificates - Zero to Pro' }) %>
   <style>
-    /* Print: sirf certificate cards dikhein, baaki sab chhupa do */
+    /* Print: show only the certificate cards, hide everything else */
     @media print {
       @page { margin: 0.4in; }
       body { background: #fff !important; }
@@ -62,8 +62,8 @@
     <div class="max-w-5xl mx-auto">
       <!-- ─── Heading ───────────────────────────────────────────────────── -->
       <div class="cert-header text-center mb-12">
-        <div class="w-24 h-24 md:w-32 md:h-32 mx-auto mb-4 rounded-full overflow-hidden flex items-center justify-center bg-transparent">
-          <img src="/logo/certificate.png" alt="Zero to Pro" class="w-full h-full object-contain" />
+        <div class="h-20 md:h-24 mx-auto mb-4 flex items-center justify-center">
+          <img src="/logo/brand-logo.png" alt="Zero to Pro" class="h-full w-auto object-contain" />
         </div>
         <span class="text-sm font-bold uppercase tracking-widest text-indigo-400">Certificates</span>
         <h1 class="text-4xl md:text-5xl font-extrabold mt-2">My Certificates</h1>
@@ -77,8 +77,8 @@
       <% if (!certificates || certificates.length === 0) { %>
         <!-- ─── No certificates ─────────────────────────────────────────── -->
         <div class="max-w-md mx-auto text-center bg-gray-800/50 border border-gray-700 rounded-3xl p-10">
-          <div class="w-20 h-20 mx-auto rounded-full flex items-center justify-center overflow-hidden">
-            <img src="/logo/certificate.png" alt="Zero to Pro Certificate" class="w-full h-full object-cover" />
+          <div class="w-32 h-32 mx-auto flex items-center justify-center">
+            <img src="/logo/badge.png" alt="Zero to Pro Badge" class="w-full h-full object-contain" />
           </div>
           <p class="text-[10px] uppercase tracking-widest text-gray-500 mt-3">No Badge Yet</p>
           <h2 class="text-2xl font-bold mt-4">No Certificates Yet</h2>

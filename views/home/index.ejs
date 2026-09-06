@@ -2,60 +2,246 @@
 <html lang="en">
 <head>
   <%- include('../partials/head', { title: 'Zero to Pro - Learn & Practice Coding' }) %>
+  <style>
+    /* ============================================================
+       LANDING PAGE — matches Website/index.html
+       Dark = default (current app dark styling)
+       Light = exact Website/index.html colors
+       ============================================================ */
+
+    /* ---------- HERO + COLLABORATIONS ---------- */
+    .lp-hero {
+      background: linear-gradient(135deg,#0f172a 0%,#1e293b 30%,#172554 60%,#0c1a3d 100%);
+      color: #fff;
+      padding: 0 20px 80px;
+    }
+    html[data-theme="light"] .lp-hero {
+      background: linear-gradient(180deg,#0c4652 0%, #123a8a 45%, #0a1a6b 75%, #060c33 100%);
+    }
+    .lp-hero-inner { max-width: 1000px; margin: 0 auto; padding: 64px 8px 0; text-align: center; }
+    .lp-hero-glass {
+      background: rgba(255,255,255,.07);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 1.75rem;
+      padding: 3rem 2rem;
+      box-shadow: 0 24px 60px rgba(2,6,23,.35), inset 0 1px 0 rgba(255,255,255,.08);
+    }
+    html[data-theme="light"] .lp-hero-glass {
+      background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.04));
+      border: 1px solid rgba(255,255,255,.35);
+      border-top-color: rgba(255,255,255,.55);
+      box-shadow: 0 8px 32px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.4);
+    }
+    .lp-hero h1 { font-size: 40px; line-height: 1.25; font-weight: 700; margin: 0 0 18px; color: #fff; }
+    @media (max-width: 600px) { .lp-hero h1 { font-size: 28px; } }
+    .lp-hl {
+      background: #3b6bf5; color: #fff; padding: 1px 9px; border-radius: 5px;
+      font-style: italic; font-family: 'Consolas','SFMono-Regular','Courier New',monospace;
+      font-weight: 700; line-height: 1.35; box-decoration-break: clone; -webkit-box-decoration-break: clone;
+    }
+    .lp-hero-sub { font-size: 15px; color: rgba(255,255,255,.82); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    .lp-ctas { display: flex; justify-content: center; gap: 14px; margin-top: 30px; flex-wrap: wrap; }
+    .lp-btn {
+      padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600;
+      border: 1px solid transparent; cursor: pointer; display: inline-block; text-decoration: none;
+      transition: transform .15s ease, background .15s ease, color .15s ease;
+    }
+    .lp-btn:hover { transform: translateY(-1px); }
+    .lp-btn-primary { background: linear-gradient(135deg,#6366f1,#4f46e5); color: #fff; }
+    .lp-btn-primary:hover { background: linear-gradient(135deg,#4f46e5,#4338ca); }
+    html[data-theme="light"] .lp-btn-primary { background: #3b6bf5; box-shadow: 0 4px 14px rgba(59,107,245,.3); }
+    html[data-theme="light"] .lp-btn-primary:hover { background: #5b8bff; }
+    .lp-btn-outline { background: transparent; border-color: rgba(255,255,255,.55); color: #fff; }
+    .lp-btn-outline:hover { background: rgba(255,255,255,.12); }
+
+    .lp-collab { margin-top: 64px; text-align: center; }
+    .lp-collab h3 { font-size: 22px; font-weight: 700; color: #fff; margin: 0 0 28px; letter-spacing: .3px; }
+    .lp-collab-logos { display: flex; justify-content: center; align-items: center; gap: 52px; flex-wrap: wrap; opacity: .95; }
+    .lp-collab-logos img { height: 38px; width: auto; object-fit: contain; }
+    @media (max-width: 700px) { .lp-collab-logos { gap: 26px; } .lp-collab-logos img { height: 32px; } }
+
+    /* ---------- APP INTRO ---------- */
+    .lp-app { position: relative; margin-top: -46px; padding: 0 20px 60px; z-index: 2; }
+    .lp-app-card {
+      max-width: 1080px; margin: 0 auto; background: #1e293b; border: 1px solid #334155;
+      border-radius: 28px; box-shadow: 0 30px 60px rgba(10,20,60,.28);
+      display: flex; align-items: center; justify-content: space-between; gap: 40px; padding: 52px 56px;
+    }
+    html[data-theme="light"] .lp-app-card { background: #dceafe; border: none; box-shadow: 0 30px 60px rgba(10,20,60,.18); }
+    .lp-app-text h2 { font-size: 40px; font-weight: 700; line-height: 1.15; margin: 0 0 6px; color: #fff; }
+    html[data-theme="light"] .lp-app-text h2 { color: #111318; }
+    .lp-app-text p { color: #94a3b8; font-size: 15px; max-width: 420px; line-height: 1.6; margin: 18px 0 26px; }
+    html[data-theme="light"] .lp-app-text p { color: #4b5563; }
+    .lp-store-btns { display: flex; gap: 14px; }
+    .lp-store-btn { width: 160px; height: 52px; display: flex; align-items: center; justify-content: center; }
+    .lp-store-btn img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
+    @media (max-width: 860px) {
+      .lp-app-card { flex-direction: column; text-align: center; padding: 36px 24px; }
+      .lp-app-text p { margin-left: auto; margin-right: auto; }
+      .lp-store-btns { justify-content: center; }
+    }
+
+    /* ---------- TUTORIALS ---------- */
+    .lp-tutorials { background: #111827; padding: 70px 0; text-align: center; }
+    html[data-theme="light"] .lp-tutorials { background: #f4f5f7; }
+    .lp-eyebrow { color: #818cf8; font-size: 12px; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; }
+    html[data-theme="light"] .lp-eyebrow { color: #3b6bf5; }
+    .lp-tutorials h2, .lp-langs h2, .lp-practice h2 { font-size: 32px; font-weight: 700; margin: 0 0 10px; color: #fff; }
+    html[data-theme="light"] .lp-tutorials h2, html[data-theme="light"] .lp-langs h2, html[data-theme="light"] .lp-practice h2 { color: #111318; }
+    .lp-tutorials p, .lp-langs p, .lp-practice p { color: #94a3b8; font-size: 14px; margin: 0 0 34px; }
+    html[data-theme="light"] .lp-tutorials p, html[data-theme="light"] .lp-langs p, html[data-theme="light"] .lp-practice p { color: #4b5563; }
+    .lp-icon-carousel { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 36px; flex-wrap: wrap; }
+    .lp-arrow {
+      width: 34px; height: 34px; border-radius: 50%; border: 1px solid #475569; background: #1f2937;
+      color: #94a3b8; display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; line-height: 0;
+    }
+    html[data-theme="light"] .lp-arrow { border-color: #e5e7eb; background: #fff; color: #6b7280; }
+    .lp-arrow svg { display: block; width: 14px; height: 14px; }
+    .lp-lang-circle {
+      width: 64px; height: 64px; border-radius: 50%; background: #1f2937; border: 1px solid #334155;
+      display: flex; align-items: center; justify-content: center; padding: 8px; overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,.2); cursor: pointer; transition: border-color .2s;
+    }
+    html[data-theme="light"] .lp-lang-circle { background: #fff; border: 1px solid #e5e7eb; box-shadow: 0 2px 6px rgba(0,0,0,.04); }
+    .lp-lang-circle.active { border: 2px solid #3b6bf5; box-shadow: 0 4px 12px rgba(59,107,245,.25); }
+    .lp-lang-circle img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .lp-code-wrap {
+      background: #0d1117; border: 1px solid #1f2937; border-radius: 14px; overflow: hidden;
+      max-width: 680px; margin: 0 auto 28px; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,.3);
+    }
+    html[data-theme="light"] .lp-code-wrap { border-color: #e5e7eb; box-shadow: 0 10px 30px rgba(0,0,0,.08); }
+
+    /* ---------- LANGUAGES WE OFFER ---------- */
+    .lp-langs { background: #0f172a; padding: 70px 0; text-align: center; }
+    html[data-theme="light"] .lp-langs { background: #fff; }
+    .lp-lang-cards { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
+    .lp-lang-card {
+      width: 112px; height: 112px; border: 1px solid #334155; border-radius: 14px; background: #1f2937;
+      display: flex; align-items: center; justify-content: center; padding: 14px; overflow: hidden;
+    }
+    html[data-theme="light"] .lp-lang-card { border-color: #e5e7eb; background: #fff; }
+    .lp-lang-card img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+    /* ---------- STUDY ANYWHERE ---------- */
+    .lp-study { padding: 60px 20px; }
+    .lp-study-inner {
+      max-width: 1080px; margin: 0 auto; background: #134e4a; border-radius: 24px; padding: 52px 56px;
+      display: flex; align-items: center; justify-content: space-between; gap: 40px;
+    }
+    html[data-theme="light"] .lp-study-inner { background: #bdeee1; }
+    .lp-study-text h2 { font-size: 34px; font-weight: 700; line-height: 1.2; margin: 0 0 16px; color: #fff; }
+    html[data-theme="light"] .lp-study-text h2 { color: #111318; }
+    .lp-study-text p { color: #9ca3af; font-size: 15px; line-height: 1.7; max-width: 420px; margin: 0 0 22px; }
+    html[data-theme="light"] .lp-study-text p { color: #374151; }
+    .lp-study-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 32px; font-size: 13.5px; font-weight: 600; color: #fff; }
+    html[data-theme="light"] .lp-study-list { color: #111318; }
+    .lp-study-list li { display: flex; align-items: center; gap: 8px; }
+    .lp-study-list li::before { content: "✓"; color: #0f9d58; font-weight: 700; }
+    .lp-signin-card {
+      background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 30px 32px;
+      width: 300px; flex-shrink: 0; box-shadow: 0 20px 40px rgba(0,0,0,.2); text-align: center;
+    }
+    html[data-theme="light"] .lp-signin-card { background: #fff; border: 1px solid #e2e8f0; box-shadow: 0 20px 40px rgba(0,0,0,.08); }
+    .lp-signin-card h3 { font-size: 18px; font-weight: 700; margin: 0 0 8px; color: #fff; }
+    html[data-theme="light"] .lp-signin-card h3 { color: #111318; }
+    .lp-signin-card p { font-size: 12.5px; color: #94a3b8; line-height: 1.5; margin: 0 0 22px; }
+    html[data-theme="light"] .lp-signin-card p { color: #4b5563; }
+    .lp-btn-full { display: block; width: 100%; padding: 11px 0; border-radius: 8px; font-size: 13px; font-weight: 600; margin-bottom: 10px; border: 1px solid transparent; cursor: pointer; }
+    .lp-btn-signin { background: #334155; color: #fff; border: 1px solid #475569; }
+    html[data-theme="light"] .lp-btn-signin { background: #fff; border: 1px solid #d1d5db; color: #111318; }
+    .lp-divider-or { font-size: 11px; color: #9ca3af; margin: 8px 0; font-weight: 600; }
+    .lp-btn-signup { background: #3b6bf5; color: #fff; }
+    html[data-theme="light"] .lp-btn-signup:hover { background: #5b8bff; }
+    .lp-welcome-name { color: #fff; font-weight: 600; }
+    html[data-theme="light"] .lp-welcome-name { color: #111318; }
+    .lp-welcome-sub { color: #94a3b8; font-size: 13px; }
+    html[data-theme="light"] .lp-welcome-sub { color: #4b5563; }
+    @media (max-width: 860px) {
+      .lp-study-inner { flex-direction: column; text-align: center; padding: 36px 24px; }
+      .lp-study-text p { margin-left: auto; margin-right: auto; }
+      .lp-signin-card { width: 100%; }
+      .lp-study-list { text-align: left; }
+    }
+
+    /* ---------- CERTIFICATES ---------- */
+    .lp-certs { background: #111827; padding: 70px 0; }
+    html[data-theme="light"] .lp-certs { background: #f4f5f7; }
+    .lp-certs-inner { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 40px; padding: 0 20px; }
+    .lp-certs-text .lp-eyebrow { text-align: left; }
+    .lp-certs-text h2 { font-size: 34px; font-weight: 700; line-height: 1.2; margin: 0 0 16px; color: #fff; }
+    html[data-theme="light"] .lp-certs-text h2 { color: #111318; }
+    .lp-certs-text p { color: #94a3b8; font-size: 14px; max-width: 400px; line-height: 1.7; margin: 0 0 24px; }
+    html[data-theme="light"] .lp-certs-text p { color: #4b5563; }
+    .lp-certs-ctas { display: flex; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+    .lp-btn-line { background: #1f2937; color: #fff; border: 1px solid #475569; }
+    .lp-btn-line:hover { background: #334155; }
+    html[data-theme="light"] .lp-btn-line { background: #fff; color: #111318; border: 1px solid #d1d5db; }
+    html[data-theme="light"] .lp-btn-line:hover { background: #f1f5f9; }
+    .lp-verified { font-size: 13px; font-weight: 600; color: #fff; }
+    html[data-theme="light"] .lp-verified { color: #111318; }
+    .lp-verified::before { content: "✓ "; color: #0f9d58; font-weight: 700; }
+    .lp-badge { width: 260px; height: 260px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; filter: drop-shadow(0 12px 24px rgba(0,0,0,.2)); }
+    .lp-badge img { width: 100%; height: 100%; object-fit: contain; }
+    @media (max-width: 860px) {
+      .lp-certs-inner { flex-direction: column; text-align: center; }
+      .lp-certs-text .lp-eyebrow { text-align: center; }
+      .lp-certs-text p { margin-left: auto; margin-right: auto; }
+      .lp-certs-ctas { justify-content: center; }
+    }
+
+    /* ---------- PRACTICE ---------- */
+    .lp-practice { background: #0f172a; padding: 70px 0; text-align: center; }
+    html[data-theme="light"] .lp-practice { background: #fff; }
+    .lp-practice p { margin: 0 0 30px; }
+    .lp-practice-ctas { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+  </style>
 </head>
 <body class="font-sans min-h-screen flex flex-col">
 
   <%- include('../partials/navbar') %>
 
   <!-- ============================================================
-       HERO SECTION + OUR COLLABORATIONS (single box)
+       HERO + OUR COLLABORATIONS
        ============================================================ -->
-  <section class="hero-gradient hero-section collab-bg text-center px-6 pt-20 pb-24 relative overflow-hidden">
-    <!-- Decorative floating elements -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none">
-      <div class="absolute -top-40 -right-40 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl"></div>
-      <div class="absolute -bottom-20 -left-20 w-60 h-60 bg-purple-500/10 rounded-full blur-3xl"></div>
-    </div>
-
-    <div class="max-w-3xl mx-auto relative z-10 hero-glass">
-      <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight">
-        From
-        <span class="bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent">Zero</span>
-        to
-        <span class="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">Pro</span>
-      </h1>
-      <p class="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
-        Master high-demand skills with structured learning paths designed to take you from zero to career-ready.
-      </p>
-      <div class="flex flex-wrap justify-center gap-4">
-        <% if (user) { %>
-          <a href="/tutorials" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-8 py-3 rounded-xl transition shadow-lg shadow-emerald-500/20">Explore Courses</a>
-        <% } else { %>
-          <a href="/signup" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-8 py-3 rounded-xl transition shadow-lg shadow-emerald-500/20">Explore Courses</a>
-        <% } %>
-        <a href="/compiler" class="border-2 border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white font-bold px-8 py-3 rounded-xl transition">Online Compiler</a>
+  <section class="hero-section lp-hero">
+    <div class="lp-hero-inner">
+      <div class="lp-hero-glass">
+        <h1>From <span class="lp-hl">Zero</span> to <span class="lp-hl">Pro</span></h1>
+        <p class="lp-hero-sub">
+          Master high-demand skills with structured learning paths designed to take you from zero to career-ready.
+        </p>
+        <div class="lp-ctas">
+          <% if (user) { %>
+            <a href="/tutorials" class="lp-btn lp-btn-primary">Explore Courses</a>
+          <% } else { %>
+            <a href="/signup" class="lp-btn lp-btn-primary">Explore Courses</a>
+          <% } %>
+          <a href="/compiler" class="lp-btn lp-btn-outline">Online Compiler</a>
+        </div>
       </div>
-    </div>
 
-    <!-- OUR COLLABORATIONS -->
-    <div class="max-w-5xl mx-auto text-center relative z-10 mt-24">
-      <h2 class="text-2xl md:text-3xl font-bold mb-10">Our Collaborations</h2>
-      <div class="flex flex-wrap justify-center items-center gap-10 md:gap-16">
-        <a href="https://www.google.com/" target="_blank" rel="noopener noreferrer" title="Google" class="hover:scale-105 transition">
-          <img src="/logo/Goolge logo.png" alt="Google" class="h-10 md:h-12 object-contain" />
-        </a>
-        <a href="https://www.microsoft.com/" target="_blank" rel="noopener noreferrer" title="Microsoft" class="hover:scale-105 transition">
-          <img src="/logo/microsoft logo.png" alt="Microsoft" class="h-10 md:h-12 object-contain" />
-        </a>
-        <a href="https://www.amazon.com/" target="_blank" rel="noopener noreferrer" title="Amazon" class="hover:scale-105 transition">
-          <img src="/logo/amazon logo.png" alt="Amazon" class="h-10 md:h-12 object-contain" />
-        </a>
-        <a href="https://about.meta.com/" target="_blank" rel="noopener noreferrer" title="Meta" class="hover:scale-105 transition">
-          <img src="/logo/meta_logo.svg.png" alt="Meta" class="h-10 md:h-12 object-contain" />
-        </a>
-        <a href="https://www.coursera.org/" target="_blank" rel="noopener noreferrer" title="Coursera" class="hover:scale-105 transition">
-          <img src="/logo/coursera logo.png" alt="Coursera" class="h-10 md:h-12 object-contain" />
-        </a>
+      <!-- OUR COLLABORATIONS -->
+      <div class="lp-collab">
+        <h3>Our Collaborations</h3>
+        <div class="lp-collab-logos">
+          <a href="https://www.google.com/" target="_blank" rel="noopener noreferrer" title="Google" class="hover:opacity-80 transition">
+            <img src="/logo/google.png" alt="Google" />
+          </a>
+          <a href="https://www.microsoft.com/" target="_blank" rel="noopener noreferrer" title="Microsoft" class="hover:opacity-80 transition">
+            <img src="/logo/microsoft.png" alt="Microsoft" />
+          </a>
+          <a href="https://www.amazon.com/" target="_blank" rel="noopener noreferrer" title="Amazon" class="hover:opacity-80 transition">
+            <img src="/logo/amazon.png" alt="Amazon" />
+          </a>
+          <a href="https://about.meta.com/" target="_blank" rel="noopener noreferrer" title="Meta" class="hover:opacity-80 transition">
+            <img src="/logo/meta.png" alt="Meta" />
+          </a>
+          <a href="https://www.coursera.org/" target="_blank" rel="noopener noreferrer" title="Coursera" class="hover:opacity-80 transition">
+            <img src="/logo/coursera.png" alt="Coursera" />
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -63,34 +249,27 @@
   <!-- ============================================================
        APP SECTION
        ============================================================ -->
-  <section class="app-section py-20 px-6">
-    <div class="max-w-5xl mx-auto flex flex-col lg:flex-row items-center gap-12">
-      <!-- Left: Text + App Store Buttons -->
-      <div class="flex-1 text-center lg:text-left">
-        <h2 class="text-3xl md:text-4xl font-extrabold mb-4 leading-tight">
-          Introducing<br>
-          <span class="bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent">Zero to Pro</span><br>
-          Learning App
-        </h2>
-        <p class="text-gray-400 mb-8 max-w-md mx-auto lg:mx-0">
+  <section class="lp-app">
+    <div class="lp-app-card">
+      <div class="lp-app-text">
+        <h2>Introducing<br><span class="lp-hl">Zero to Pro</span><br>Learning App</h2>
+        <p>
           The Zero to Pro Learning app is here! Coding fundamentals as a game. Bite-sized lessons, streaks and XP. Free on iOS and Android.
         </p>
-        <div class="flex flex-wrap justify-center lg:justify-start gap-3">
-          <a href="https://play.google.com/store/apps" target="_blank" rel="noopener noreferrer" class="store-badge flex items-center justify-center bg-gray-800 hover:bg-gray-700 border border-gray-600 w-12 h-12 rounded-xl transition" title="Get it on Google Play">
-            <img src="/logo/goolge paly logo.png" alt="Google Play" class="h-7 w-7 object-contain" />
+        <div class="lp-store-btns">
+          <a href="https://play.google.com/store/apps" target="_blank" rel="noopener noreferrer" class="lp-store-btn" title="Get it on Google Play">
+            <img src="/logo/playstore-cropped.png" alt="Google Play" />
           </a>
-          <a href="https://apps.apple.com/us/genre/ios/id36" target="_blank" rel="noopener noreferrer" class="store-badge flex items-center justify-center bg-gray-800 hover:bg-gray-700 border border-gray-600 w-12 h-12 rounded-xl transition" title="Download on the App Store">
-            <img src="/logo/apple logo.png" alt="App Store" class="apple-logo h-7 w-7 object-contain" />
+          <a href="https://apps.apple.com/us/genre/ios/id36" target="_blank" rel="noopener noreferrer" class="lp-store-btn" title="Download on the App Store">
+            <img src="/logo/appstore-cropped.png" alt="App Store" />
           </a>
         </div>
       </div>
 
-      <!-- Right: Phone Mockup -->
+      <!-- Phone Mockup (unchanged) -->
       <div class="flex-1 flex justify-center">
         <div class="phone-mockup rounded-[2.5rem] w-64 h-[28rem] border-4 border-gray-700 p-3 relative overflow-hidden shadow-2xl shadow-indigo-500/10">
-          <!-- Phone notch -->
           <div class="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-5 bg-gray-900 rounded-b-2xl z-10"></div>
-          <!-- Phone screen content -->
           <div class="bg-gray-900 rounded-[2rem] h-full flex flex-col items-center justify-center p-6 text-center">
             <div class="text-4xl mb-3">👨‍💻</div>
             <div class="text-lg font-bold text-white mb-2">Zero to Pro</div>
@@ -122,48 +301,30 @@
   <!-- ============================================================
        TUTORIALS SECTION
        ============================================================ -->
-  <section class="py-20 px-6 bg-gray-800/30">
-    <div class="max-w-4xl mx-auto text-center">
-      <span class="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3 block">Tutorials</span>
-      <h2 class="text-3xl md:text-4xl font-extrabold mb-4">What's The Goal Today?</h2>
-      <p class="text-gray-400 mb-10 max-w-xl mx-auto">
+  <section class="lp-tutorials">
+    <div class="max-w-4xl mx-auto px-6">
+      <span class="lp-eyebrow">TUTORIALS</span>
+      <h2>What's The Goal Today?</h2>
+      <p>
         Pick a language and start right away. Every tutorial is packed with examples you can run and edit in your browser.
       </p>
 
       <!-- Language Icon Carousel -->
-      <div class="relative mb-10">
-        <div class="overflow-hidden rounded-2xl">
-          <div id="langCarousel" class="carousel-track justify-center py-4">
-            <button class="lang-card flex-shrink-0 w-16 h-16 rounded-full bg-gray-800 border-2 border-gray-700 p-2 cursor-pointer transition hover:border-indigo-400" data-lang="html">
-              <img src="/logo/HTML5_logo_black logo.png" alt="HTML5" class="w-full h-full object-contain" />
-            </button>
-            <button class="lang-card flex-shrink-0 w-16 h-16 rounded-full bg-gray-800 border-2 border-gray-700 p-2 cursor-pointer transition hover:border-indigo-400" data-lang="css">
-              <img src="/logo/css.png" alt="CSS" class="w-full h-full object-contain" />
-            </button>
-            <button class="lang-card flex-shrink-0 w-16 h-16 rounded-full bg-gray-800 border-2 border-gray-700 p-2 cursor-pointer transition hover:border-indigo-400" data-lang="java">
-              <img src="/logo/java.png" alt="Java" class="w-full h-full object-contain" />
-            </button>
-            <button class="lang-card flex-shrink-0 w-16 h-16 rounded-full bg-gray-800 border-2 border-gray-700 p-2 cursor-pointer transition hover:border-indigo-400" data-lang="javascript">
-              <img src="/logo/JavaScript logo.png" alt="JavaScript" class="w-full h-full object-contain" />
-            </button>
-            <button class="lang-card flex-shrink-0 w-16 h-16 rounded-full bg-gray-800 border-2 border-gray-700 p-2 cursor-pointer transition hover:border-indigo-400" data-lang="php">
-              <img src="/logo/php.png" alt="PHP" class="w-full h-full object-contain" />
-            </button>
-            <button class="lang-card flex-shrink-0 w-16 h-16 rounded-full bg-gray-800 border-2 border-gray-700 p-2 cursor-pointer transition hover:border-indigo-400" data-lang="cpp">
-              <img src="/logo/C++ logo.png" alt="C++" class="w-full h-full object-contain" />
-            </button>
-            <button class="lang-card flex-shrink-0 w-16 h-16 rounded-full bg-gray-800 border-2 border-gray-700 p-2 cursor-pointer transition hover:border-indigo-400" data-lang="react">
-              <img src="/logo/React logo.png" alt="React" class="w-full h-full object-contain" />
-            </button>
-            <button class="lang-card flex-shrink-0 w-16 h-16 rounded-full bg-gray-800 border-2 border-gray-700 p-2 cursor-pointer transition hover:border-indigo-400" data-lang="bootstrap">
-              <img src="/logo/Bootstrap logo.png" alt="Bootstrap" class="w-full h-full object-contain" />
-            </button>
-          </div>
-        </div>
+      <div class="lp-icon-carousel">
+        <button class="lp-arrow" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+        <button class="lp-lang-circle active" data-lang="html"><img src="/logo/html5.png" alt="HTML5" /></button>
+        <button class="lp-lang-circle" data-lang="css"><img src="/logo/css3.png" alt="CSS3" /></button>
+        <button class="lp-lang-circle" data-lang="java"><img src="/logo/java.png" alt="Java" /></button>
+        <button class="lp-lang-circle" data-lang="javascript"><img src="/logo/javascript.png" alt="JavaScript" /></button>
+        <button class="lp-lang-circle" data-lang="php"><img src="/logo/php.png" alt="PHP" /></button>
+        <button class="lp-lang-circle" data-lang="cpp"><img src="/logo/cpp.png" alt="C++" /></button>
+        <button class="lp-lang-circle" data-lang="react"><img src="/logo/react.png" alt="React" /></button>
+        <button class="lp-lang-circle" data-lang="bootstrap"><img src="/logo/bootstrap.png" alt="Bootstrap" /></button>
+        <button class="lp-arrow" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
       </div>
 
       <!-- Code Editor Preview -->
-      <div class="bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden max-w-2xl mx-auto mb-8 shadow-xl">
+      <div class="lp-code-wrap">
         <div class="code-editor-header flex items-center gap-2 px-4 py-3 border-b border-gray-700">
           <div class="w-3 h-3 rounded-full bg-red-500"></div>
           <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
@@ -184,67 +345,27 @@
         </div>
       </div>
 
-      <a href="/compiler" class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-8 py-3 rounded-xl transition shadow-lg shadow-emerald-500/20">
-        Give It A Try <span class="text-lg">→</span>
-      </a>
+      <a href="/compiler" class="lp-btn lp-btn-primary">Give It A Try →</a>
     </div>
   </section>
 
   <!-- ============================================================
        LANGUAGES WE OFFER
        ============================================================ -->
-  <section class="py-20 px-6">
-    <div class="max-w-5xl mx-auto text-center">
-      <span class="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3 block">All Languages</span>
-      <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Languages We Offer</h2>
-      <p class="text-gray-400 mb-12 max-w-xl mx-auto">
+  <section class="lp-langs">
+    <div class="max-w-5xl mx-auto px-6">
+      <span class="lp-eyebrow">ALL LANGUAGES</span>
+      <h2>Languages We Offer</h2>
+      <p>
         We offer a large variety of programming languages of all types. Feel free to select the language you want to master.
       </p>
-
-      <!-- Language Cards Carousel -->
-      <div class="relative">
-        <button id="langPrev" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-gray-800 border border-gray-600 hover:border-indigo-400 text-gray-400 hover:text-white flex items-center justify-center transition text-lg">‹</button>
-        <div class="overflow-hidden mx-12">
-          <div id="langCardsTrack" class="flex gap-4 md:gap-6 justify-center transition-transform duration-300">
-            <a href="/tutorials" class="lang-card group block flex-shrink-0 w-28 md:w-32">
-              <div class="lang-card-inner bg-gray-800 border border-gray-700 rounded-2xl p-5 md:p-6 flex flex-col items-center justify-center aspect-square hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-500/10 transition">
-                <img src="/logo/HTML5_logo_black logo.png" alt="HTML5" class="w-12 h-12 md:w-14 md:h-14 object-contain mb-3" />
-                <span class="text-xs font-semibold text-gray-400 group-hover:text-indigo-400 transition">HTML5</span>
-              </div>
-            </a>
-            <a href="/tutorials" class="lang-card group block flex-shrink-0 w-28 md:w-32">
-              <div class="lang-card-inner bg-gray-800 border border-gray-700 rounded-2xl p-5 md:p-6 flex flex-col items-center justify-center aspect-square hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-500/10 transition">
-                <img src="/logo/css.png" alt="CSS3" class="w-12 h-12 md:w-14 md:h-14 object-contain mb-3" />
-                <span class="text-xs font-semibold text-gray-400 group-hover:text-indigo-400 transition">CSS3</span>
-              </div>
-            </a>
-            <a href="/tutorials" class="lang-card group block flex-shrink-0 w-28 md:w-32">
-              <div class="lang-card-inner bg-gray-800 border border-gray-700 rounded-2xl p-5 md:p-6 flex flex-col items-center justify-center aspect-square hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-500/10 transition">
-                <img src="/logo/java.png" alt="Java" class="w-12 h-12 md:w-14 md:h-14 object-contain mb-3" />
-                <span class="text-xs font-semibold text-gray-400 group-hover:text-indigo-400 transition">Java</span>
-              </div>
-            </a>
-            <a href="/tutorials" class="lang-card group block flex-shrink-0 w-28 md:w-32">
-              <div class="lang-card-inner bg-gray-800 border border-gray-700 rounded-2xl p-5 md:p-6 flex flex-col items-center justify-center aspect-square hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-500/10 transition">
-                <img src="/logo/JavaScript logo.png" alt="JavaScript" class="w-12 h-12 md:w-14 md:h-14 object-contain mb-3" />
-                <span class="text-xs font-semibold text-gray-400 group-hover:text-indigo-400 transition">JavaScript</span>
-              </div>
-            </a>
-            <a href="/tutorials" class="lang-card group block flex-shrink-0 w-28 md:w-32">
-              <div class="lang-card-inner bg-gray-800 border border-gray-700 rounded-2xl p-5 md:p-6 flex flex-col items-center justify-center aspect-square hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-500/10 transition">
-                <img src="/logo/php.png" alt="PHP" class="w-12 h-12 md:w-14 md:h-14 object-contain mb-3" />
-                <span class="text-xs font-semibold text-gray-400 group-hover:text-indigo-400 transition">PHP</span>
-              </div>
-            </a>
-            <a href="/tutorials" class="lang-card group block flex-shrink-0 w-28 md:w-32">
-              <div class="lang-card-inner bg-gray-800 border border-gray-700 rounded-2xl p-5 md:p-6 flex flex-col items-center justify-center aspect-square hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-500/10 transition">
-                <img src="/logo/C++ logo.png" alt="C++" class="w-12 h-12 md:w-14 md:h-14 object-contain mb-3" />
-                <span class="text-xs font-semibold text-gray-400 group-hover:text-indigo-400 transition">C++</span>
-              </div>
-            </a>
-          </div>
-        </div>
-        <button id="langNext" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-gray-800 border border-gray-600 hover:border-indigo-400 text-gray-400 hover:text-white flex items-center justify-center transition text-lg">›</button>
+      <div class="lp-lang-cards">
+        <a href="/tutorials" class="lp-lang-card"><img src="/logo/html5.png" alt="HTML5" /></a>
+        <a href="/tutorials" class="lp-lang-card"><img src="/logo/css3.png" alt="CSS3" /></a>
+        <a href="/tutorials" class="lp-lang-card"><img src="/logo/java.png" alt="Java" /></a>
+        <a href="/tutorials" class="lp-lang-card"><img src="/logo/javascript.png" alt="JavaScript" /></a>
+        <a href="/tutorials" class="lp-lang-card"><img src="/logo/php.png" alt="PHP" /></a>
+        <a href="/tutorials" class="lp-lang-card"><img src="/logo/cpp.png" alt="C++" /></a>
       </div>
     </div>
   </section>
@@ -252,73 +373,42 @@
   <!-- ============================================================
        STUDY ANYWHERE
        ============================================================ -->
-  <section class="study-section py-20 px-6">
-    <div class="max-w-5xl mx-auto flex flex-col lg:flex-row items-center gap-12">
-      <!-- Left: Features -->
-      <div class="flex-1 text-center lg:text-left">
-        <h2 class="text-3xl md:text-4xl font-extrabold mb-4 leading-tight">
-          Study anywhere.<br>Never lose your place.
-        </h2>
-        <p class="text-gray-400 mb-8 max-w-lg mx-auto lg:mx-0">
+  <section class="lp-study">
+    <div class="lp-study-inner">
+      <div class="lp-study-text">
+        <h2>Study anywhere.<br>Never lose your place.</h2>
+        <p>
           Anyone can access our tutorials for free. Create a profile to track your XP, preserve daily streaks, and sync your coding journey between web and mobile.
         </p>
-        <div class="grid grid-cols-2 gap-4 max-w-lg mx-auto lg:mx-0">
-          <div class="flex items-center gap-2">
-            <span class="text-emerald-400 text-lg">✓</span>
-            <span class="text-gray-300 text-sm">Progress tracking</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="text-emerald-400 text-lg">✓</span>
-            <span class="text-gray-300 text-sm">XP & streaks</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="text-emerald-400 text-lg">✓</span>
-            <span class="text-gray-300 text-sm">Ad-free learning</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="text-emerald-400 text-lg">✓</span>
-            <span class="text-gray-300 text-sm">Access to App</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="text-emerald-400 text-lg">✓</span>
-            <span class="text-gray-300 text-sm">Challenges</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="text-emerald-400 text-lg">✓</span>
-            <span class="text-gray-300 text-sm">Practice problems</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="text-emerald-400 text-lg">✓</span>
-            <span class="text-gray-300 text-sm">Leagues</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="text-emerald-400 text-lg">✓</span>
-            <span class="text-gray-300 text-sm">Build & host websites</span>
-          </div>
-        </div>
+        <ul class="lp-study-list">
+          <li>Progress tracking</li>
+          <li>XP &amp; streaks</li>
+          <li>Ad-free learning</li>
+          <li>Access to App</li>
+          <li>Challenges</li>
+          <li>Practice problems</li>
+          <li>Leagues</li>
+          <li>Build &amp; host websites</li>
+        </ul>
       </div>
 
-      <!-- Right: Sign In Card -->
-      <div class="flex-1 w-full max-w-md mx-auto lg:mx-0">
-        <div class="bg-gray-800 border border-gray-700 rounded-2xl p-8 shadow-xl">
-          <h3 class="text-xl font-bold mb-2 text-center">Sign In to Level Up.</h3>
-          <p class="text-gray-400 text-sm text-center mb-6">Create your free account and pick up where you left off, anywhere.</p>
-
-          <% if (user) { %>
-            <div class="text-center">
-              <div class="w-16 h-16 rounded-full bg-indigo-600 flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                <%= user.name.charAt(0).toUpperCase() %>
-              </div>
-              <p class="text-white font-semibold mb-1">Welcome back, <%= user.name %>!</p>
-              <p class="text-gray-400 text-sm mb-4">You're already signed in.</p>
-              <a href="/tutorials" class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition text-center">Go to Tutorials</a>
+      <div class="lp-signin-card">
+        <% if (user) { %>
+          <div class="text-center">
+            <div class="w-16 h-16 rounded-full bg-indigo-600 flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+              <%= user.name.charAt(0).toUpperCase() %>
             </div>
-          <% } else { %>
-            <a href="/login" class="block w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 rounded-xl transition text-center mb-3">Sign In</a>
-            <div class="text-center text-gray-500 text-sm mb-3">or</div>
-            <a href="/signup" class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition text-center">Sign Up</a>
-          <% } %>
-        </div>
+            <p class="lp-welcome-name mb-1">Welcome back, <%= user.name %>!</p>
+            <p class="lp-welcome-sub mb-4">You're already signed in.</p>
+            <a href="/tutorials" class="lp-btn-full lp-btn-signup no-underline" style="color:#fff;">Go to Tutorials</a>
+          </div>
+        <% } else { %>
+          <h3>Sign In to Level Up.</h3>
+          <p>Create your free account and pick up where you left off, anywhere.</p>
+          <a href="/login" class="lp-btn-full lp-btn-signin no-underline">Sign In</a>
+          <div class="lp-divider-or">OR</div>
+          <a href="/signup" class="lp-btn-full lp-btn-signup no-underline" style="color:#fff;">Sign Up</a>
+        <% } %>
       </div>
     </div>
   </section>
@@ -326,34 +416,22 @@
   <!-- ============================================================
        CERTIFICATES
        ============================================================ -->
-  <section class="py-20 px-6">
-    <div class="max-w-5xl mx-auto flex flex-col lg:flex-row items-center gap-12">
-      <!-- Left: Text + Buttons -->
-      <div class="flex-1 text-center lg:text-left">
-        <span class="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3 block">Certificates</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold mb-4 leading-tight">
-          Turn Your<br>
-          Knowledge Into<br>
-          Certified Expertise
-        </h2>
-        <p class="text-gray-400 mb-8 max-w-md mx-auto lg:mx-0">
+  <section class="lp-certs">
+    <div class="lp-certs-inner">
+      <div class="lp-certs-text">
+        <span class="lp-eyebrow">CERTIFICATES</span>
+        <h2>Turn Your Knowledge Into Certified Expertise</h2>
+        <p>
           Stand out in the job market with validated skills and shareable credentials built on a legacy of trusted education.
         </p>
-        <div class="flex flex-wrap justify-center lg:justify-start gap-3 mb-6">
-          <a href="/test" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-xl transition">Get Certified</a>
-          <a href="/certificates" class="border border-gray-600 text-gray-300 hover:bg-gray-800 font-semibold px-6 py-3 rounded-xl transition">See All Certificates</a>
+        <div class="lp-certs-ctas">
+          <a href="/test" class="lp-btn lp-btn-primary">Get Certified</a>
+          <a href="/certificates" class="lp-btn lp-btn-line">See All Certificates</a>
         </div>
-        <div class="flex items-center gap-2 justify-center lg:justify-start text-emerald-400">
-          <span class="text-lg">✓</span>
-          <span class="text-sm">Verified credential you can share</span>
-        </div>
+        <div class="lp-verified">Verified credential you can share</div>
       </div>
-
-      <!-- Right: Certificate Badge -->
-      <div class="flex-1 flex items-center justify-center py-6">
-        <div class="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden flex items-center justify-center bg-transparent mx-auto">
-          <img src="/logo/certificate.png" alt="Zero to Pro Certified" class="w-full h-full object-contain" />
-        </div>
+      <div class="lp-badge">
+        <img src="/logo/badge.png" alt="Zero to Pro Certified badge" />
       </div>
     </div>
   </section>
@@ -361,24 +439,17 @@
   <!-- ============================================================
        TEST YOUR SKILLS
        ============================================================ -->
-  <section class="py-20 px-6 bg-gray-800/30">
-    <div class="max-w-4xl mx-auto text-center">
-      <span class="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3 block">Test Your Skills</span>
-      <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Practice with Zero to Pro</h2>
-      <p class="text-gray-400 mb-10 max-w-xl mx-auto">
+  <section class="lp-practice">
+    <div class="max-w-4xl mx-auto px-6">
+      <span class="lp-eyebrow">TEST YOUR SKILLS</span>
+      <h2>Practice with Zero to Pro</h2>
+      <p>
         Exercises, quizzes and a new coding challenge every week.
       </p>
-
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
-        <a href="/test" class="border-2 border-indigo-500/40 hover:border-indigo-500 bg-gray-800 hover:bg-indigo-500/10 text-white font-semibold py-4 px-6 rounded-xl transition flex items-center justify-center gap-2">
-          <span class="text-lg">📝</span> Exercises
-        </a>
-        <a href="/test" class="border-2 border-indigo-500/40 hover:border-indigo-500 bg-gray-800 hover:bg-indigo-500/10 text-white font-semibold py-4 px-6 rounded-xl transition flex items-center justify-center gap-2">
-          <span class="text-lg">❓</span> Quizzes
-        </a>
-        <a href="/test" class="border-2 border-indigo-500/40 hover:border-indigo-500 bg-gray-800 hover:bg-indigo-500/10 text-white font-semibold py-4 px-6 rounded-xl transition flex items-center justify-center gap-2">
-          <span class="text-lg">📅</span> Weekly Problem
-        </a>
+      <div class="lp-practice-ctas">
+        <a href="/test" class="lp-btn lp-btn-primary">📝 Exercises</a>
+        <a href="/test" class="lp-btn lp-btn-line">❓ Quizzes</a>
+        <a href="/test" class="lp-btn lp-btn-line">📅 Weekly Problem</a>
       </div>
     </div>
   </section>
@@ -429,15 +500,11 @@
     // Language carousel click handler
     document.querySelectorAll('[data-lang]').forEach(btn => {
       btn.addEventListener('click', () => {
-        // Update active state
         document.querySelectorAll('[data-lang]').forEach(b => {
-          b.classList.remove('border-indigo-400', 'bg-gray-700');
-          b.classList.add('border-gray-700');
+          b.classList.remove('active');
         });
-        btn.classList.remove('border-gray-700');
-        btn.classList.add('border-indigo-400', 'bg-gray-700');
+        btn.classList.add('active');
 
-        // Update code preview
         const lang = btn.dataset.lang;
         const data = langCodes[lang];
         if (data) {
@@ -446,56 +513,6 @@
         }
       });
     });
-
-    // Set first language as active by default
-    const firstLang = document.querySelector('[data-lang="html"]');
-    if (firstLang) {
-      firstLang.classList.remove('border-gray-700');
-      firstLang.classList.add('border-indigo-400', 'bg-gray-700');
-    }
-
-    // Language Cards Carousel (Languages We Offer section)
-    const langCardsTrack = document.getElementById('langCardsTrack');
-    const langPrevBtn = document.getElementById('langPrev');
-    const langNextBtn = document.getElementById('langNext');
-    let langCardIndex = 0;
-    if (langCardsTrack && langPrevBtn && langNextBtn) {
-      const langCardItems = langCardsTrack.children;
-      const totalLangCards = langCardItems.length;
-      function getVisibleCards() {
-        if (window.innerWidth >= 768) return 6;
-        if (window.innerWidth >= 640) return 4;
-        return 3;
-      }
-      function updateLangCards() {
-        const visible = getVisibleCards();
-        langCardIndex = Math.min(langCardIndex, Math.max(0, totalLangCards - visible));
-        const cardWidth = langCardItems[0].offsetWidth + 16;
-        const offset = langCardIndex * cardWidth;
-        langCardsTrack.style.transform = 'translateX(-' + offset + 'px)';
-      }
-      langPrevBtn.addEventListener('click', () => {
-        langCardIndex = Math.max(0, langCardIndex - 1);
-        updateLangCards();
-      });
-      langNextBtn.addEventListener('click', () => {
-        const visible = getVisibleCards();
-        langCardIndex = Math.min(totalLangCards - visible, langCardIndex + 1);
-        updateLangCards();
-      });
-      window.addEventListener('resize', updateLangCards);
-    }
-
-    // Scroll-triggered fade-in animation
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>

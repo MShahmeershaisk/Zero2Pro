@@ -37,7 +37,7 @@
                 <h3 class="text-xl font-bold"><%= t.title %></h3>
               </div>
               <div class="flex gap-3 items-center">
-                <select class="lang-select bg-gray-700 border border-gray-600 rounded-lg text-white px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <select class="lang-select bg-gray-700 border border-gray-600 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                   <option value="" disabled selected>Select Language</option>
                   <% categories.forEach(function (cat) { %>
                     <option value="<%= cat %>" class="bg-gray-800"><%= cat %></option>
@@ -52,7 +52,6 @@
       <% } %>
 
       <script>
-        document.querySelectorAll('.test-card').forEach(() => {});
         // Enable start buttons once a language is selected
         document.querySelectorAll('.lang-select').forEach(function (select) {
           const card = select.closest('div');
