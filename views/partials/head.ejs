@@ -18,9 +18,11 @@
 
   /* ---------- DARK THEME (default) ---------- */
   body { background-color: #0f172a; color: #e2e8f0; }
-  /* Sub-pages (not home) — LIGHT MODE ONLY: soft mint/sky gradient (study-section colors) */
+  /* Sub-pages (not home) — LIGHT MODE ONLY: same navy gradient as the home
+     hero, so every page's background matches the "From Zero to Pro" hero box. */
   html[data-theme="light"] body:not(:has(.hero-section)) {
-    background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 40%, #cffafe 100%);
+    background: linear-gradient(180deg,#0c4652 0%,#123a8a 45%,#0a1a6b 75%,#060c33 100%) !important;
+    color: #e2e8f0 !important;
   }
 
   /* Landing page fade-in animation */
@@ -76,13 +78,31 @@
   html[data-theme="light"] .hero-section .hover\:bg-blue-500:hover { background-color: rgba(255,255,255,0.15) !important; color: #ffffff !important; }
   html[data-theme="light"] .hero-section .ring-indigo-500\/30 { box-shadow: 0 0 0 8px rgba(129,140,248,0.15) !important; }
 
-  /* Navbar — clean white with soft border (landing page style) */
+  /* Navbar — ONE box with the home hero in light mode: same navy gradient,
+     so the header and the "From Zero to Pro" hero look like a single panel. */
   html[data-theme="light"] nav.bg-gray-900\/80,
-  html[data-theme="light"] nav { background-color: rgba(255,255,255,0.95) !important; border-color: #e5e7eb !important; box-shadow: 0 1px 3px rgba(15,23,42,0.06) !important; }
+  html[data-theme="light"] nav {
+    background: linear-gradient(180deg,#0c4652 0%,#123a8a 45%,#0a1a6b 75%,#060c33 100%) !important;
+    border-color: rgba(255,255,255,.08) !important;
+    box-shadow: 0 1px 3px rgba(15,23,42,.35) !important;
+  }
   html[data-theme="light"] nav .text-gray-300,
-  html[data-theme="light"] nav a:not(.bg-indigo-600):not(.bg-red-600):not(.bg-gradient-to-r) { color: #334155 !important; }
-  html[data-theme="light"] nav a:not(.bg-indigo-600):not(.bg-red-600):not(.bg-gradient-to-r):hover { color: #4f46e5 !important; background-color: #f1f5f9 !important; }
-  html[data-theme="light"] nav .bg-gray-800 { background-color: #f1f5f9 !important; }
+  html[data-theme="light"] nav a:not(.bg-indigo-600):not(.bg-red-600):not(.bg-gradient-to-r) { color: #cbd5e1 !important; }
+  html[data-theme="light"] nav a:not(.bg-indigo-600):not(.bg-red-600):not(.bg-gradient-to-r):hover { color: #ffffff !important; background-color: rgba(255,255,255,.08) !important; }
+  html[data-theme="light"] nav .bg-gray-800 { background-color: rgba(255,255,255,.12) !important; }
+
+  /* Light mode non-hero pages — the app background is now the navy gradient,
+     so text that sits directly on it must be light. Text inside the white
+     bootstrap-style cards (and the certificate cards) keeps its normal color. */
+  html[data-theme="light"] body:not(:has(.hero-section)) .text-gray-100:not(.bg-gray-800 *):not(.bg-gray-900 *):not(.certificate-card *),
+  html[data-theme="light"] body:not(:has(.hero-section)) .text-gray-200:not(.bg-gray-800 *):not(.bg-gray-900 *):not(.certificate-card *) { color: #f1f5f9 !important; }
+  html[data-theme="light"] body:not(:has(.hero-section)) .text-gray-300:not(.bg-gray-800 *):not(.bg-gray-900 *):not(.certificate-card *) { color: #cbd5e1 !important; }
+  html[data-theme="light"] body:not(:has(.hero-section)) .text-gray-400:not(.bg-gray-800 *):not(.bg-gray-900 *):not(.certificate-card *),
+  html[data-theme="light"] body:not(:has(.hero-section)) .text-gray-500:not(.bg-gray-800 *):not(.bg-gray-900 *):not(.certificate-card *) { color: #94a3b8 !important; }
+  html[data-theme="light"] body:not(:has(.hero-section)) .text-white:not(.bg-gray-800 *):not(.bg-gray-900 *):not(.certificate-card *) { color: #f8fafc !important; }
+  /* White cards (light mode) keep dark text for headings that inherit the body color */
+  html[data-theme="light"] body:not(:has(.hero-section)) .bg-gray-800,
+  html[data-theme="light"] body:not(:has(.hero-section)) .bg-gray-900 { color: #1e293b !important; }
 
   /* Collaborations background — match hero gradient */
   html[data-theme="light"] .collab-bg { background: linear-gradient(135deg, #4f46e5 0%, #2563eb 40%, #0ea5e9 100%) !important; }

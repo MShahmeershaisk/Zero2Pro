@@ -186,7 +186,7 @@ function wireEvents() {
       "My program is giving an error in the compiler. Language: " + langName + ".\n\n" +
       "My code:\n---\n" + code + "\n---\n\n" +
       "Compiler error:\n---\n" + (errorOutput || "(No output)") + "\n---\n\n" +
-      "Please tell me the correct fix. Write the corrected code (the full program) and briefly explain what was wrong."
+      "Please tell me the correct fix. Only point out the exact error and give the corrected line(s) — do NOT rewrite the whole program. Then briefly explain what was wrong."
     );
   }
 
