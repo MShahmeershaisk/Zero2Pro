@@ -69,6 +69,7 @@
       .certificate-card .text-gray-400,
       .certificate-card .text-gray-500 { color: #6b7280 !important; }
       .certificate-card .border-gray-800 { border-color: #e5e7eb !important; }
+      .certificate-card .cert-name { color: #111827 !important; }
     }
 
     /* Light mode overrides */
@@ -87,6 +88,15 @@
       html[data-theme="light"] body .cert-header h1 { color: #111827 !important; }
       html[data-theme="light"] body .cert-header p { color: #6b7280 !important; }
     }
+
+    /* Certificate recipient name: black in light mode, white/light-gray in dark mode.
+       Written independent of Tailwind's dark: class variant so it works even if
+       the theme toggle only sets data-theme (and not the .dark class) on <html>. */
+    .cert-name { color: #000; }
+    html[data-theme="light"] .cert-name,
+    html:not(.dark):not([data-theme="dark"]) .cert-name { color: #000 !important; }
+    html.dark .cert-name,
+    html[data-theme="dark"] .cert-name { color: #f9fafb !important; }
   </style>
 </head>
 <body class="bg-gray-900 text-gray-100 font-sans min-h-screen flex flex-col">
@@ -98,7 +108,7 @@
       <!-- ─── Heading ───────────────────────────────────────────────────── -->
       <div class="cert-header text-center mb-12">
         <div class="h-20 md:h-24 mx-auto mb-4 flex items-center justify-center">
-          <img src="/logo/brand-logo.png" alt="Zero to Pro" class="h-full w-auto object-contain" />
+          <img src="/logo/brand-icon.png" alt="Zero to Pro" class="h-full w-auto object-contain" />
         </div>
         <span class="text-sm font-bold uppercase tracking-widest text-indigo-400">Certificates</span>
         <h1 class="text-4xl md:text-5xl font-extrabold mt-2">My Certificates</h1>
@@ -170,7 +180,7 @@
 
                     <!-- Body -->
                     <p class="text-gray-400 text-sm">This certifies that</p>
-                    <p class="mt-2 text-4xl md:text-5xl leading-tight text-gray-50" style="font-family:'Great Vibes', cursive"><%= user.name %></p>
+                    <p class="cert-name mt-2 text-4xl md:text-5xl leading-tight" style="font-family:'Great Vibes', cursive"><%= user.name %></p>
                     <p class="mt-4 text-gray-400 text-sm">has successfully passed the</p>
                     <p class="mt-2 text-2xl md:text-3xl font-extrabold bg-clip-text text-transparent" style="background-image:linear-gradient(90deg,<%= c1 %>,<%= c2 %>)"><%= cert.category %> Certification Test</p>
                     <p class="mt-2 text-xs text-gray-500"><%= cert.testTitle %></p>
