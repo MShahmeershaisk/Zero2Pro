@@ -35,7 +35,7 @@ node seed.js
 npm start
 ```
 
-Visit `http://localhost:3000`.
+Visit `http://localhost:3999`.
 
 > The compiler runs PHP through a local XAMPP install and C++ through g++.
 > Install XAMPP (PHP) and MinGW/MSYS2 (g++) and they are auto-detected.
