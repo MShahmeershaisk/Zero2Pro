@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const { LOGOS } = require("../lib/languages");
 
 // /certificates page — shows the user's earned certificates.
 // If the user has not passed a test in any language, the certificates array is
@@ -15,6 +16,7 @@ async function certificates(req, res) {
       user,
       certificates: list,
       error: null,
+      logos: LOGOS,
     });
   } catch (err) {
     console.error(err);

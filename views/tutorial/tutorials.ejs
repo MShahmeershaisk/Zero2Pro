@@ -1,9 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <%
-  // Inline helper for category icons (plain EJS, no external deps)
-  const ICONS = { 'HTML': '🖥️', 'CSS': '🎨', 'JavaScript': '⚡', 'PHP': '🐘', 'C++': '⚙️', 'React': '⚛️', 'Bootstrap': '🅱️' };
-  function catIcon(c) { return ICONS[c] || '📘'; }
+  // Language logos come from the controller (shared lib/languages.js), passed
+  // in as `logos` — a { category: '/logo/….png' } map. Views never hardcode them.
+  function langLogo(c) { return (logos && logos[c]) || '/logo/badge.png'; }
+
+  // Single-language mode (/tutorials/:lang) vs the old grouped browse view
+  const single = typeof isSingleLang !== 'undefined' && isSingleLang;
+  const heroTitle = single ? (langName + ' Tutorials') : 'Coding Tutorials';
+  const heroSub = single
+    ? (comingSoon ? 'More ' + langName + ' lessons are on the way — check back soon!' : langCount + (langCount === 1 ? ' lesson' : ' lessons') + ' to master ' + langName + '.')
+    : 'Learn the fundamentals of HTML, CSS, and JavaScript with these hand-picked study guides.';
 %>
 <head>
   <%- include('../partials/head', { title: 'Tutorials - Zero to Pro' }) %>
@@ -16,11 +23,15 @@
     <!-- Hero -->
     <section class="text-center px-6 py-14 max-w-3xl mx-auto">
       <span class="inline-block text-xs font-semibold uppercase tracking-widest text-indigo-400 mb-3">Zero to Pro Library</span>
-      <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Coding Tutorials</h1>
-      <p class="text-gray-400 text-lg">Learn the fundamentals of HTML, CSS, and JavaScript with these hand-picked study guides.</p>
+      <% if (single) { %>
+        <a href="/tutorials" class="inline-flex items-center gap-1 text-sm text-gray-400 hover:text-indigo-400 transition mb-3">← All Languages</a>
+      <% } %>
+      <h1 class="text-4xl md:text-5xl font-extrabold mb-4"><%= heroTitle %></h1>
+      <p class="text-gray-400 text-lg"><%= heroSub %></p>
     </section>
 
-    <!-- Category filter -->
+    <!-- Category filter (grouped browse view only — hidden on a single-language page) -->
+    <% if (!single) { %>
     <div class="max-w-6xl mx-auto px-6 flex flex-wrap justify-center gap-2 mb-10" id="filterBar">
       <button data-cat="All"
         class="filter-btn px-4 py-1.5 rounded-full text-sm font-semibold transition bg-indigo-600 text-white">All</button>
@@ -29,6 +40,7 @@
           class="filter-btn px-4 py-1.5 rounded-full text-sm font-semibold transition bg-gray-800 text-gray-300 hover:bg-gray-700 border border-gray-700"><%= cat %></button>
       <% }) %>
     </div>
+    <% } %>
 
     <!-- Tutorial grid -->
     <div class="max-w-6xl mx-auto px-6 pb-20">
@@ -42,7 +54,10 @@
             <% grouped[cat].forEach(t => { %>
               <article class="tutorial-card bg-gray-800 border border-gray-700 rounded-2xl p-6 flex flex-col hover:border-indigo-500/60 hover:shadow-xl transition group">
                 <div class="flex items-start justify-between mb-3">
-                  <span class="text-2xl"><%= catIcon(cat) %></span>
+                  <div class="w-10 h-10 rounded-lg bg-gray-900 border border-gray-700 p-1.5">
+                    <img src="<%= langLogo(cat) %>" alt="<%= cat %> logo" class="w-full h-full object-contain"
+                         onerror="this.onerror=null;this.src='/logo/badge.png';" />
+                  </div>
                   <span class="text-xs bg-indigo-500/15 text-indigo-300 px-2.5 py-1 rounded-full"><%= cat %></span>
                 </div>
                 <h3 class="text-lg font-bold mb-1"><%= t.title %></h3>
@@ -60,7 +75,19 @@
         </section>
       <% }) %>
       <% if (categories.length === 0) { %>
-        <p class="text-gray-400 text-center py-10">No tutorials available yet. Check back soon!</p>
+        <% if (single) { %>
+          <div class="text-center py-14">
+            <div class="w-20 h-20 rounded-2xl bg-gray-800 border border-gray-700 p-4 mx-auto opacity-70">
+              <img src="<%= langLogo(langName) %>" alt="<%= langName %> logo" class="w-full h-full object-contain"
+                   onerror="this.onerror=null;this.src='/logo/badge.png';" />
+            </div>
+            <p class="text-gray-200 text-lg font-semibold mt-6">No <%= langName %> tutorials yet</p>
+            <p class="text-gray-500 text-sm mt-1">We're busy writing them — check back soon!</p>
+            <a href="/tutorials" class="inline-block mt-6 bg-indigo-700 hover:bg-indigo-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">Browse other languages</a>
+          </div>
+        <% } else { %>
+          <p class="text-gray-400 text-center py-10">No tutorials available yet. Check back soon!</p>
+        <% } %>
       <% } %>
     </div>
   </main>

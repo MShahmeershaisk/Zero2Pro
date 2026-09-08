@@ -15,19 +15,9 @@
   function accentColors(c) {
     return CATEGORY_COLORS[c] ? [CATEGORY_COLORS[c][0], CATEGORY_COLORS[c][1]] : ['#22d3ee', '#6366f1'];
   }
-  // Real logo image per language (from /logo folder) instead of emoji icons
+  // Language logos come from the controller (shared lib/languages.js) via `logos`.
   function langLogo(c) {
-    const map = {
-      HTML: '/logo/html5.png',
-      CSS: '/logo/css3.png',
-      JavaScript: '/logo/javascript.png',
-      PHP: '/logo/php.png',
-      'C++': '/logo/cpp.png',
-      React: '/logo/react.png',
-      Bootstrap: '/logo/bootstrap.png',
-      General: '/logo/badge.png',
-    };
-    return map[c] || '/logo/badge.png';
+    return (logos && logos[c]) || '/logo/badge.png';
   }
   function logoAlt(c) {
     return (c || 'General') + ' logo';

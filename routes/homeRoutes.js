@@ -8,8 +8,11 @@ const { requireAuth, requireAdmin } = require("../controllers/authController");
 // Public landing page
 router.get("/", homeController.landing);
 
-// Tutorials browse page (any logged-in user)
-router.get("/tutorials", requireAuth, tutorialController.listTutorials);
+// Tutorials language-select landing page (any logged-in user)
+router.get("/tutorials", requireAuth, tutorialController.languageLanding);
+
+// Tutorials for one language only (any logged-in user) — e.g. /tutorials/javascript
+router.get("/tutorials/:lang", requireAuth, tutorialController.listTutorials);
 
 // Tutorial management dashboard (admin only)
 router.get("/home", requireAdmin, tutorialController.dashboard);
