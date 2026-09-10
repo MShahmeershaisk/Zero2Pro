@@ -320,7 +320,10 @@ ${code}
       try {
         const res = await fetch("/api/run", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]')?.content || "",
+          },
           body: JSON.stringify({
             language: selectedLang,
             code: code,

@@ -99,9 +99,11 @@ else console.warn("Compiler: 'g++' binary not found — C++ runs will return a f
 // Security Check: Block external library imports
 function checkForbiddenLibraries(lang, code) {
   if (lang === "python") {
-    // Python Built-in modules list (allowed ones)
+    // Python Built-in modules list (allowed ones).
+    // NOTE: "os" is deliberately excluded — os.system("...") would let code
+    // run arbitrary shell commands on the server.
     const allowedModules = [
-      "math", "random", "time", "datetime", "sys", "os",
+      "math", "random", "time", "datetime", "sys",
       "re", "json", "string", "collections", "itertools", "functools",
     ];
 
@@ -128,6 +130,13 @@ function checkForbiddenLibraries(lang, code) {
         return `Security Error: External library import '${imp}' is not allowed!`;
       }
     }
+
+    // java.lang.Runtime / ProcessBuilder are auto-imported, so the import scan
+    // above can't see them — but Runtime.getRuntime().exec() and
+    // ProcessBuilder both launch OS processes. Block them explicitly.
+    if (/\b(?:Runtime|ProcessBuilder)\b/.test(code) && /\b(?:getRuntime|exec|start)\s*\(/.test(code)) {
+      return "Security Error: Process execution (Runtime/ProcessBuilder) is not allowed in this compiler!";
+    }
   } else if (lang === "javascript") {
     // Node.js built-in modules list (allowed ones).
     // Deliberately excludes fs / child_process / vm / net / dgram / http — the
@@ -151,6 +160,16 @@ function checkForbiddenLibraries(lang, code) {
         return `Security Error: External library '${mod}' is not allowed in this compiler! Only pure standard logic is supported.`;
       }
     }
+
+    // The scans above only catch literal require("x") / import "x" strings.
+    // Block the indirection tricks that smuggle in dangerous modules:
+    //   process.mainModule.require("child_process")
+    //   global.require(...) / module.require(...)
+    //   process.binding("spawn_sync")  (native process spawn)
+    if (/\bprocess\.(?:mainModule|binding)\b/.test(code) ||
+        /\b(?:global|module)\.require\s*\(/.test(code)) {
+      return "Security Error: Indirect module loading is not allowed in this compiler!";
+    }
   } else if (lang === "php") {
     // Block dangerous functions — stop server command execution
     if (/\b(?:system|shell_exec|passthru|exec|popen|proc_open)\s*\(/.test(code)) {
@@ -169,12 +188,15 @@ function runLocalCode(lang, code, stdin = "") {
     }
 
     const timestamp = Date.now();
+    // Random suffix: under PM2 cluster, two processes may run code in the same
+    // millisecond — a plain timestamp would collide and overwrite each other's file.
+    const uniq = Math.random().toString(36).slice(2, 8);
     let command = "";
     let mainFilePath = "";
     let filesToClean = [];
 
     if (lang === "python") {
-      mainFilePath = path.join(tempDir, `script_${timestamp}.py`);
+      mainFilePath = path.join(tempDir, `script_${timestamp}_${uniq}.py`);
       filesToClean.push(mainFilePath);
       fs.writeFileSync(mainFilePath, code);
       const pyCmd = process.platform === "win32" ? "python" : "python3";
@@ -182,14 +204,16 @@ function runLocalCode(lang, code, stdin = "") {
     } else if (lang === "java") {
       const classNameMatch = code.match(/public\s+class\s+([A-Za-z0-9_]+)/);
       const className = classNameMatch ? classNameMatch[1] : "Main";
-      const javaRunDir = path.join(tempDir, `java_${timestamp}`);
+      const javaRunDir = path.join(tempDir, `java_${timestamp}_${uniq}`);
       if (!fs.existsSync(javaRunDir)) fs.mkdirSync(javaRunDir);
       mainFilePath = path.join(javaRunDir, `${className}.java`);
       filesToClean.push(javaRunDir);
       fs.writeFileSync(mainFilePath, code);
-      command = `javac "${mainFilePath}" && java -cp "${javaRunDir}" ${className}`;
+      // className is quoted: even though the regex above restricts it to
+      // [A-Za-z0-9_], quoting defends against any shell metacharacters.
+      command = `javac "${mainFilePath}" && java -cp "${javaRunDir}" "${className}"`;
     } else if (lang === "javascript") {
-      mainFilePath = path.join(tempDir, `script_${timestamp}.js`);
+      mainFilePath = path.join(tempDir, `script_${timestamp}_${uniq}.js`);
       filesToClean.push(mainFilePath);
       fs.writeFileSync(mainFilePath, code);
       command = `node "${mainFilePath}"`;
@@ -200,7 +224,7 @@ function runLocalCode(lang, code, stdin = "") {
           output: "PHP compiler (php CLI) is not installed on this server. To run PHP, install XAMPP/WAMP, or ask me to integrate an online compiler (Piston/Judge0).",
         });
       }
-      mainFilePath = path.join(tempDir, `script_${timestamp}.php`);
+      mainFilePath = path.join(tempDir, `script_${timestamp}_${uniq}.php`);
       filesToClean.push(mainFilePath);
       fs.writeFileSync(mainFilePath, code);
       command = `${PHP_BIN} -f "${mainFilePath}"`;
@@ -211,7 +235,7 @@ function runLocalCode(lang, code, stdin = "") {
           output: "C++ compiler (g++) is not installed on this server yet, so C++ cannot run right now. Let me know if you want a local install (XAMPP/g++) or an online compiler (Piston/Judge0).",
         });
       }
-      const cppRunDir = path.join(tempDir, `cpp_${timestamp}`);
+      const cppRunDir = path.join(tempDir, `cpp_${timestamp}_${uniq}`);
       if (!fs.existsSync(cppRunDir)) fs.mkdirSync(cppRunDir);
       const srcFile = path.join(cppRunDir, "main.cpp");
       const binFile = path.join(cppRunDir, process.platform === "win32" ? "program.exe" : "program");

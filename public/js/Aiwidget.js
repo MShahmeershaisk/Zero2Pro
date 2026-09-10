@@ -220,7 +220,10 @@
     try {
       const res = await fetch("/api/ai/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]')?.content || "",
+        },
         body: JSON.stringify({ message: text, history }),
       });
       const data = await res.json();

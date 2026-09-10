@@ -152,7 +152,10 @@
     try {
       const res = await fetch(`/api/test/${testId}/submit`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]')?.content || "",
+        },
         body: JSON.stringify({ answers, questionIds, category }),
       });
       const data = await res.json();

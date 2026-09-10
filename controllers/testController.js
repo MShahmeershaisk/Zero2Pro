@@ -36,6 +36,15 @@ const CATEGORY_RANGES = {
   General: { start: 701, end: 800 },
 };
 
+// Reverse-map a question's qNum to its category name (used to award the
+// certificate server-side — never trust the client's req.body.category).
+function categoryFromQNum(qNum) {
+  for (const [cat, range] of Object.entries(CATEGORY_RANGES)) {
+    if (qNum >= range.start && qNum <= range.end) return cat;
+  }
+  return "General";
+}
+
 // Pick `count` unique random numbers from within a range.
 // (Simpler than shuffling the whole 100-question pool — just pick numbers,
 // then map those numbers to questions.)
@@ -176,7 +185,17 @@ async function submitTest(req, res) {
       try {
         const user = await User.findById(req.session.user.id);
         if (user) {
-          const categoryName = String(req.body.category || "General").trim();
+          // Derive the category from the questions themselves — a malicious
+          // client could otherwise forge req.body.category to claim a
+          // certificate for any language.
+          let categoryName = "General";
+          for (const qid of questionIds) {
+            const q = questionMap.get(String(qid));
+            if (q && typeof q.qNum === "number") {
+              categoryName = categoryFromQNum(q.qNum);
+              break;
+            }
+          }
           const existing = user.certificates.find((c) => c.category === categoryName);
           if (existing) {
             existing.percentage = roundedPercent;

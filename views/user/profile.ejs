@@ -33,8 +33,9 @@
           <span class="font-medium"><%= profile && profile.createdAt ? new Date(profile.createdAt).toLocaleDateString() : '—' %></span>
         </div>
         <div class="flex justify-between border-b border-gray-700 pb-3">
-          <span class="text-gray-400">Account ID</span>
-          <span class="font-medium text-gray-500"><%= profile ? profile._id : '—' %></span>
+          <span class="text-gray-400">Member ID</span>
+          <!-- Full MongoDB ObjectId is an internal detail — only show a masked hint -->
+          <span class="font-medium text-gray-500"><%= profile ? (profile._id.toString().slice(0, 8) + '••••') : '—' %></span>
         </div>
       </div>
 

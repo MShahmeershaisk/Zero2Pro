@@ -1,7 +1,44 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title><%= typeof title !== 'undefined' ? title : 'Zero to Pro - Learn & Practice Coding' %></title>
+
+<% const metaDesc = typeof meta !== 'undefined' && meta && meta.description
+   ? meta.description
+   : 'Zero to Pro — Free coding platform with interactive tutorials, quizzes, certificates, live compiler, and AI tutor. Learn HTML, CSS, JavaScript, Python, React, C++ and more.';
+   const metaKeywords = typeof meta !== 'undefined' && meta && meta.keywords
+   ? meta.keywords
+   : 'learn coding, programming tutorials, free coding platform, coding exercises, certificates, online compiler, AI tutor, HTML, CSS, JavaScript, Python, React, C++';
+   const metaOgImage = typeof meta !== 'undefined' && meta && meta.ogImage
+   ? meta.ogImage
+   : '/logo/brand-logo.png';
+   const metaOgUrl = typeof meta !== 'undefined' && meta && meta.ogUrl
+   ? meta.ogUrl
+   : 'https://zerotopro.dev';
+%>
+
+<!-- SEO Meta Tags -->
+<meta name="description" content="<%= metaDesc %>" />
+<meta name="keywords" content="<%= metaKeywords %>" />
+<meta name="author" content="Zero to Pro Team" />
+<meta name="robots" content="index, follow" />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="<%= metaOgUrl %>" />
+<meta property="og:title" content="<%= typeof title !== 'undefined' ? title : 'Zero to Pro' %>" />
+<meta property="og:description" content="<%= metaDesc %>" />
+<meta property="og:image" content="<%= metaOgImage %>" />
+<meta property="og:site_name" content="Zero to Pro" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="<%= typeof title !== 'undefined' ? title : 'Zero to Pro' %>" />
+<meta name="twitter:description" content="<%= metaDesc %>" />
+<meta name="twitter:image" content="<%= metaOgImage %>" />
+
 <link rel="icon" href="/logo/brand-icon.png" />
+<!-- Same-origin CSRF token for AJAX calls (read by compiler.js / csstest.js / AiWidget.js) -->
+<meta name="csrf-token" content="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>" />
 <!-- Theme init: apply saved theme BEFORE page renders to prevent flash -->
 <script>
   (function(){var t=localStorage.getItem('ztp-theme');var s=(t==='light'||t==='dark')?t:'light';document.documentElement.setAttribute('data-theme',s);})();

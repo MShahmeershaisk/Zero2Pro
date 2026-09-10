@@ -36,7 +36,7 @@
         <ul class="space-y-2 text-gray-400 text-sm">
           <li><a href="/test" class="hover:text-indigo-400 transition">Quizzes</a></li>
           <li><a href="/test" class="hover:text-indigo-400 transition">Exercises</a></li>
-          <li><a href="/test" class="hover:text-indigo-400 transition">Weekly Problem</a></li>
+          <li><a href="/blog" class="hover:text-indigo-400 transition">Blog</a></li>
         </ul>
       </div>
 
@@ -57,17 +57,27 @@
         <ul class="space-y-2 text-gray-400 text-sm">
           <% if (user) { %>
             <li><a href="/profile" class="hover:text-indigo-400 transition">My Profile</a></li>
-            <li><a href="/logout" class="hover:text-indigo-400 transition">Logout</a></li>
+            <li><a href="/contact" class="hover:text-indigo-400 transition">Contact Us</a></li>
+            <li><form method="POST" action="/logout" class="inline"><input type="hidden" name="_csrf" value="<%= csrfToken %>" /><button type="submit" class="hover:text-indigo-400 transition cursor-pointer bg-transparent border-0 p-0 text-left text-sm text-gray-400">Logout</button></form></li>
           <% } else { %>
             <li><a href="/login" class="hover:text-indigo-400 transition">Login</a></li>
             <li><a href="/signup" class="hover:text-indigo-400 transition">Sign Up</a></li>
+            <li><a href="/contact" class="hover:text-indigo-400 transition">Contact Us</a></li>
           <% } %>
         </ul>
       </div>
     </div>
 
+    <!-- Contact Us CTA -->
+    <div class="border-t border-gray-700 mt-10 pt-8 text-center">
+      <p class="text-gray-400 text-sm mb-4">Have a question or need help? We're here for you.</p>
+      <a href="/contact" class="inline-block bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-8 py-3 rounded-lg transition shadow-lg shadow-indigo-600/20">
+        ✉ Contact Us
+      </a>
+    </div>
+
     <!-- Bottom bar -->
-    <div class="border-t border-gray-700 mt-10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="border-t border-gray-700 mt-8 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
       <p class="text-gray-500 text-sm">&copy; <%= new Date().getFullYear() %> Zero to Pro. All rights reserved.</p>
       <div class="flex items-center gap-4">
         <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="text-gray-500 hover:text-indigo-400 transition">

@@ -17,7 +17,16 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+      required: false, // Optional for Google-authenticated users
+      default: null,
+    },
+    googleId: {
+      type: String,
+      default: null,
+    },
+    avatar: {
+      type: String,
+      default: "",
     },
     role: {
       type: String,
@@ -53,15 +62,19 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Hash the password before saving it
+// Hash the password before saving it (skip for Google users with null password)
 userSchema.pre("save", async function () {
-  if (!this.isModified("password")) return;
+  if (!this.isModified("password") || !this.password) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-// Method to compare the password during login
+// Admin dashboard filters/orders users by role and join date — index those.
+userSchema.index({ role: 1, createdAt: -1 });
+
+// Method to compare the password during login (returns false for Google-only users)
 userSchema.methods.comparePassword = function (candidatePassword) {
+  if (!this.password) return Promise.resolve(false);
   return bcrypt.compare(candidatePassword, this.password);
 };
 

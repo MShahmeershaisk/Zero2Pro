@@ -41,4 +41,9 @@ const homeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Tutorials are listed per category, newest first — make those lookups indexed
+// instead of scanning every tutorial document.
+homeSchema.index({ category: 1, createdAt: -1 });
+homeSchema.index({ createdAt: -1 });
+
 module.exports = mongoose.model("Home", homeSchema);

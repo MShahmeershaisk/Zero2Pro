@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head', { title: 'Blog - Zero to Pro' }) %>
+  <style>
+    .blog-hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 30%, #172554 60%, #0c1a3d 100%);
+      padding: 60px 20px 50px;
+      text-align: center;
+    }
+    html[data-theme="light"] .blog-hero {
+      background: linear-gradient(180deg, #0c4652 0%, #123a8a 45%, #0a1a6b 75%, #060c33 100%);
+    }
+    .blog-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .blog-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+    html[data-theme="light"] .blog-card {
+      background: #ffffff;
+      border-color: #e2e8f0;
+    }
+    html[data-theme="light"] .blog-card:hover {
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+    .blog-tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+      border: 1px solid rgba(99, 102, 241, 0.25);
+    }
+    html[data-theme="light"] .blog-tag {
+      background: rgba(99, 102, 241, 0.08);
+      color: #4f46e5;
+      border-color: rgba(99, 102, 241, 0.2);
+    }
+    .blog-empty {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 20px;
+    }
+    html[data-theme="light"] .blog-empty {
+      background: #ffffff;
+      border-color: #e2e8f0;
+    }
+    .blog-pagination a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .blog-pagination a.active {
+      background: #6366f1;
+      color: #fff;
+    }
+    .blog-pagination a:not(.active) {
+      background: #1e293b;
+      color: #94a3b8;
+      border: 1px solid #334155;
+    }
+    .blog-pagination a:not(.active):hover {
+      background: #334155;
+      color: #e2e8f0;
+    }
+    html[data-theme="light"] .blog-pagination a:not(.active) {
+      background: #ffffff;
+      color: #475569;
+      border-color: #e2e8f0;
+    }
+    html[data-theme="light"] .blog-pagination a:not(.active):hover {
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans min-h-screen flex flex-col">
+
+  <%- include('../partials/navbar') %>
+
+  <!-- Hero -->
+  <section class="blog-hero">
+    <div class="max-w-3xl mx-auto">
+      <span class="text-sm font-bold uppercase tracking-widest text-indigo-400">Blog</span>
+      <h1 class="text-4xl md:text-5xl font-extrabold mt-2">Zero to Pro Blog</h1>
+      <p class="text-gray-400 mt-3 max-w-xl mx-auto">
+        Coding tutorials, tips, and guides to accelerate your learning journey.
+      </p>
+    </div>
+  </section>
+
+  <!-- Content -->
+  <main class="flex-1 px-6 py-12">
+    <div class="max-w-6xl mx-auto">
+
+      <% if (typeof activeTag !== 'undefined' && activeTag) { %>
+        <div class="flex items-center gap-3 mb-8">
+          <span class="text-gray-400">Filtered by:</span>
+          <span class="blog-tag"><%= activeTag %></span>
+          <a href="/blog" class="text-sm text-indigo-400 hover:underline">Clear</a>
+        </div>
+      <% } %>
+
+      <% if (!posts || posts.length === 0) { %>
+        <div class="blog-empty max-w-lg mx-auto text-center p-12">
+          <div class="text-5xl mb-4">📝</div>
+          <h2 class="text-2xl font-bold mb-3">No Posts Yet</h2>
+          <p class="text-gray-400 mb-6">
+            We're working on exciting coding tutorials and guides. Check back soon!
+          </p>
+          <a href="/tutorials" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-xl transition inline-block">
+            Browse Tutorials
+          </a>
+        </div>
+      <% } else { %>
+        <!-- Posts Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <% posts.forEach(post => { %>
+            <a href="/blog/<%= post.slug %>" class="blog-card block">
+              <% if (post.featuredImage) { %>
+                <div class="h-48 overflow-hidden">
+                  <img src="<%= post.featuredImage %>" alt="<%= post.title %>" class="w-full h-full object-cover" />
+                </div>
+              <% } else { %>
+                <div class="h-48 flex items-center justify-center" style="background:linear-gradient(135deg,#312e81,#1e1b4b)">
+                  <span class="text-5xl">📖</span>
+                </div>
+              <% } %>
+              <div class="p-6">
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <% (post.tags || []).slice(0, 3).forEach(tag => { %>
+                    <span class="blog-tag"><%= tag %></span>
+                  <% }) %>
+                </div>
+                <h2 class="text-lg font-bold mb-2 line-clamp-2"><%= post.title %></h2>
+                <% if (post.excerpt) { %>
+                  <p class="text-gray-400 text-sm line-clamp-3 mb-4"><%= post.excerpt %></p>
+                <% } %>
+                <div class="flex items-center justify-between text-xs text-gray-500">
+                  <span><%= post.author %></span>
+                  <span><%= new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></span>
+                </div>
+              </div>
+            </a>
+          <% }) %>
+        </div>
+
+        <!-- Pagination -->
+        <% if (totalPages > 1) { %>
+          <div class="blog-pagination flex items-center justify-center gap-2 mt-12">
+            <% if (currentPage > 1) { %>
+              <a href="?page=<%= currentPage - 1 %>">&laquo;</a>
+            <% } %>
+            <% for (let i = 1; i <= totalPages; i++) { %>
+              <a href="?page=<%= i %>" class="<%= i === currentPage ? 'active' : '' %>"><%= i %></a>
+            <% } %>
+            <% if (currentPage < totalPages) { %>
+              <a href="?page=<%= currentPage + 1 %>">&raquo;</a>
+            <% } %>
+          </div>
+        <% } %>
+      <% } %>
+    </div>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

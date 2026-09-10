@@ -41,7 +41,7 @@ async function languageLanding(req, res) {
     return res.redirect("/tutorials/" + slugFor(req.query.cat));
   }
   try {
-    const tutorials = await Home.find().sort({ createdAt: -1 });
+    const tutorials = await Home.find().sort({ createdAt: -1 }).lean();
 
     // Count tutorials per category
     const counts = {};
@@ -82,7 +82,7 @@ async function listTutorials(req, res) {
   if (!category) return res.redirect("/tutorials");
 
   try {
-    const tutorials = await Home.find({ category }).sort({ createdAt: -1 });
+    const tutorials = await Home.find({ category }).sort({ createdAt: -1 }).lean();
 
     // Group by category (single entry here) so the existing view keeps working
     const grouped = {};
@@ -134,12 +134,13 @@ async function listTutorials(req, res) {
 
 // Management dashboard — admin only. Redirects regular users to the browse page.
 async function dashboard(req, res) {
-  // Non-admins should not see management controls
-  if (req.session.user.role !== "admin") {
+  // Defense-in-depth: the route already uses requireAdmin, but this guard also
+  // protects against a missing session (crash-prevention) if ever called directly.
+  if (!req.session.user || req.session.user.role !== "admin") {
     return res.redirect("/tutorials");
   }
   try {
-    const tutorials = await Home.find().sort({ createdAt: -1 });
+    const tutorials = await Home.find().sort({ createdAt: -1 }).lean();
     res.render("tutorial/dashboard", {
       tutorials,
       error: req.session.flash?.error || null,
